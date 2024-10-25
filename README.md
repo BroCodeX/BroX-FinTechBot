@@ -64,6 +64,11 @@ RABBITMQ_URL=your_rabbitmq_url
 SENTRY_DSN=your_sentry_dsn
 ```
 
+### Run Docker Containers
+```bash
+docker-compose up
+```
+
 ### Database Migration
 Run database migrations to set up the schema:
 ```bash
@@ -87,7 +92,7 @@ Once deployed, the Telegram bot offers the following commands for user interacti
 - `/info` - Provides VPN connection instructions and additional information.
 
 ### API Endpoints
-The backend also offers several REST API endpoints for managing users, subscriptions, and notifications. You can explore them via [Swagger API Documentation](http://localhost:8080/swagger-ui.html).
+For detailed API documentation, visit: [Swagger API Docs](http://localhost:8080/swagger-ui.html)
 
 ---
 
@@ -132,7 +137,6 @@ This project is licensed under the MIT License. For details, see the [LICENSE](L
 ---
 
 ## 📬 Contact & Bot Link
-
 For any questions or feedback, reach out via [your-email@example.com](mailto:your-email@example.com).
 
 ### 🌐 Try the Bot
