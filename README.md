@@ -1,6 +1,6 @@
 # 📊 Telegram Finance Bot
 
-[![Test-CI](https://github.com/BroCodeX/BroX-FinTechBot/blob/main/.github/workflows/tests.yml/badge.svg)](https://github.com/BroCodeX/BroX-FinTechBot/blob/main/.github/workflows/tests.yml)
+[![Test-CI](https://github.com/BroCodeX/BroX-FinTechBot/blob/main/.github/workflows/tests.yml/badge.svg)](https://github.com/BroCodeX/BroX-FinTechBot/actions)
 [![Maintainability](https://api.codeclimate.com/v1/badges/19b56c2cacb32335ae69/maintainability)](https://codeclimate.com/github/BroCodeX/java-project-72/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/19b56c2cacb32335ae69/test_coverage)](https://codeclimate.com/github/BroCodeX/java-project-72/test_coverage)
 
