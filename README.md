@@ -1,143 +1,122 @@
-# 🌐 VPN Subscription Service with Telegram Bot 🎩
+# 📊 Telegram Finance Bot
 
-Welcome to the VPN Subscription Service project! This repository hosts a full-stack application that provides secure, subscription-based VPN access through a user-friendly Telegram bot. Designed to handle everything from subscription management to asynchronous notifications and robust monitoring, this project is built for scale and reliability. 🌍🔒
+Telegram-бот для учета, анализа финансовых данных и контроля бюджета. Позволяет пользователям регистрировать доходы и расходы, получать отчеты по категориям, а также получать уведомления о превышении лимитов бюджета.
 
-## 🌟 Key Features
-- **Seamless VPN Access**: Secure access to VPN services with subscription-based control.
-- **Telegram Bot Integration**: Users interact with the VPN service directly through Telegram commands.
-- **Asynchronous Notifications**: RabbitMQ-powered notifications to keep users up-to-date on their subscriptions.
-- **Comprehensive Monitoring**: Sentry integration for real-time error tracking and system health.
-- **Scalable Deployment**: Designed for cloud deployment with Docker and Kubernetes support.
+## 🚀 Основные возможности
 
----
-
-## 📑 Table of Contents
-1. [Tech Stack](#tech-stack)
-2. [System Architecture](#system-architecture)
-3. [Getting Started](#getting-started)
-4. [Bot Usage](#bot-usage)
-5. [Deployment Instructions](#deployment-instructions)
-6. [API Endpoints](#api-endpoints)
-7. [License](#license)
-8. [Contact & Bot Link](#contact--bot-link)
+- **Регистрация доходов и расходов** с указанием категорий
+- **Отчеты по транзакциям** с разбивкой по категориям
+- **Установка и контроль бюджета** с уведомлениями о превышении лимита
+- **Интеграция с RabbitMQ** для асинхронной обработки уведомлений
+- **Покрытие кода тестами** с использованием TDD-подхода
+- **Контейнеризация и деплой в Kubernetes**
 
 ---
 
-## ⚙️ Tech Stack
-This project leverages a modern technology stack to ensure optimal performance and maintainability:
-- **Backend**: Java, Spring Boot (RESTful APIs), Spring Data JPA (database management), Spring AMQP (messaging)
+## 🏗 Стек технологий
+
+- **Backend**: Java, Spring Boot (Web, Data JPA, Security, AMQP)
 - **Database**: PostgreSQL
-- **Message Queue**: RabbitMQ
-- **Bot Interface**: Telegram Bot API
-- **Monitoring**: Sentry
-- **Containerization & Deployment**: Docker, Kubernetes
+- **Messaging**: RabbitMQ
+- **CI/CD**: Docker, Kubernetes
+- **Testing**: JUnit, Mockito
 
 ---
 
-## 🏗️ System Architecture
-Our system architecture is structured around a microservice design that ensures modularity, scalability, and efficient error handling:
-1. **VPN Server**: Controls user access based on subscription status.
-2. **Telegram Bot Interface**: Users can manage subscriptions and receive status updates directly through Telegram.
-3. **Backend API**: Built with Spring Boot, this API handles all core business logic, including managing subscriptions, user data, and message queues.
-4. **RabbitMQ**: Powers the notification system to provide real-time updates on subscription status and service notifications.
-5. **PostgreSQL Database**: Stores user information, subscription statuses, and activity logs.
-6. **Sentry**: Tracks and logs errors and downtime for continuous monitoring.
 
 ---
 
-## 🚀 Getting Started
+<details>
+<summary>## 📚 Запуск проекта локально</summary>
 
-### Prerequisites
-Ensure you have the following installed on your system:
-- **Java 17**
-- **Docker & Docker Compose**
-- **PostgreSQL and RabbitMQ** (for local testing or use Docker)
-- **Sentry** account for monitoring
+### 1. Подготовьте окружение
+Убедитесь, что у вас установлены:
+- Docker и Docker Compose
+- Java 17
 
-### Set Up Environment Variables
-Create a `.env` file in the project’s root directory and define the required variables:
-```plaintext
-TELEGRAM_BOT_TOKEN=your_bot_token
-DB_USERNAME=your_db_username
-DB_PASSWORD=your_db_password
-RABBITMQ_URL=your_rabbitmq_url
-SENTRY_DSN=your_sentry_dsn
-```
+### 2. Клонируйте репозиторий
 
-### Run Docker Containers
-```bash
-docker-compose up
-```
+\```bash
+git clone https://github.com/yourusername/telegram-finance-bot.git
+cd telegram-finance-bot
+\```
 
-### Database Migration
-Run database migrations to set up the schema:
-```bash
-./mvnw flyway:migrate
-```
+### 3. Запустите инфраструктуру (PostgreSQL и RabbitMQ)
 
-### Start the Application
-```bash
+\```bash
+docker-compose up -d
+\```
+
+### 4. Запустите приложение
+
+\```bash
 ./mvnw spring-boot:run
-```
+\```
+
+</details>
 
 ---
 
-## 🤖 Bot Usage
+## 🧪 Запуск тестов
 
-Once deployed, the Telegram bot offers the following commands for user interaction:
-
-- `/start` - Initializes the bot and sends a welcome message to the user.
-- `/subscribe` - Allows the user to start or renew their VPN subscription.
-- `/status` - Displays the user's current subscription status, including expiration details.
-- `/info` - Provides VPN connection instructions and additional information.
-
-### API Endpoints
-For detailed API documentation, visit: [Swagger API Docs](http://localhost:8080/swagger-ui.html)
+\```bash
+./mvnw test
+\```
 
 ---
 
-## 🌐 Deployment Instructions
+## 📈 Примеры команд для бота
 
-### Docker & Kubernetes
+| Команда            | Описание                               |
+|--------------------|----------------------------------------|
+| `/start`           | Начало работы и регистрация пользователя |
+| `/add_transaction` | Добавление новой транзакции            |
+| `/view_transactions` | Отображение последних транзакций       |
+| `/set_budget`      | Установка месячного бюджета            |
+| `/get_report`      | Получение отчета по категориям         |
 
-#### Docker
-1. **Build Docker Image**
-   ```bash
-   docker build -t vpn-subscription-service .
-   ```
+Пример добавления транзакции:
 
-2. **Start Containers**
-   Run all services using `docker-compose.yml`:
-   ```bash
-   docker-compose up -d
-   ```
-
-#### Kubernetes
-For deployment to a Kubernetes cluster:
-1. **Namespace Creation**
-   ```bash
-   kubectl create namespace vpn-service
-   ```
-
-2. **Deploy Resources**
-   Apply the Kubernetes manifests:
-   ```bash
-   kubectl apply -f k8s/deployment.yaml -n vpn-service
-   kubectl apply -f k8s/service.yaml -n vpn-service
-   ```
-
-3. **Configure Sentry for Error Tracking in Kubernetes**
-   Sentry setup can be adapted to monitor all services running in the Kubernetes environment, ensuring continuous error tracking.
+\```plaintext
+/add_transaction
+Тип: Расход
+Категория: Еда
+Сумма: 500
+\```
 
 ---
 
-## 📜 License
-This project is licensed under the MIT License. For details, see the [LICENSE](LICENSE) file.
+<details>
+<summary>## 🛠 Контейнеризация и деплой в Kubernetes</summary>
+
+### Сборка Docker-образа
+
+\```bash
+docker build -t telegram-finance-bot .
+\```
+
+### Запуск в Kubernetes
+
+1. **Создайте манифесты Kubernetes** для деплоя (см. папку `/k8s`).
+2. **Примените конфигурации**:
+
+   \```bash
+   kubectl apply -f k8s/
+   \```
+
+</details>
 
 ---
 
-## 📬 Contact & Bot Link
-For any questions or feedback, reach out via [your-email@example.com](mailto:your-email@example.com).
+## 📬 Контакты и поддержка
 
-### 🌐 Try the Bot
-🔗 [Telegram Bot](https://t.me/YourBotUsername) (Link coming soon!)
+Если у вас есть вопросы или предложения, создайте новый Issue или отправьте Pull Request.
+
+---
+
+## 🔗 Ссылка на бота
+
+[Перейти к боту в Telegram](https://t.me/your_bot_placeholder)
+
+
+
