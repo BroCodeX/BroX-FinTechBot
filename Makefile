@@ -1,18 +1,16 @@
 test: #A build of the app
-	make -C fbot test
-
-run-dist: #Launch of the program
+	./gradlew test
 
 build: #A build of the app
-	make -C fbot build
+	./gradlew installDist
 
 clean:
-	make -C fbot clean
+	./gradlew clean
 
 lint: #Chech a style of code via Checkstyle
-	make -C fbot lint
+	./gradlew checkstyleMain
 
 report: #Make a JaCoCo Report
-	make -C fbot report
+	./gradlew jacocoTestReport
 
 .PHONY: build
