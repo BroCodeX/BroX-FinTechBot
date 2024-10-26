@@ -1,18 +1,18 @@
 test: #A build of the app
-	make -C app test
+	make -C fbot test
 
 run-dist: #Launch of the program
 
 build: #A build of the app
-	make -C app build
+	make -C fbot build
 
 clean:
-	make -C app clean
+	make -C fbot clean
 
 lint: #Chech a style of code via Checkstyle
-	make -C app lint
+	make -C fbot lint
 
 report: #Make a JaCoCo Report
-	make -C app report
+	make -C fbot report
 
 .PHONY: build
