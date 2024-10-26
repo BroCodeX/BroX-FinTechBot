@@ -1,16 +1,18 @@
 test: #A build of the app
-	./gradlew test
+	make -C app test
+
+run-dist: #Launch of the program
 
 build: #A build of the app
-	./gradlew installDist
+	make -C app build
 
 clean:
-	./gradlew clean
+	make -C app clean
 
 lint: #Chech a style of code via Checkstyle
-	./gradlew checkstyleMain
+	make -C app lint
 
 report: #Make a JaCoCo Report
-	./gradlew jacocoTestReport
+	make -C app report
 
 .PHONY: build
