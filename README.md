@@ -1,5 +1,9 @@
 # 📊 Telegram Finance Bot
 
+[![Main-CI](https://github.com/BroCodeX/java-project-72/actions/workflows/main-CI.yml/badge.svg)](https://github.com/BroCodeX/java-project-72/actions/workflows/main-CI.yml)
+[![Maintainability](https://api.codeclimate.com/v1/badges/19b56c2cacb32335ae69/maintainability)](https://codeclimate.com/github/BroCodeX/java-project-72/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/19b56c2cacb32335ae69/test_coverage)](https://codeclimate.com/github/BroCodeX/java-project-72/test_coverage)
+
 Telegram-бот для учета, анализа финансовых данных и контроля бюджета. Позволяет пользователям регистрировать доходы и расходы, получать отчеты по категориям, а также получать уведомления о превышении лимитов бюджета.
 
 ## 🚀 Основные возможности
