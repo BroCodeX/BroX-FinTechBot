@@ -1,5 +1,7 @@
-package brocodex.fbot.model;
+package brocodex.fbot.model.transaction;
 
+import brocodex.fbot.model.BaseModel;
+import brocodex.fbot.model.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -35,4 +37,8 @@ public class Transaction implements BaseModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private TransactionCategory category;
 }

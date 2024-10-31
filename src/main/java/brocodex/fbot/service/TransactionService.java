@@ -1,7 +1,7 @@
 package brocodex.fbot.service;
 
 import brocodex.fbot.dto.transaction.TransactionDTO;
-import brocodex.fbot.repository.TransactionRepository;
+import brocodex.fbot.repository.transactions.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

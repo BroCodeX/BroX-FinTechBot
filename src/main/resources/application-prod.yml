@@ -1,4 +1,21 @@
 spring:
-
+  datasource:
+    url: ${JDBC-DATABASE-URL}
+    driver-class-name: org.postgresql.Driver
+    username: ${USERNAME}
+    password: ${PASSWORD}
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    show-sql: false
 
 senty:
+  logging:
+    minimum-event-level: info
+    minimum-breadcrumb-level: debug
+  dsn:
+  tracesSampleRate: 1.0
+liquibase:
+  enabled: true
+  change-log: classpath:db/changelog/db.changelog-master.xml

@@ -51,6 +51,7 @@ dependencies {
 	// DB
 	implementation("org.postgresql:postgresql:42.7.3")
 	runtimeOnly("com.h2database:h2")
+	implementation("org.liquibase:liquibase-core")
 
 	// Spring
 	implementation("org.springframework.boot:spring-boot-starter")

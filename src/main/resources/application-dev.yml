@@ -6,3 +6,12 @@ spring:
     driverClassName: org.h2.Driver
   h2:
     console.enabled: true
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+liquibase:
+  enabled: false
+

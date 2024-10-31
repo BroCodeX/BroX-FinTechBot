@@ -6,11 +6,6 @@ spring:
     password: "WHYSOserious&112233"
   application:
     name: fbot
-  jpa:
-    generate-ddl: true
-    show-sql: true
-    hibernate:
-      ddl-auto: update
   output:
     ansi:
       enabled: always
