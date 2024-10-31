@@ -25,7 +25,7 @@ public class User implements BaseModel {
 
     @NotBlank
     @Column(unique = true, nullable = false)
-    private String nickname; // логин в телеге
+    private Long telegramId; // логин в телеге
 
     @CreatedDate
     private LocalDate createdAt; // создан
