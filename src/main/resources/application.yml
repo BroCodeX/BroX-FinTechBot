@@ -1,1 +1,34 @@
-spring.application.name=fbot
+spring:
+  rabbitmq:
+    host: "localhost"
+    port: 5672
+    username: "rootbot"
+    password: "WHYSOserious&112233"
+  application:
+    name: fbot
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  output:
+    ansi:
+      enabled: always
+  profiles:
+    default: "dev"
+
+server:
+  port: 8181
+
+logging:
+  level:
+    root: DEBUG
+    org:
+      springframework:
+        security: DEBUG
+
+springdoc:
+  api-docs:
+    path: /documentation/api-docs
+  swagger-ui:
+    path: /documentation/swagger-ui.html
