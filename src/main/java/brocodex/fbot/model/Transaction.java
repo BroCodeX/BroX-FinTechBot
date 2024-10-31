@@ -31,4 +31,8 @@ public class Transaction implements BaseModel {
 
     @CreatedDate
     private LocalDate transactionDate; // дата транзакции
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

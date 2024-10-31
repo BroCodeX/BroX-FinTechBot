@@ -32,4 +32,8 @@ public class User implements BaseModel {
 
     @LastModifiedDate
     private LocalDate updatedAt; // обновлен
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "budget_id")
+    private Budget budget;
 }

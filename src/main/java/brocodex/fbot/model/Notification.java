@@ -24,4 +24,8 @@ public class Notification implements BaseModel {
 
     @CreatedDate
     private LocalDate sentAt; // дата отправки
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 }
