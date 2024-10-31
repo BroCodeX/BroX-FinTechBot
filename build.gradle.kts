@@ -80,6 +80,7 @@ dependencies {
 	implementation("org.instancio:instancio-junit:3.3.0")
 	testImplementation("net.javacrumbs.json-unit:json-unit-assertj:3.2.2")
 	testImplementation("org.springframework.security:spring-security-test")
+	testImplementation ("org.mockito:mockito-core:4.11.0")
 
 	// Spring AMQP
 	implementation("org.springframework.boot:spring-boot-starter-amqp")
