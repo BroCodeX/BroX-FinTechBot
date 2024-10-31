@@ -11,5 +11,5 @@ import org.mapstruct.ReportingPolicy;
         unmappedSourcePolicy = ReportingPolicy.WARN,
         unmappedTargetPolicy = ReportingPolicy.WARN
 )
-public class UserMapper {
+public abstract class UserMapper {
 }

@@ -8,7 +8,7 @@ import lombok.Setter;
 @Table(name = "transaction_categories")
 @Getter
 @Setter
-public class TransactionCategory {
+public class TransactionCategory{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
