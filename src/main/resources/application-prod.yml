@@ -1,4 +1,7 @@
 spring:
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
   datasource:
     url: ${JDBC-DATABASE-URL}
     driver-class-name: org.postgresql.Driver
@@ -16,6 +19,3 @@ senty:
     minimum-breadcrumb-level: debug
   dsn:
   tracesSampleRate: 1.0
-liquibase:
-  enabled: true
-  change-log: classpath:db/changelog/db.changelog-master.xml
