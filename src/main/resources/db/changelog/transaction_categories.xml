@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="brocodex">
+        <createTable tableName="transaction_categories">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="brocodex">
+        <insert tableName="transaction_categories">
+            <column name="name" value="Salary"/>
+        </insert>
+        <insert tableName="transaction_categories">
+            <column name="name" value="Bonuses"/>
+        </insert>
+        <insert tableName="transaction_categories">
+            <column name="name" value="Freelance"/>
+        </insert>
+        <insert tableName="transaction_categories">
+            <column name="name" value="Investments"/>
+        </insert>
+        <insert tableName="transaction_categories">
+            <column name="name" value="Other Income"/>
+        </insert>
+
+        <insert tableName="transaction_categories">
+            <column name="name" value="Food and Drinks"/>
+        </insert>
+        <insert tableName="transaction_categories">
+            <column name="name" value="Housing and Utilities"/>
+        </insert>
+        <insert tableName="transaction_categories">
+            <column name="name" value="Transportation"/>
+        </insert>
+        <insert tableName="transaction_categories">
+            <column name="name" value="Health and Medical"/>
+        </insert>
+        <insert tableName="transaction_categories">
+            <column name="name" value="Entertainment"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
