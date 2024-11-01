@@ -22,10 +22,10 @@ public class Budget implements BaseModel {
     private Double amount; // весь бюджет
 
     @NotNull
-    private Double monthlyBudget; // месячный бюджет
+    private Double monthlyBudget; // месячный бюджет - опционально
 
     @NotNull
-    private Double weeklyBudget; // недельный бюджет
+    private Double weeklyBudget; // недельный бюджет- опционально
 
     @NotNull
     private Double spentAmount; // потрачено всего
