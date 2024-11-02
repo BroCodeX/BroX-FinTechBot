@@ -10,5 +10,5 @@ import java.time.LocalDate;
 public class ReportFilterDTO {
     private LocalDate startDate; // Начальная дата фильтрации
     private LocalDate endDate; // Конечная дата фильтрации
-    private String categoryName; // категория для фильтрации, опционально
+    private String operationType; // тип операции доход / расход
 }
