@@ -19,15 +19,13 @@ public class Budget implements BaseModel {
     private Long id;
 
     @NotNull
+    @Column(nullable = false)
     private Double amount; // весь бюджет
 
-    @NotNull
-    private Double monthlyBudget; // месячный бюджет - опционально
+//    private Double monthlyBudget; // месячный бюджет - опционально
+//
+//    private Double weeklyBudget; // недельный бюджет- опционально
 
-    @NotNull
-    private Double weeklyBudget; // недельный бюджет- опционально
-
-    @NotNull
     private Double spentAmount; // потрачено всего
 
     @CreatedDate

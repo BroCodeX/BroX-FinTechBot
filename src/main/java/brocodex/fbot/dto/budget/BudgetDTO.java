@@ -9,8 +9,8 @@ import java.time.LocalDate;
 @Getter
 public class BudgetDTO {
     private Double amount; // текущий бюджет
-    private Double monthlyBudget; // Месячный бюджет, если выставлен
-    private Double weeklyBudget; // Недельный бюджет, если выставлен
+//    private Double monthlyBudget; // Месячный бюджет, если выставлен
+//    private Double weeklyBudget; // Недельный бюджет, если выставлен
     private Double spentAmount; // Потраченная сумма
     private LocalDate createdAt;
     private LocalDate updatedAt;
