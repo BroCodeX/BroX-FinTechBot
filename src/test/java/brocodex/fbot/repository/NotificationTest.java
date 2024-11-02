@@ -1,9 +1,7 @@
 package brocodex.fbot.repository;
 
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@DataJpaTest
 public class NotificationTest {
 }
