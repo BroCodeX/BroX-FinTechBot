@@ -1,7 +1,6 @@
 package brocodex.fbot.utils;
 
 import brocodex.fbot.model.Budget;
-import brocodex.fbot.model.Notification;
 import brocodex.fbot.model.User;
 import brocodex.fbot.model.transaction.Transaction;
 import brocodex.fbot.repository.transactions.TransactionCategoryRepository;
@@ -12,6 +11,8 @@ import org.instancio.Model;
 import org.instancio.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
 
 @Component
 public class ModelsGenerator {
@@ -43,7 +44,10 @@ public class ModelsGenerator {
                 .supply(Select.field(Transaction::getAmount), () -> 1500.00)
                 .supply(Select.field(Transaction::getDescription), () -> "Buy a new iPhone")
                 .supply(Select.field(Transaction::getType), () -> "EXPENSE")
-                .supply(Select.field(Transaction::getCategory), () -> categoryRepository.findBySlug("Electronic"))
+                .ignore(Select.field(Transaction::getCategory))
+                .supply(Select.field(Transaction::getTransactionDate),
+                        () -> LocalDate.of(1991, 8, 25))
+                //.supply(Select.field(Transaction::getCategory), () -> categoryRepository.findBySlug("Electronic"))
                 .toModel();
     }
 
@@ -53,7 +57,11 @@ public class ModelsGenerator {
                 .supply(Select.field(Transaction::getAmount), () -> 5000.00)
                 .supply(Select.field(Transaction::getDescription), () -> "Had a salary")
                 .supply(Select.field(Transaction::getType), () -> "INCOME")
-                .supply(Select.field(Transaction::getCategory), () -> categoryRepository.findBySlug("Salary"))
+                .ignore(Select.field(Transaction::getUser))
+                .ignore(Select.field(Transaction::getCategory))
+                .supply(Select.field(Transaction::getTransactionDate),
+                        () -> LocalDate.of(1991, 8, 25))
+                //.supply(Select.field(Transaction::getCategory), () -> categoryRepository.findBySlug("Salary"))
                 .toModel();
     }
 

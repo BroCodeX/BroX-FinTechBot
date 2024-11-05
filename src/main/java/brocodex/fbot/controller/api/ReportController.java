@@ -1,7 +1,7 @@
 package brocodex.fbot.controller.api;
 
-import brocodex.fbot.dto.report.ReportDTO;
-import brocodex.fbot.dto.report.ReportFilterDTO;
+import brocodex.fbot.dto.transaction.report.TransactionReportDTO;
+import brocodex.fbot.dto.transaction.report.TransactionFilterDTO;
 import brocodex.fbot.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +15,7 @@ public class ReportController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ReportDTO show(@ModelAttribute ReportFilterDTO dto) {
+    public TransactionReportDTO show(@ModelAttribute TransactionFilterDTO dto) {
         return service.showReport(dto);
     }
 }

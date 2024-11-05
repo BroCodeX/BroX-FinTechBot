@@ -1,12 +1,12 @@
 package brocodex.fbot.service;
 
-import brocodex.fbot.dto.report.ReportDTO;
-import brocodex.fbot.dto.report.ReportFilterDTO;
+import brocodex.fbot.dto.transaction.report.TransactionReportDTO;
+import brocodex.fbot.dto.transaction.report.TransactionFilterDTO;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ReportService {
-    public ReportDTO showReport(ReportFilterDTO dto) {
+    public TransactionReportDTO showReport(TransactionFilterDTO dto) {
         return null;
     }
 }
