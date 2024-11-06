@@ -13,8 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,6 +28,14 @@ public class TransactionTest {
     @Autowired
     private TransactionCategoryRepository categoryRepository;
 
+    private static final LocalDateTime DATE_1996 =
+            LocalDateTime.of(1996, 8, 25, 10, 10);
+    private static final LocalDateTime DATE_1981 =
+            LocalDateTime.of(1981, 8, 25, 10, 10);
+    private static final LocalDateTime DATE_1991 =
+            LocalDateTime.of(1991, 8, 25, 10, 10);
+    private static final LocalDateTime NOW = LocalDateTime.now();
+
     private TransactionSpec specification = new TransactionSpec();
 
     private Transaction incomeTransaction;
@@ -37,52 +44,127 @@ public class TransactionTest {
 
     @BeforeEach
     public void prepareData() {
+        repository.deleteAll();
         incomeTransaction = Instancio.of(generator.makeIncomeTransaction()).create();
-        TransactionCategory categorySalary = new TransactionCategory();
-        categorySalary.setSlug("Salary");
-        incomeTransaction.setCategory(categorySalary);
-
         expenseTransaction = Instancio.of(generator.makeExpenseTransaction()).create();
-        TransactionCategory categoryElect = new TransactionCategory();
-        categoryElect.setSlug("Electronic");
-        expenseTransaction.setCategory(categoryElect);
     }
 
     @Test
     public void testWithStartDate() {
+        repository.save(incomeTransaction);
+        incomeTransaction.setTransactionDate(DATE_1991);
+        repository.save(incomeTransaction);
+
         var incomeTransaction2 = Instancio.of(generator.makeIncomeTransaction()).create();
-        incomeTransaction2.setTransactionDate(LocalDate.of(1996, 8, 25));
+        repository.save(incomeTransaction2);
+        incomeTransaction2.setTransactionDate(DATE_1996);
         repository.save(incomeTransaction2);
 
         var incomeTransaction3 = Instancio.of(generator.makeIncomeTransaction()).create();
-        incomeTransaction3.setTransactionDate(LocalDate.of(1981, 8, 25));
+        repository.save(incomeTransaction3);
+        incomeTransaction3.setTransactionDate(DATE_1981);
         repository.save(incomeTransaction3);
 
         var dto = new TransactionFilterDTO();
-        dto.setStartDate(LocalDate.of(1991, 8, 25));
+        dto.setStartDate(DATE_1991);
 
         var spec = specification.build(dto);
 
         List<Transaction> transactionList = repository.findAll(spec);
 
-        List<Long> ids = new ArrayList<>();
-        ids.add(incomeTransaction.getId());
-        ids.add(incomeTransaction2.getId());
+        assertThat(transactionList).isNotEmpty();
+        assertThat(transactionList.size()).isEqualTo(2);
+        assertThat(transactionList)
+                .extracting(Transaction::getTransactionDate)
+                .allMatch(date -> !date.isBefore((dto.getStartDate())));
+    }
+
+    @Test
+    public void testWithEndDate() {
+        repository.save(incomeTransaction);
+        incomeTransaction.setTransactionDate(DATE_1991);
+        repository.save(incomeTransaction);
+
+        var incomeTransaction2 = Instancio.of(generator.makeIncomeTransaction()).create();
+        repository.save(incomeTransaction2);
+        incomeTransaction2.setTransactionDate(DATE_1996);
+        repository.save(incomeTransaction2);
+
+        var incomeTransaction3 = Instancio.of(generator.makeIncomeTransaction()).create();
+        repository.save(incomeTransaction3);
+        incomeTransaction3.setTransactionDate(DATE_1981);
+        repository.save(incomeTransaction3);
+
+        var dto = new TransactionFilterDTO();
+        dto.setEndDate(DATE_1996);
+
+        var spec = specification.build(dto);
+
+        List<Transaction> transactionList = repository.findAll(spec);
+
+        assertThat(transactionList).isNotEmpty();
+        assertThat(transactionList.size()).isEqualTo(3);
+        assertThat(transactionList)
+                .extracting(Transaction::getTransactionDate)
+                .allMatch(date -> !date.isAfter((dto.getEndDate())));
+    }
+
+    @Test
+    public void testBetweenDates() {
+        repository.save(incomeTransaction);
+        incomeTransaction.setTransactionDate(DATE_1991);
+        repository.save(incomeTransaction);
+
+        var incomeTransaction2 = Instancio.of(generator.makeIncomeTransaction()).create();
+        repository.save(incomeTransaction2);
+        incomeTransaction2.setTransactionDate(DATE_1996);
+        repository.save(incomeTransaction2);
+
+        var incomeTransaction3 = Instancio.of(generator.makeIncomeTransaction()).create();
+        repository.save(incomeTransaction3);
+        incomeTransaction3.setTransactionDate(DATE_1981);
+        repository.save(incomeTransaction3);
+
+        var incomeTransactionNow = Instancio.of(generator.makeIncomeTransaction()).create();
+        repository.save(incomeTransactionNow);
+
+        var dto = new TransactionFilterDTO();
+        dto.setStartDate(DATE_1991);
+        dto.setEndDate(DATE_1996);
+
+        var spec = specification.build(dto);
+
+        List<Transaction> transactionList = repository.findAll(spec);
 
         assertThat(transactionList).isNotEmpty();
         assertThat(transactionList.size()).isEqualTo(2);
         assertThat(transactionList)
                 .extracting(Transaction::getTransactionDate)
-                .allMatch(date -> !date.isBefore(dto.getStartDate())); // Проверяем, что все даты равны или больше фильтра
+                .allMatch(date -> !date.isBefore(dto.getStartDate()) && !date.isAfter(dto.getEndDate()));
     }
 
     @Test
-    public void testWithEndDate() {
+    public void categoryTest() {
+        category = new TransactionCategory();
+        category.setSlug("Food");
+        categoryRepository.save(category);
 
-    }
+        incomeTransaction.setCategory(category);
+        expenseTransaction.setCategory(category);
 
-    @Test
-    public void testBetweenDates() {
+        repository.save(incomeTransaction);
+        repository.save(expenseTransaction);
 
+        var dto = new TransactionFilterDTO();
+        dto.setCategory("food");
+
+        var spec = specification.build(dto);
+
+        List<Transaction> transactionList = repository.findAll(spec);
+
+        assertThat(transactionList.size()).isEqualTo(2);
+        assertThat(transactionList)
+                .extracting(Transaction::getCategory)
+                .allMatch(cat -> cat.getSlug().equals(dto.getCategory()));
     }
 }

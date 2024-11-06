@@ -11,6 +11,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "transactions")
@@ -31,8 +32,9 @@ public class Transaction implements BaseModel {
     @NotBlank
     private String type; // тип операции: income или expense
 
+    @NotNull
     @CreatedDate
-    private LocalDate transactionDate; // дата транзакции
+    private LocalDateTime transactionDate; // дата транзакции
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

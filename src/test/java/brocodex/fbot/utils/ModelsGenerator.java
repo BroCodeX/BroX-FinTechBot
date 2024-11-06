@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Component
 public class ModelsGenerator {
@@ -46,7 +47,7 @@ public class ModelsGenerator {
                 .supply(Select.field(Transaction::getType), () -> "EXPENSE")
                 .ignore(Select.field(Transaction::getCategory))
                 .supply(Select.field(Transaction::getTransactionDate),
-                        () -> LocalDate.of(1991, 8, 25))
+                        () -> LocalDateTime.of(1991, 8, 25, 10, 10))
                 //.supply(Select.field(Transaction::getCategory), () -> categoryRepository.findBySlug("Electronic"))
                 .toModel();
     }
@@ -60,7 +61,7 @@ public class ModelsGenerator {
                 .ignore(Select.field(Transaction::getUser))
                 .ignore(Select.field(Transaction::getCategory))
                 .supply(Select.field(Transaction::getTransactionDate),
-                        () -> LocalDate.of(1991, 8, 25))
+                        () -> LocalDateTime.of(1991, 8, 25, 10, 10))
                 //.supply(Select.field(Transaction::getCategory), () -> categoryRepository.findBySlug("Salary"))
                 .toModel();
     }
