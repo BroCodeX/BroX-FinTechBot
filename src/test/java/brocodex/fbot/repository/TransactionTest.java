@@ -150,7 +150,9 @@ public class TransactionTest {
         categoryRepository.save(category);
 
         incomeTransaction.setCategory(category);
+        incomeTransaction.setUser(null);
         expenseTransaction.setCategory(category);
+        expenseTransaction.setUser(null);
 
         repository.save(incomeTransaction);
         repository.save(expenseTransaction);
@@ -165,6 +167,6 @@ public class TransactionTest {
         assertThat(transactionList.size()).isEqualTo(2);
         assertThat(transactionList)
                 .extracting(Transaction::getCategory)
-                .allMatch(cat -> cat.getSlug().equals(dto.getCategory()));
+                .allMatch(cat -> cat.getSlug().equals("Food"));
     }
 }

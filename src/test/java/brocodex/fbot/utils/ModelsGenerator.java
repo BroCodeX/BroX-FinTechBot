@@ -34,7 +34,7 @@ public class ModelsGenerator {
     public Model<User> makeUser() {
         return Instancio.of(User.class)
                 .ignore(Select.field(User::getId))
-                .supply(Select.field(User::getUsername), () -> faker.name().firstName())
+                .supply(Select.field(User::getUsername), () -> faker.name().name())
                 .supply(Select.field(User::getTelegramId), () -> faker.number().randomNumber())
                 .toModel();
     }
