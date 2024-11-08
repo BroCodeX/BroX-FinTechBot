@@ -31,8 +31,8 @@ public class FinanceBot extends AbilityBot {
 
     @PostConstruct
     public void init() {
-        System.out.println("Starting bot...");
-        System.out.println("Starting has started!");
+        System.out.println("Bot has been initialized!");
+        start();
     }
 
     public Ability start() {

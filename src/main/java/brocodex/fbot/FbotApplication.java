@@ -18,9 +18,4 @@ public class FbotApplication {
 		SpringApplication.run(FbotApplication.class, args);
 	}
 
-	@PostConstruct
-	public void init() {
-		bot.init();
-	}
-
 }
