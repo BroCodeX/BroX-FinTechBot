@@ -87,6 +87,12 @@ dependencies {
 
 	// Spring AMQP
 	implementation("org.springframework.boot:spring-boot-starter-amqp")
+
+	// Telegram
+	implementation("org.telegram:telegrambots-spring-boot-starter:6.9.7.1")
+	implementation("org.telegram:telegrambots-abilities:6.9.7.1")
+
+
 }
 
 tasks.withType<Test> {

@@ -27,3 +27,9 @@ springdoc:
     path: /documentation/api-docs
   swagger-ui:
     path: /documentation/swagger-ui.html
+
+telegram:
+  bot:
+    token: ${BOT_TOKEN}
+    username: ${BOT_NAME}
+    creatorId: ${CREATOR_ID}
