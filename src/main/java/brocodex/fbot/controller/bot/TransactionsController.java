@@ -1,13 +1,17 @@
 package brocodex.fbot.controller.bot;
 
-import brocodex.fbot.handler.ResponseHandler;
+import brocodex.fbot.service.handler.ResponseHandlerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.telegram.abilitybots.api.objects.Ability;
 
+@Controller
 public class TransactionsController {
-    private final ResponseHandler responseHandler;
+    private final ResponseHandlerService responseHandler;
 
-    public TransactionsController(ResponseHandler responseHandler) {
-        this.responseHandler = responseHandler;
+    @Autowired
+    public TransactionsController(ResponseHandlerService responseHandlerService) {
+        this.responseHandler = responseHandlerService;
     }
 
     public Ability addTransaction() {

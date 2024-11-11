@@ -1,10 +1,7 @@
 package brocodex.fbot.component;
 
-import brocodex.fbot.controller.bot.BudgetController;
-import brocodex.fbot.controller.bot.ReportController;
-import brocodex.fbot.controller.bot.TransactionsController;
-import brocodex.fbot.controller.bot.UserController;
-import brocodex.fbot.handler.ResponseHandler;
+import brocodex.fbot.controller.bot.*;
+import brocodex.fbot.service.handler.ResponseHandlerService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -14,7 +11,7 @@ import org.telegram.abilitybots.api.sender.SilentSender;
 
 @Component
 public class FinanceBot extends AbilityBot {
-    private final ResponseHandler responseHandler;
+    private final ResponseHandlerService responseHandlerService;
     private UserController userController;
     private BudgetController budgetController;
     private ReportController reportController;
@@ -27,7 +24,7 @@ public class FinanceBot extends AbilityBot {
                       @Value("${telegram.bot.creatorId}") Long creatorId) {
         super(botToken, botUsername);
         this.creatorID = creatorId;
-        this.responseHandler = new ResponseHandler(new SilentSender(this.sender), this.db());
+        this.responseHandlerService = new ResponseHandlerService(new SilentSender(this.sender), this.db());
     }
 
     @Override
