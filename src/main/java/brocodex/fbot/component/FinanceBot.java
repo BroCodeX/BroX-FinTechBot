@@ -1,6 +1,9 @@
 package brocodex.fbot.component;
 
-import brocodex.fbot.controller.bot.BotCommandsController;
+import brocodex.fbot.controller.bot.BudgetController;
+import brocodex.fbot.controller.bot.ReportController;
+import brocodex.fbot.controller.bot.TransactionsController;
+import brocodex.fbot.controller.bot.UserController;
 import brocodex.fbot.handler.ResponseHandler;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,7 +15,10 @@ import org.telegram.abilitybots.api.sender.SilentSender;
 @Component
 public class FinanceBot extends AbilityBot {
     private final ResponseHandler responseHandler;
-    private BotCommandsController commandsController;
+    private UserController userController;
+    private BudgetController budgetController;
+    private ReportController reportController;
+    private TransactionsController transactionsController;
 
     private final long creatorID;
 
@@ -36,28 +42,28 @@ public class FinanceBot extends AbilityBot {
     }
 
     public Ability start() {
-        return commandsController.start();
+        return userController.start();
     }
 
-    public Ability add_transaction() {
-        return commandsController.addTransaction();
-    }
-
-
-    public Ability view_transactions() {
-        return commandsController.viewTransactions();
+    public Ability addTransaction() {
+        return transactionsController.addTransaction();
     }
 
 
-    public Ability set_budget() {
-        return commandsController.setBudget();
+    public Ability viewTransactions() {
+        return transactionsController.viewTransactions();
     }
 
-    public Ability edit_budget() {
-        return commandsController.editBudget();
+
+    public Ability setBudget() {
+        return budgetController.setBudget();
     }
 
-    public Ability get_report() {
-        return commandsController.getReport();
+    public Ability editBudget() {
+        return budgetController.editBudget();
+    }
+
+    public Ability getReport() {
+        return reportController.generateReport();
     }
 }

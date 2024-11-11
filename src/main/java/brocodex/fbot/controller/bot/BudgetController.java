@@ -3,26 +3,12 @@ package brocodex.fbot.controller.bot;
 import brocodex.fbot.handler.ResponseHandler;
 import org.telegram.abilitybots.api.objects.Ability;
 
-public class BotCommandsController {
+public class BudgetController {
     private final ResponseHandler responseHandler;
 
-    public BotCommandsController(ResponseHandler responseHandler) {
+    public BudgetController(ResponseHandler responseHandler) {
         this.responseHandler = responseHandler;
     }
-
-    public Ability start() {
-        return Ability.builder().build();
-    }
-
-    public Ability addTransaction() {
-        return Ability.builder().build();
-    }
-
-
-    public Ability viewTransactions() {
-        return Ability.builder().build();
-    }
-
 
     public Ability setBudget() {
         return Ability.builder().build();
@@ -32,7 +18,7 @@ public class BotCommandsController {
         return Ability.builder().build();
     }
 
-    public Ability getReport() {
+    public Ability generateReport() {
         return Ability.builder().build();
     }
 }
