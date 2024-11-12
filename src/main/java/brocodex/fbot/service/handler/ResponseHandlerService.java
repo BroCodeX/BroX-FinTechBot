@@ -50,4 +50,8 @@ public class ResponseHandlerService {
         message.setText("I don't understand your message: " + userMessage);
         sender.execute(message);
     }
+
+    public boolean userIsActive(Long chatId) {
+        return chatStates.containsKey(chatId);
+    }
 }
