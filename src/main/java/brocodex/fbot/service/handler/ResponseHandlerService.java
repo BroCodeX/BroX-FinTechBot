@@ -1,7 +1,9 @@
 package brocodex.fbot.service.handler;
 
 import brocodex.fbot.constants.ChatState;
+import brocodex.fbot.controller.bot.UserController;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.abilitybots.api.db.DBContext;
 import org.telegram.abilitybots.api.sender.SilentSender;
@@ -15,6 +17,9 @@ import java.util.Map;
 public class ResponseHandlerService {
     private final SilentSender sender;
     private final Map<Long, ChatState> chatStates;
+
+    @Autowired
+    private UserController userController;
 
     public ResponseHandlerService(SilentSender sender, DBContext dbContext) {
         this.sender = sender;
@@ -31,7 +36,7 @@ public class ResponseHandlerService {
         }
 
         switch (chatStates.get(chatID)) {
-            case WAITING_FOR_USERNAME -> ;
+            case WAITING_FOR_USERNAME -> userController.saveUsername(chatID, message);
             case WAITING_FOR_BUDGET -> ;
             case WAITING_FOR_TRANSACTION -> ;
             case PREPARE_REPORT_FILTERS -> ;
