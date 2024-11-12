@@ -4,6 +4,7 @@ import brocodex.fbot.service.handler.ResponseHandlerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.telegram.abilitybots.api.objects.Ability;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Controller
 public class TransactionsController {
@@ -14,8 +15,10 @@ public class TransactionsController {
         this.responseHandler = responseHandlerService;
     }
 
-    public Ability addTransaction() {
-        return Ability.builder().build();
+    public void replyToAddTransaction(Long chatId) {
+    }
+
+    public void addTransaction(Long chatId, Message message) {
     }
 
     public Ability viewTransactions() {

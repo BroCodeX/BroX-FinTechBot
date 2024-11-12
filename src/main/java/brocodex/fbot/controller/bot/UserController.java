@@ -6,9 +6,6 @@ import brocodex.fbot.service.handler.ResponseHandlerService;
 import brocodex.fbot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.telegram.abilitybots.api.objects.Ability;
-import org.telegram.abilitybots.api.objects.Locality;
-import org.telegram.abilitybots.api.objects.Privacy;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
@@ -24,19 +21,6 @@ public class UserController {
         this.responseHandler = responseHandlerService;
     }
 
-    public Ability start() {
-        return Ability.builder()
-                .name("start")
-                .info("Starts the bot")
-                .locality(Locality.USER)
-                .privacy(Privacy.PUBLIC)
-                .action(ctx -> {
-                    Long chatId = ctx.chatId();
-                    welcomeUser(chatId);
-                })
-                .build();
-    }
-
     public void welcomeUser(Long chatId) {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
@@ -45,14 +29,17 @@ public class UserController {
         responseHandler.updateChatState(chatId, ChatState.WAITING_FOR_USERNAME);
     }
 
-    public void saveUsername(long chatId, Message message) {
+    public void saveUsername(Long chatId, Message message) {
         UserDTO dto = new UserDTO();
         dto.setUsername(message.getText());
         dto.setTelegramId(message.getFrom().getId());
-        userService.createUser(dto);
+
+        var savedUser = userService.createUser(dto);
+
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
-        sendMessage.setText("Hello " + dto.getUsername() + ". Please set your budget");
+        sendMessage.setText("Hello " + savedUser.getUsername() + ". Please set your budget");
+
         responseHandler.getSender().execute(sendMessage);
         responseHandler.updateChatState(chatId, ChatState.WAITING_FOR_BUDGET);
     }

@@ -15,7 +15,7 @@ public class BudgetService {
         return null;
     }
 
-    public BudgetDTO createBudget(UserDTO dto) {
+    public BudgetDTO createBudget(BudgetDTO dto) {
         return null;
     }
 

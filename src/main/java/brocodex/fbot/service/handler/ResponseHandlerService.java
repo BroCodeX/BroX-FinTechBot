@@ -1,6 +1,8 @@
 package brocodex.fbot.service.handler;
 
 import brocodex.fbot.constants.ChatState;
+import brocodex.fbot.controller.bot.BudgetController;
+import brocodex.fbot.controller.bot.TransactionsController;
 import brocodex.fbot.controller.bot.UserController;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,11 @@ public class ResponseHandlerService {
 
     @Autowired
     private UserController userController;
+    @Autowired
+    private BudgetController budgetController;
+
+    @Autowired
+    private TransactionsController transactionsController;
 
     public ResponseHandlerService(SilentSender sender, DBContext dbContext) {
         this.sender = sender;
@@ -37,10 +44,11 @@ public class ResponseHandlerService {
 
         switch (chatStates.get(chatID)) {
             case WAITING_FOR_USERNAME -> userController.saveUsername(chatID, message);
-            case WAITING_FOR_BUDGET -> ;
-            case WAITING_FOR_TRANSACTION -> ;
-            case PREPARE_REPORT_FILTERS -> ;
-            case VIEWING_REPORT -> ;
+            case WAITING_FOR_BUDGET -> budgetController.setBudget(chatID, message);
+//            case READY -> ;
+            case WAITING_FOR_TRANSACTION -> transactionsController.addTransaction(chatID, message);
+            case TRANSACTION_REPORT_FILTERS -> ;
+//            case ADMIN_MODE -> ;
             default -> unexpectedMessage(chatID, message.getText());
         }
     }
