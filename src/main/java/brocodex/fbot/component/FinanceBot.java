@@ -118,6 +118,26 @@ public class FinanceBot extends AbilityBot {
                 .build();
     }
 
+    public Ability help() {
+        return Ability.builder()
+                .name("help")
+                .info("Displays a list of all available commands")
+                .locality(Locality.USER)
+                .privacy(Privacy.PUBLIC)
+                .action(ctx -> {
+                    Long chatId = ctx.chatId();
+                    StringBuilder helpMessage = new StringBuilder("Available commands:\n\n");
+
+                    helpMessage.append("/add_transaction - Add a transaction");
+                    helpMessage.append("/view_transactions - View your transactions with filters");
+                    helpMessage.append("/edit_budget - Set or update your budget");
+                    helpMessage.append("/view_budget - Watch your current budget");
+
+                    ctx.bot().silent().send(helpMessage.toString(), chatId);
+                })
+                .build();
+    }
+
     public Reply replyToButtons() {
         BiConsumer<BaseAbilityBot, Update> action = (abilityBot, upd) ->
                 responseHandlerService.replyToButtons(getChatId(upd), upd.getMessage());

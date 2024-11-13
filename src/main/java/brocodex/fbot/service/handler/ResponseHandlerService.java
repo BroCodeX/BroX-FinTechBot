@@ -24,7 +24,6 @@ public class ResponseHandlerService {
     private UserController userController;
     @Autowired
     private BudgetController budgetController;
-
     @Autowired
     private TransactionsController transactionsController;
 
@@ -45,9 +44,12 @@ public class ResponseHandlerService {
         switch (chatStates.get(chatID)) {
             case WAITING_FOR_USERNAME -> userController.saveUsername(chatID, message);
             case WAITING_FOR_BUDGET -> budgetController.setBudget(chatID, message);
-//            case READY -> ;
-            case WAITING_FOR_TRANSACTION -> transactionsController.addTransaction(chatID, message);
-            case TRANSACTION_REPORT_FILTERS -> ;
+            case READY -> userController.readyUser(chatID);
+            case WAITING_FOR_TRANSACTION_AMOUNT -> transactionsController.addTransactionAmount(chatID, message);
+            case WAITING_FOR_TRANSACTION_TYPE -> ;
+            case WAITING_FOR_TRANSACTION_DESCRIPTION -> ;
+            case WAITING_FOR_TRANSACTION_CATEGORY -> ;
+//            case TRANSACTION_REPORT_FILTERS -> ;
 //            case ADMIN_MODE -> ;
             default -> unexpectedMessage(chatID, message.getText());
         }

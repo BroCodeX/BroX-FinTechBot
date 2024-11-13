@@ -43,4 +43,13 @@ public class UserController {
         responseHandler.getSender().execute(sendMessage);
         responseHandler.updateChatState(chatId, ChatState.WAITING_FOR_BUDGET);
     }
+
+    public void readyUser(Long chatId) {
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText("Your bot is ready for work\n" +
+                "You can type /help for commands information");
+        responseHandler.getSender().execute(message);
+        responseHandler.updateChatState(chatId, ChatState.WAITING_FOR_USERNAME);
+    }
 }
