@@ -1,7 +1,7 @@
 package brocodex.fbot.mapper;
 
-import brocodex.fbot.dto.budget.BudgetDTO;
-import brocodex.fbot.model.Budget;
+import brocodex.fbot.dto.transaction.TransactionDTO;
+import brocodex.fbot.model.transaction.Transaction;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -13,7 +13,7 @@ import org.mapstruct.ReportingPolicy;
         unmappedSourcePolicy = ReportingPolicy.WARN,
         unmappedTargetPolicy = ReportingPolicy.WARN
 )
-public abstract class BudgetMapper {
-    abstract Budget map(BudgetDTO dto);
-    abstract BudgetDTO map(Budget budget);
+public abstract class TransactionMapper {
+    abstract Transaction map(TransactionDTO dto);
+    abstract TransactionDTO map(Transaction transaction);
 }
