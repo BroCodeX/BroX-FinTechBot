@@ -54,9 +54,11 @@ public class ResponseHandlerService {
             case WAITING_FOR_BUDGET -> budgetController.setBudget(chatID, message);
             case READY -> infoMessage(chatID, message);
             case WAITING_FOR_TRANSACTION_AMOUNT -> transactionsController.addTransactionAmount(chatID, message);
-            case WAITING_FOR_TRANSACTION_TYPE -> ;
-            case WAITING_FOR_TRANSACTION_DESCRIPTION -> ;
-            case WAITING_FOR_TRANSACTION_CATEGORY -> ;
+            case WAITING_FOR_TRANSACTION_TYPE -> transactionsController.sendTransactionTypeButtons(chatID);
+            case WAITING_FOR_TRANSACTION_DESCRIPTION ->
+                    transactionsController.addTransactionDescription(chatID, message);
+            case WAITING_FOR_TRANSACTION_CATEGORY ->
+                    transactionsController.addTransactionCategory(chatID, message);
 //            case TRANSACTION_REPORT_FILTERS -> ;
 //            case ADMIN_MODE -> ;
             default -> handleUnexpectedState(chatID, chatStates.get(chatID));

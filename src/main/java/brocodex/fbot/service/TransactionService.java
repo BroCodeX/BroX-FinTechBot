@@ -17,14 +17,17 @@ public class TransactionService {
     }
 
     public TransactionDTO createTransaction(TransactionDTO dto) {
-        return null;
+        String type = dto.getType();
+        if (type.equals("income")) {
+            return null;
+        } else if (type.equals("expense")) {
+            return null;
+        } else {
+            return null;
+        }
     }
 
     public TransactionDTO showTransaction(Long id) {
-        return null;
-    }
-
-    public TransactionDTO updateTransaction(Long id, TransactionDTO dto) {
         return null;
     }
 

@@ -3,12 +3,16 @@ package brocodex.fbot.controller.bot;
 import brocodex.fbot.constants.ChatState;
 import brocodex.fbot.dto.transaction.TransactionDTO;
 import brocodex.fbot.service.TransactionService;
+import brocodex.fbot.service.handler.CallbackHandlerService;
 import brocodex.fbot.service.handler.ResponseHandlerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.telegram.abilitybots.api.objects.Ability;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+
+import java.util.List;
 
 @Controller
 public class TransactionsController {
@@ -16,12 +20,16 @@ public class TransactionsController {
 
     private final ResponseHandlerService responseHandler;
 
+    private final CallbackHandlerService callbackHandler;
+
     @Autowired
     private TransactionService service;
 
     @Autowired
-    public TransactionsController(ResponseHandlerService responseHandlerService) {
+    public TransactionsController(ResponseHandlerService responseHandlerService,
+                                  CallbackHandlerService callbackHandler) {
         this.responseHandler = responseHandlerService;
+        this.callbackHandler = callbackHandler;
     }
 
     public void replyToAddTransaction(Long chatId) {
@@ -38,9 +46,8 @@ public class TransactionsController {
         try {
             dto.setAmount(Double.parseDouble(message.getText()));
 
-            replyToAddTransactionType(chatId);
             responseHandler.updateChatState(chatId, ChatState.WAITING_FOR_TRANSACTION_TYPE);
-            addTransactionType(chatId);
+            sendTransactionTypeButtons(chatId);
         } catch (NumberFormatException ex) {
             SendMessage sendMessage = new SendMessage();
             sendMessage.setChatId(chatId);
@@ -48,21 +55,38 @@ public class TransactionsController {
         }
     }
 
-    public void replyToAddTransactionType(Long chatId) {
+    public void sendTransactionTypeButtons(Long chatId) {
+        InlineKeyboardButton incomeButton = new InlineKeyboardButton();
+        incomeButton.setText("income");
+        incomeButton.setCallbackData("transaction_type_income");
+
+        InlineKeyboardButton expenseButton = new InlineKeyboardButton();
+        incomeButton.setText("expense");
+        incomeButton.setCallbackData("transaction_type_expense");
+
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+        markup.setKeyboard(List.of(List.of(incomeButton), List.of(expenseButton)));
+
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
-        sendMessage.setText("Please enter the transaction type.");
-
-        responseHandler.getSender().execute(sendMessage);
+        sendMessage.setText("Please choose the type of transaction.");
+        sendMessage.setReplyMarkup(markup);
+        try {
+            responseHandler.getSender().execute(sendMessage);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
-    public void addTransactionType(Long chatId) {
+    public void addTransactionType(Long chatId, String type) {
         try {
-            dto.setType();
+            dto.setType(type);
             replyToAddTransactionDescription(chatId);
             responseHandler.updateChatState(chatId, ChatState.WAITING_FOR_TRANSACTION_DESCRIPTION);
         } catch (NumberFormatException ex) {
-
+            SendMessage sendMessage = new SendMessage();
+            sendMessage.setChatId(chatId);
+            sendMessage.setText("Invalid type of transaction. Please choose income or expense");
         }
     }
 
@@ -80,7 +104,9 @@ public class TransactionsController {
             replyToAddTransactionCategory(chatId);
             responseHandler.updateChatState(chatId, ChatState.WAITING_FOR_TRANSACTION_CATEGORY);
         } catch (NumberFormatException ex) {
-
+            SendMessage sendMessage = new SendMessage();
+            sendMessage.setChatId(chatId);
+            sendMessage.setText("Sorry, something went wrong. Please retype the description");
         }
     }
 
@@ -97,7 +123,9 @@ public class TransactionsController {
             dto.setCategoryName(message.getText());
             replyTransactionSuccess(chatId);
         } catch (NumberFormatException ex) {
-
+            SendMessage sendMessage = new SendMessage();
+            sendMessage.setChatId(chatId);
+            sendMessage.setText("Sorry, something went wrong. Please retype the description");
         }
     }
 

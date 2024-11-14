@@ -6,9 +6,6 @@ import brocodex.fbot.service.BudgetService;
 import brocodex.fbot.service.handler.ResponseHandlerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.telegram.abilitybots.api.objects.Ability;
-import org.telegram.abilitybots.api.objects.Locality;
-import org.telegram.abilitybots.api.objects.Privacy;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
@@ -23,10 +20,6 @@ public class BudgetController {
     public BudgetController(ResponseHandlerService responseHandlerService) {
         this.responseHandler = responseHandlerService;
     }
-
-//    public Ability setBudget(Long chatId, Message message) {
-//        return Ability.builder().build();
-//    }
 
     public void setBudget(Long chatId, Message message) {
         try {

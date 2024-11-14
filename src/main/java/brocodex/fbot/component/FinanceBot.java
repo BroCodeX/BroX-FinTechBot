@@ -1,6 +1,7 @@
 package brocodex.fbot.component;
 
 import brocodex.fbot.controller.bot.*;
+import brocodex.fbot.service.handler.CallbackHandlerService;
 import brocodex.fbot.service.handler.ResponseHandlerService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +22,7 @@ public class FinanceBot extends AbilityBot {
     private final BudgetController budgetController;
     private final ReportController reportController;
     private final TransactionsController transactionsController;
+    private final CallbackHandlerService callbackHandlerService;
 
     private final long creatorID;
 
@@ -32,7 +34,8 @@ public class FinanceBot extends AbilityBot {
             UserController userController,
             BudgetController budgetController,
             ReportController reportController,
-            TransactionsController transactionsController) {
+            TransactionsController transactionsController,
+            CallbackHandlerService callbackHandlerService) {
         super(botToken, botUsername);
         this.creatorID = creatorId;
         this.responseHandlerService = responseHandlerService;
@@ -40,6 +43,7 @@ public class FinanceBot extends AbilityBot {
         this.budgetController = budgetController;
         this.reportController = reportController;
         this.transactionsController = transactionsController;
+        this.callbackHandlerService = callbackHandlerService;
     }
 
     @Override
@@ -142,5 +146,11 @@ public class FinanceBot extends AbilityBot {
         BiConsumer<BaseAbilityBot, Update> action = (abilityBot, upd) ->
                 responseHandlerService.replyToButtons(getChatId(upd), upd.getMessage());
         return Reply.of(action, Flag.TEXT,upd -> responseHandlerService.userIsActive(getChatId(upd)));
+    }
+
+    public void onUpdateReceived(Update update) {
+        if(update.hasCallbackQuery()) {
+            callbackHandlerService.handleCallback(update.getCallbackQuery());
+        }
     }
 }
