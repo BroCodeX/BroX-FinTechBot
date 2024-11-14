@@ -2,6 +2,7 @@ package brocodex.fbot.controller.bot;
 
 import brocodex.fbot.constants.ChatState;
 import brocodex.fbot.dto.transaction.TransactionDTO;
+import brocodex.fbot.factory.KeyboardFactory;
 import brocodex.fbot.service.TransactionService;
 import brocodex.fbot.service.handler.CallbackHandlerService;
 import brocodex.fbot.service.handler.ResponseHandlerService;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.List;
@@ -111,11 +113,23 @@ public class TransactionsController {
     }
 
     public void replyToAddTransactionCategory(Long chatId) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.setText("Please enter the transaction's category.");
+        String text = "Please choose the transaction's category.";
+        var state = ChatState.WAITING_FOR_TRANSACTION_CATEGORY;
+        String type = dto.getType();
 
-        responseHandler.getSender().execute(sendMessage);
+        if (type.equals("income")) {
+            var variant = KeyboardFactory.getIncomeCategories();
+            promptWithKeyboardForState(chatId, text, variant, state);
+        } else if(type.equals("expense")) {
+            var variant = KeyboardFactory.getExpenseCategories();
+            promptWithKeyboardForState(chatId, text, variant, state);
+        } else {
+            SendMessage sendMessage = new SendMessage();
+            sendMessage.setChatId(chatId);
+            sendMessage.setText("Enter your own category");
+            responseHandler.getSender().execute(sendMessage);
+            responseHandler.updateChatState(chatId, state);
+        }
     }
 
     public void addTransactionCategory(Long chatId, Message message) {
@@ -150,6 +164,15 @@ public class TransactionsController {
 
     public void viewTransactions() {
 
+    }
+
+    private void promptWithKeyboardForState(long chatId, String text, ReplyKeyboard variant, ChatState state) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+        sendMessage.setText(text);
+        sendMessage.setReplyMarkup(variant);
+        responseHandler.getSender().execute(sendMessage);
+        responseHandler.updateChatState(chatId, state);
     }
 
 }
