@@ -18,6 +18,7 @@ public class TransactionService {
 
     public TransactionDTO createTransaction(TransactionDTO dto) {
         String type = dto.getType();
+
         if (type.equals("income")) {
             return null;
         } else if (type.equals("expense")) {

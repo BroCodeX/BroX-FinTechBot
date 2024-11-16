@@ -70,6 +70,7 @@ public class ModelsGenerator {
         return Instancio.of(Budget.class)
                 .ignore(Select.field(Budget::getId))
                 .ignore(Select.field(Budget::getSpentAmount))
+                .ignore(Select.field(Budget::getUser))
                 .supply(Select.field(Budget::getAmount), () -> 10.000)
                 .toModel();
     }

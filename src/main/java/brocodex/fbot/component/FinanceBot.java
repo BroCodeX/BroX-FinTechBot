@@ -4,6 +4,7 @@ import brocodex.fbot.controller.bot.*;
 import brocodex.fbot.service.handler.CallbackHandlerService;
 import brocodex.fbot.service.handler.ResponseHandlerService;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.abilitybots.api.bot.AbilityBot;
@@ -26,6 +27,7 @@ public class FinanceBot extends AbilityBot {
 
     private final long creatorID;
 
+    @Autowired
     public FinanceBot(
             @Value("${telegram.bot.token}") String botToken,
             @Value("${telegram.bot.username}") String botUsername,

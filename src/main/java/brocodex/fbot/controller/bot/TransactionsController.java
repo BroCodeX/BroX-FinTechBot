@@ -103,8 +103,8 @@ public class TransactionsController {
     public void addTransactionDescription(Long chatId, Message message) {
         try {
             dto.setDescription(message.getText());
-            replyToAddTransactionCategory(chatId);
             responseHandler.updateChatState(chatId, ChatState.WAITING_FOR_TRANSACTION_CATEGORY);
+            replyToAddTransactionCategory(chatId);
         } catch (NumberFormatException ex) {
             SendMessage sendMessage = new SendMessage();
             sendMessage.setChatId(chatId);
@@ -126,9 +126,10 @@ public class TransactionsController {
         } else {
             SendMessage sendMessage = new SendMessage();
             sendMessage.setChatId(chatId);
-            sendMessage.setText("Enter your own category");
+            sendMessage.setText("You should set only income or expense");
             responseHandler.getSender().execute(sendMessage);
-            responseHandler.updateChatState(chatId, state);
+            responseHandler.updateChatState(chatId, ChatState.WAITING_FOR_TRANSACTION_TYPE);
+            sendTransactionTypeButtons(chatId);
         }
     }
 
@@ -140,6 +141,7 @@ public class TransactionsController {
             SendMessage sendMessage = new SendMessage();
             sendMessage.setChatId(chatId);
             sendMessage.setText("Sorry, something went wrong. Please retype the description");
+            replyToAddTransactionCategory(chatId);
         }
     }
 

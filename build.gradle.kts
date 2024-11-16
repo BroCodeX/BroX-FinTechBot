@@ -65,9 +65,9 @@ dependencies {
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
 	// Spring security
-	implementation("org.springframework.boot:spring-boot-starter-security")
-	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-	testImplementation("org.springframework.security:spring-security-test")
+//	implementation("org.springframework.boot:spring-boot-starter-security")
+//	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+//	testImplementation("org.springframework.security:spring-security-test")
 
 	// Logger
 	implementation("io.sentry:sentry-spring-boot-starter-jakarta:7.15.0")
