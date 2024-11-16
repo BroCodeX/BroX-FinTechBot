@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 public class TransactionDTO {
     private Long id;
+    private Long telegramId;
     private Double amount; // сумма
     private String description; // описание в виде заметки
     private String type; // тип операции: income или expense

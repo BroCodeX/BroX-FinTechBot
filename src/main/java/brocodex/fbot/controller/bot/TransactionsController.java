@@ -34,7 +34,7 @@ public class TransactionsController {
         this.callbackHandler = callbackHandler;
     }
 
-    public void replyToAddTransaction(Long chatId) {
+    public void replyToAddTransaction(Long chatId, Long telegramId) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         sendMessage.setText("Please enter the transaction amount.");
@@ -42,6 +42,7 @@ public class TransactionsController {
         responseHandler.getSender().execute(sendMessage);
         responseHandler.updateChatState(chatId, ChatState.WAITING_FOR_TRANSACTION_AMOUNT);
         dto = new TransactionDTO();
+        dto.setTelegramId(telegramId);
     }
 
     public void addTransactionAmount(Long chatId, Message message) {

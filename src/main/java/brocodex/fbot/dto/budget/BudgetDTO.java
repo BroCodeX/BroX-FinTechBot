@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Setter
 @Getter
 public class BudgetDTO {
+    private Long telegramId;
     private Double amount; // текущий бюджет
 //    private Double monthlyBudget; // Месячный бюджет, если выставлен
 //    private Double weeklyBudget; // Недельный бюджет, если выставлен

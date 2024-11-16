@@ -25,6 +25,7 @@ public class BudgetController {
         try {
             BudgetDTO dto = new BudgetDTO();
             dto.setAmount(Double.parseDouble(message.getText()));
+            dto.setTelegramId(message.getFrom().getId());
 
             var budget = service.createBudget(dto);
 

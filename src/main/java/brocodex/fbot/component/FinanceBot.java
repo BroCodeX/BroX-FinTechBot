@@ -79,7 +79,8 @@ public class FinanceBot extends AbilityBot {
                 .privacy(Privacy.PUBLIC)
                 .action(ctx -> {
                     Long chatId = ctx.chatId();
-                    transactionsController.replyToAddTransaction(chatId);
+                    Long telegramId = ctx.user().getId();
+                    transactionsController.replyToAddTransaction(chatId, telegramId);
                 })
                 .build();
     }
@@ -93,6 +94,7 @@ public class FinanceBot extends AbilityBot {
                 .privacy(Privacy.PUBLIC)
                 .action(ctx -> {
                     Long chatId = ctx.chatId();
+                    Long telegramId = ctx.user().getId();
                     //
                 })
                 .build();
@@ -106,6 +108,7 @@ public class FinanceBot extends AbilityBot {
                 .privacy(Privacy.PUBLIC)
                 .action(ctx -> {
                     Long chatId = ctx.chatId();
+                    Long telegramId = ctx.user().getId();
                     //budgetController.editBudget();
                 })
                 .build();
@@ -118,6 +121,7 @@ public class FinanceBot extends AbilityBot {
                 .locality(Locality.USER)
                 .privacy(Privacy.PUBLIC)
                 .action(ctx -> {
+                    Long telegramId = ctx.user().getId();
                     Long chatId = ctx.chatId();
                     //
                 })

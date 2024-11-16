@@ -84,7 +84,7 @@ public class TransactionBudgetTest {
 
         verify(budgetRepository).findById(1L);
         verify(budgetRepository).save(budget);
-        verify(transactionRepository.save(any(Transaction.class)));
+        verify(transactionRepository).save(any(Transaction.class));
     }
 
     @Test
@@ -97,5 +97,13 @@ public class TransactionBudgetTest {
         });
 
         dto.setType("expense");
+        var result = service.createTransaction(dto);
+
+        assertThat(result).isNotNull();
+        assertThat(budget.getAmount()).isEqualTo(5.000);
+
+        verify(budgetRepository).findById(2L);
+        verify(budgetRepository).save(budget);
+        verify(transactionRepository).save(any(Transaction.class));
     }
 }
