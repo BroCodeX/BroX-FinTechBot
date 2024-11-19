@@ -34,12 +34,12 @@ public class ReferenceMapper {
     @Named("toUserEntity")
     public User toUserEntity(Long telegramId) {
         return userRepository.findByTelegramId(telegramId).orElseThrow(() ->
-                new NoSuchElementException("This telegramId hasn't found"));
+                new NoSuchElementException("This telegram id hasn't found: " + telegramId));
     }
 
     @Named("toTransactionCategory")
     public TransactionCategory toTransactionCategory(String transactionCategory) {
-        return categoryRepository.findBySlug(transactionCategory).orElseThrow(() ->
-                new NoSuchElementException("This category hasn't found"));
+        return categoryRepository.findBySlug(transactionCategory.trim().toLowerCase()).orElseThrow(() ->
+                new NoSuchElementException("This category hasn't found: " + transactionCategory));
     }
 }
