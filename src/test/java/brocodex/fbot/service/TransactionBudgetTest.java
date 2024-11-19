@@ -19,8 +19,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.MockitoAnnotations.openMocks;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -83,9 +81,7 @@ public class TransactionBudgetTest {
 
     @Test
     public void testIncomeTransaction() {
-        when(userRepository.findByTelegramId(123L)).thenReturn(Optional.of(user));
-        user.setBudget(budget);
-        budget.setUser(user);
+        dto.setType("income");
 
         when(mapper.map(dto)).thenAnswer(invocation -> {
             Transaction transaction = new Transaction();
@@ -94,6 +90,10 @@ public class TransactionBudgetTest {
             transaction.setType(dto.getType());
             return transaction;
         });
+
+        when(userRepository.findByTelegramId(user.getTelegramId())).thenReturn(Optional.of(user));
+        user.setBudget(budget);
+        budget.setUser(user);
 
         when(mapper.map(any(Transaction.class))).thenAnswer(invocation -> {
             Transaction transaction = invocation.getArgument(0);
@@ -104,7 +104,6 @@ public class TransactionBudgetTest {
             return transactionDTO;
         });
 
-        dto.setType("income");
         var result = service.createTransaction(dto);
 
         assertThat(result).isNotNull();
@@ -116,7 +115,9 @@ public class TransactionBudgetTest {
 
     @Test
     public void testExpenseTransaction() {
-        when(userRepository.findByTelegramId(123L)).thenReturn(Optional.of(user));
+        dto.setType("expense");
+
+        when(userRepository.findByTelegramId(user.getTelegramId())).thenReturn(Optional.of(user));
         user.setBudget(budget);
         budget.setUser(user);
 
@@ -137,7 +138,6 @@ public class TransactionBudgetTest {
             return transactionDTO;
         });
 
-        dto.setType("expense");
         var result = service.createTransaction(dto);
 
         assertThat(result).isNotNull();

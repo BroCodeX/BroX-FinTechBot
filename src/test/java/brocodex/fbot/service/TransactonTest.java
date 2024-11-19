@@ -68,10 +68,11 @@ public class TransactonTest {
 
     @Test
     public void testIncomeTransaction() {
+        dto.setType("income");
+
         var currentBudget = budgetRepository.save(budget);
         Long budgetId = currentBudget.getId();
 
-        dto.setType("income");
         var currentTransaction = service.createTransaction(dto);
         Long transactionId = currentTransaction.getId();
 
@@ -86,10 +87,10 @@ public class TransactonTest {
 
     @Test
     public void testExpenseTransaction() {
+        dto.setType("expense");
         var currentBudget = budgetRepository.save(budget);
         Long budgetId = currentBudget.getId();
 
-        dto.setType("expense");
         var currentTransaction = service.createTransaction(dto);
         Long transactionId = currentTransaction.getId();
 
