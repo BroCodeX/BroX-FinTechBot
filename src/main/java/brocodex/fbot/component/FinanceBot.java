@@ -2,7 +2,7 @@ package brocodex.fbot.component;
 
 import brocodex.fbot.controller.bot.*;
 import brocodex.fbot.service.handler.CallbackHandlerService;
-import brocodex.fbot.service.handler.ResponseHandlerService;
+import brocodex.fbot.service.handler.ResponseHandler;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,12 +19,15 @@ import static org.telegram.abilitybots.api.util.AbilityUtils.getChatId;
 
 @Component
 public class FinanceBot extends AbilityBot {
-    private final ResponseHandlerService responseHandlerService;
+    @Autowired
+    @Lazy
+    private CallbackHandlerService callbackHandlerService;
+    private final ResponseHandler responseHandler;
+
     private final UserController userController;
     private final BudgetController budgetController;
     private final ReportController reportController;
     private final TransactionsController transactionsController;
-    private final CallbackHandlerService callbackHandlerService;
 
     private final long creatorID;
 
@@ -34,19 +37,18 @@ public class FinanceBot extends AbilityBot {
             @Value("${telegram.bot.creatorId}") Long creatorId) {
         super(botToken, botName);
         this.creatorID = creatorId;
-        this.responseHandlerService = new ResponseHandlerService(this.silent(), this.db());
-        this.userController = new UserController(responseHandlerService);
-        this.budgetController = new BudgetController(responseHandlerService);
-        this.reportController = new ReportController(responseHandlerService);
-        this.callbackHandlerService = new CallbackHandlerService();
-        this.transactionsController = new TransactionsController(responseHandlerService, callbackHandlerService);
+        this.responseHandler = new ResponseHandler(this.silent(), this.db());
+        this.userController = new UserController(responseHandler);
+        this.budgetController = new BudgetController(responseHandler);
+        this.reportController = new ReportController(responseHandler);
+        this.transactionsController = new TransactionsController(responseHandler, callbackHandlerService);
 
     }
 
 //@Component
 //public class FinanceBot extends AbilityBot {
 //    @Autowired @Lazy
-//    private ResponseHandlerService responseHandlerService;
+//    private ResponseHandler responseHandler;
 //    @Autowired
 //    private UserController userController;
 //    @Autowired
@@ -171,8 +173,8 @@ public class FinanceBot extends AbilityBot {
 
     public Reply replyToButtons() {
         BiConsumer<BaseAbilityBot, Update> action = (abilityBot, upd) ->
-                responseHandlerService.replyToButtons(getChatId(upd), upd.getMessage());
-        return Reply.of(action, Flag.TEXT,upd -> responseHandlerService.userIsActive(getChatId(upd)));
+                responseHandler.replyToButtons(getChatId(upd), upd.getMessage());
+        return Reply.of(action, Flag.TEXT,upd -> responseHandler.userIsActive(getChatId(upd)));
     }
 
     public void onUpdateReceived(Update update) {

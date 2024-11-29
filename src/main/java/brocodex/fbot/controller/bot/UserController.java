@@ -2,22 +2,22 @@ package brocodex.fbot.controller.bot;
 
 import brocodex.fbot.constants.ChatState;
 import brocodex.fbot.dto.user.UserDTO;
-import brocodex.fbot.service.handler.ResponseHandlerService;
+import brocodex.fbot.service.handler.ResponseHandler;
 import brocodex.fbot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 
 public class UserController {
 
+    @Autowired
     private UserService userService;
 
-    private final ResponseHandlerService responseHandler;
+    private final ResponseHandler responseHandler;
 
-    public UserController(ResponseHandlerService responseHandlerService) {
-        this.responseHandler = responseHandlerService;
+    public UserController(ResponseHandler responseHandler) {
+        this.responseHandler = responseHandler;
     }
 
     public void welcomeUser(Long chatId) {

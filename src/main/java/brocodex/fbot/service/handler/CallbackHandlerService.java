@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
 import java.util.Locale;
 
-
+@Service
 public class CallbackHandlerService {
 
     private TransactionsController controller;

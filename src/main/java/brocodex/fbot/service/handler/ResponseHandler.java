@@ -6,8 +6,6 @@ import brocodex.fbot.controller.bot.TransactionsController;
 import brocodex.fbot.controller.bot.UserController;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.telegram.abilitybots.api.db.DBContext;
 import org.telegram.abilitybots.api.sender.SilentSender;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -17,7 +15,7 @@ import java.util.Map;
 
 @Slf4j
 @Getter
-public class ResponseHandlerService {
+public class ResponseHandler {
     private final SilentSender sender;
     private final Map<Long, ChatState> chatStates;
 
@@ -28,7 +26,7 @@ public class ResponseHandlerService {
 
     private TransactionsController transactionsController;
 
-    public ResponseHandlerService(SilentSender sender, DBContext dbContext) {
+    public ResponseHandler(SilentSender sender, DBContext dbContext) {
         this.sender = sender;
         chatStates = dbContext.getMap("CHAT_STATES");
     }

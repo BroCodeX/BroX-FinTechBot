@@ -5,9 +5,8 @@ import brocodex.fbot.dto.transaction.TransactionDTO;
 import brocodex.fbot.factory.KeyboardFactory;
 import brocodex.fbot.service.TransactionService;
 import brocodex.fbot.service.handler.CallbackHandlerService;
-import brocodex.fbot.service.handler.ResponseHandlerService;
+import brocodex.fbot.service.handler.ResponseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -20,17 +19,18 @@ import java.util.List;
 public class TransactionsController {
     private TransactionDTO dto;
 
-    private final ResponseHandlerService responseHandler;
+    private final ResponseHandler responseHandler;
 
-    private final CallbackHandlerService callbackHandler;
+    @Autowired
+    private CallbackHandlerService callbackHandler;
 
-
+    @Autowired
     private TransactionService service;
 
 
-    public TransactionsController(ResponseHandlerService responseHandlerService,
+    public TransactionsController(ResponseHandler responseHandler,
                                   CallbackHandlerService callbackHandler) {
-        this.responseHandler = responseHandlerService;
+        this.responseHandler = responseHandler;
         this.callbackHandler = callbackHandler;
     }
 
