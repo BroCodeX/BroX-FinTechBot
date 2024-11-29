@@ -3,9 +3,11 @@ package brocodex.fbot.service;
 import brocodex.fbot.dto.transaction.TransactionDTO;
 import brocodex.fbot.dto.transaction.report.TransactionFilterDTO;
 import brocodex.fbot.model.Budget;
+import brocodex.fbot.model.User;
 import brocodex.fbot.model.transaction.Transaction;
 import brocodex.fbot.model.transaction.TransactionCategory;
 import brocodex.fbot.repository.BudgetRepository;
+import brocodex.fbot.repository.UserRepository;
 import brocodex.fbot.repository.transactions.TransactionCategoryRepository;
 import brocodex.fbot.repository.transactions.TransactionRepository;
 import brocodex.fbot.specification.TransactionSpec;
@@ -21,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 public class TransactonTest {
@@ -38,6 +41,9 @@ public class TransactonTest {
     @Autowired
     private TransactionService service;
 
+    @Autowired
+    private UserRepository userRepository;
+
     private static final LocalDateTime DATE_1991 =
             LocalDateTime.of(1991, 8, 25, 10, 10);
     private static final LocalDateTime NOW = LocalDateTime.now();
@@ -51,12 +57,17 @@ public class TransactonTest {
 
     private TransactionDTO dto;
 
+    private User user;
+
     @BeforeEach
     public void prepareData() {
         budgetRepository.deleteAll();
         transactionRepository.deleteAll();
+        userRepository.deleteAll();
+
         incomeTransaction = Instancio.of(generator.makeIncomeTransaction()).create();
         expenseTransaction = Instancio.of(generator.makeExpenseTransaction()).create();
+
         budget = Instancio.of(generator.makeBudget()).create(); // 10k
 
         dto = new TransactionDTO();
@@ -64,11 +75,17 @@ public class TransactonTest {
         dto.setDescription("Yandex transaction");
         dto.setCategoryName("Yandex");
         dto.setTransactionDate(NOW);
+
+        user = Instancio.of(generator.makeUser()).create();
+        budget.setUser(user);
+        user.setBudget(budget);
     }
 
     @Test
     public void testIncomeTransaction() {
         dto.setType("income");
+        dto.setTelegramId(user.getTelegramId());
+        userRepository.save(user);
 
         var currentBudget = budgetRepository.save(budget);
         Long budgetId = currentBudget.getId();
@@ -88,6 +105,10 @@ public class TransactonTest {
     @Test
     public void testExpenseTransaction() {
         dto.setType("expense");
+        dto.setTelegramId(user.getTelegramId());
+
+        userRepository.save(user);
+
         var currentBudget = budgetRepository.save(budget);
         Long budgetId = currentBudget.getId();
 
@@ -101,5 +122,29 @@ public class TransactonTest {
         var maybeTransaction = transactionRepository.findById(transactionId).orElse(null);
         assertThat(maybeTransaction).isNotNull();
         assertThat(maybeTransaction.getType()).isEqualTo("income");
+    }
+
+    @Test
+    public void testExpenseFailedTransaction() {
+        dto.setType("expense");
+        dto.setAmount(20.000);
+        dto.setTelegramId(user.getTelegramId());
+        userRepository.save(user);
+
+        var currentBudget = budgetRepository.save(budget);
+        Long budgetId = currentBudget.getId();
+
+        var exception = assertThrows(IllegalArgumentException.class,
+                () -> service.createTransaction(dto));
+
+        assertThat(exception.getMessage()).isEqualTo("Not enough budget for the expense");
+
+        var maybeBudget = budgetRepository.findById(budgetId).orElse(null);
+        assertThat(maybeBudget).isNotNull();
+        assertThat(maybeBudget.getAmount()).isEqualTo(5.000);
+
+//        var maybeTransaction = transactionRepository.findById(transactionId).orElse(null);
+//        assertThat(maybeTransaction).isNotNull();
+//        assertThat(maybeTransaction.getType()).isEqualTo("income");
     }
 }
