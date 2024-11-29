@@ -39,7 +39,7 @@ public class ReferenceMapper {
 
     @Named("toTransactionCategory")
     public TransactionCategory toTransactionCategory(String transactionCategory) {
-        return categoryRepository.findBySlug(transactionCategory.trim().toLowerCase()).orElseThrow(() ->
+        return categoryRepository.findBySlug(transactionCategory.trim()).orElseThrow(() ->
                 new NoSuchElementException("This category hasn't found: " + transactionCategory));
     }
 }

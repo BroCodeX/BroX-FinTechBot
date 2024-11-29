@@ -7,9 +7,9 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
 import java.util.Locale;
 
-@Service
+
 public class CallbackHandlerService {
-    @Autowired
+
     private TransactionsController controller;
     public void handleCallback(CallbackQuery callbackQuery) {
         Long chatId = callbackQuery.getMessage().getChatId();

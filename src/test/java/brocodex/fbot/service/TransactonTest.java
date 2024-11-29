@@ -27,7 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 public class TransactonTest {
-    private ModelsGenerator generator = new ModelsGenerator();
+    @Autowired
+    private ModelsGenerator generator;
 
     @Autowired
     private TransactionRepository transactionRepository;
@@ -64,6 +65,7 @@ public class TransactonTest {
         budgetRepository.deleteAll();
         transactionRepository.deleteAll();
         userRepository.deleteAll();
+        categoryRepository.deleteAll();
 
         incomeTransaction = Instancio.of(generator.makeIncomeTransaction()).create();
         expenseTransaction = Instancio.of(generator.makeExpenseTransaction()).create();
@@ -79,6 +81,10 @@ public class TransactonTest {
         user = Instancio.of(generator.makeUser()).create();
         budget.setUser(user);
         user.setBudget(budget);
+
+        category = new TransactionCategory();
+        category.setSlug("Yandex");
+        categoryRepository.save(category);
     }
 
     @Test
@@ -121,7 +127,7 @@ public class TransactonTest {
 
         var maybeTransaction = transactionRepository.findById(transactionId).orElse(null);
         assertThat(maybeTransaction).isNotNull();
-        assertThat(maybeTransaction.getType()).isEqualTo("income");
+        assertThat(maybeTransaction.getType()).isEqualTo("expense");
     }
 
     @Test
@@ -141,10 +147,6 @@ public class TransactonTest {
 
         var maybeBudget = budgetRepository.findById(budgetId).orElse(null);
         assertThat(maybeBudget).isNotNull();
-        assertThat(maybeBudget.getAmount()).isEqualTo(5.000);
-
-//        var maybeTransaction = transactionRepository.findById(transactionId).orElse(null);
-//        assertThat(maybeTransaction).isNotNull();
-//        assertThat(maybeTransaction.getType()).isEqualTo("income");
+        assertThat(maybeBudget.getAmount()).isEqualTo(10.000);
     }
 }

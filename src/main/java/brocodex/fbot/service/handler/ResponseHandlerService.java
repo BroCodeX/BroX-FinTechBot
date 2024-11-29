@@ -16,17 +16,16 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import java.util.Map;
 
 @Slf4j
-@Service
 @Getter
 public class ResponseHandlerService {
     private final SilentSender sender;
     private final Map<Long, ChatState> chatStates;
 
-    @Autowired
+
     private UserController userController;
-    @Autowired
+
     private BudgetController budgetController;
-    @Autowired
+
     private TransactionsController transactionsController;
 
     public ResponseHandlerService(SilentSender sender, DBContext dbContext) {

@@ -16,7 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.List;
 
-@Controller
+
 public class TransactionsController {
     private TransactionDTO dto;
 
@@ -24,10 +24,10 @@ public class TransactionsController {
 
     private final CallbackHandlerService callbackHandler;
 
-    @Autowired
+
     private TransactionService service;
 
-    @Autowired
+
     public TransactionsController(ResponseHandlerService responseHandlerService,
                                   CallbackHandlerService callbackHandler) {
         this.responseHandler = responseHandlerService;

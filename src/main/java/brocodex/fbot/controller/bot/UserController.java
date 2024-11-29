@@ -9,14 +9,13 @@ import org.springframework.stereotype.Controller;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-@Controller
+
 public class UserController {
-    @Autowired
+
     private UserService userService;
 
     private final ResponseHandlerService responseHandler;
 
-    @Autowired
     public UserController(ResponseHandlerService responseHandlerService) {
         this.responseHandler = responseHandlerService;
     }

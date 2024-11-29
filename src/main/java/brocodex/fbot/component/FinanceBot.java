@@ -28,24 +28,19 @@ public class FinanceBot extends AbilityBot {
 
     private final long creatorID;
 
-    @Autowired
     public FinanceBot(
             @Value("${telegram.bot.token}") String botToken,
             @Value("${telegram.bot.name}") String botName,
-            @Value("${telegram.bot.creatorId}") Long creatorId,
-            @Lazy UserController userController,
-            @Lazy BudgetController budgetController,
-            @Lazy ReportController reportController,
-            @Lazy TransactionsController transactionsController,
-            CallbackHandlerService callbackHandlerService) {
+            @Value("${telegram.bot.creatorId}") Long creatorId) {
         super(botToken, botName);
         this.creatorID = creatorId;
         this.responseHandlerService = new ResponseHandlerService(this.silent(), this.db());
-        this.userController = userController;
-        this.budgetController = budgetController;
-        this.reportController = reportController;
-        this.transactionsController = transactionsController;
-        this.callbackHandlerService = callbackHandlerService;
+        this.userController = new UserController(responseHandlerService);
+        this.budgetController = new BudgetController(responseHandlerService);
+        this.reportController = new ReportController(responseHandlerService);
+        this.callbackHandlerService = new CallbackHandlerService();
+        this.transactionsController = new TransactionsController(responseHandlerService, callbackHandlerService);
+
     }
 
 //@Component
