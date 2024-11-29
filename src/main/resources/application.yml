@@ -23,5 +23,5 @@ logging:
 telegram:
   bot:
     token: ${BOT_TOKEN}
-    username: ${BOT_NAME}
+    name: ${BOT_NAME}
     creatorId: ${CREATOR_ID}

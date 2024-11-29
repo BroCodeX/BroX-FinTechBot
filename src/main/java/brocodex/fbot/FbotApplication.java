@@ -24,7 +24,7 @@ public class FbotApplication {
 		ConfigurableApplicationContext ctx = SpringApplication.run(FbotApplication.class, args);
 		try {
 			TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-			botsApi.registerBot(ctx.getBean("FinanesBot", AbilityBot.class));
+			botsApi.registerBot(ctx.getBean(FinanceBot.class, AbilityBot.class));
 		} catch (TelegramApiException ex) {
 			throw new RuntimeException();
 		}

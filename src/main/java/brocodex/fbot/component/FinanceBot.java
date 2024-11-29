@@ -30,7 +30,7 @@ public class FinanceBot extends AbilityBot {
     @Autowired
     public FinanceBot(
             @Value("${telegram.bot.token}") String botToken,
-            @Value("${telegram.bot.username}") String botUsername,
+            @Value("${telegram.bot.name}") String botName,
             @Value("${telegram.bot.creatorId}") Long creatorId,
             ResponseHandlerService responseHandlerService,
             UserController userController,
@@ -38,7 +38,7 @@ public class FinanceBot extends AbilityBot {
             ReportController reportController,
             TransactionsController transactionsController,
             CallbackHandlerService callbackHandlerService) {
-        super(botToken, botUsername);
+        super(botToken, botName);
         this.creatorID = creatorId;
         this.responseHandlerService = responseHandlerService;
         this.userController = userController;
