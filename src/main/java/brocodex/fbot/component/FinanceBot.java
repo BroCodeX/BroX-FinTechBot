@@ -6,6 +6,7 @@ import brocodex.fbot.service.handler.ResponseHandlerService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.abilitybots.api.bot.BaseAbilityBot;
@@ -32,21 +33,46 @@ public class FinanceBot extends AbilityBot {
             @Value("${telegram.bot.token}") String botToken,
             @Value("${telegram.bot.name}") String botName,
             @Value("${telegram.bot.creatorId}") Long creatorId,
-            ResponseHandlerService responseHandlerService,
-            UserController userController,
-            BudgetController budgetController,
-            ReportController reportController,
-            TransactionsController transactionsController,
+            @Lazy UserController userController,
+            @Lazy BudgetController budgetController,
+            @Lazy ReportController reportController,
+            @Lazy TransactionsController transactionsController,
             CallbackHandlerService callbackHandlerService) {
         super(botToken, botName);
         this.creatorID = creatorId;
-        this.responseHandlerService = responseHandlerService;
+        this.responseHandlerService = new ResponseHandlerService(this.silent(), this.db());
         this.userController = userController;
         this.budgetController = budgetController;
         this.reportController = reportController;
         this.transactionsController = transactionsController;
         this.callbackHandlerService = callbackHandlerService;
     }
+
+//@Component
+//public class FinanceBot extends AbilityBot {
+//    @Autowired @Lazy
+//    private ResponseHandlerService responseHandlerService;
+//    @Autowired
+//    private UserController userController;
+//    @Autowired
+//    private BudgetController budgetController;
+//    @Autowired
+//    private ReportController reportController;
+//    @Autowired
+//    private TransactionsController transactionsController;
+//    @Autowired
+//    private CallbackHandlerService callbackHandlerService;
+//
+//    private final long creatorID;
+//
+//    @Autowired
+//    public FinanceBot(
+//            @Value("${telegram.bot.token}") String botToken,
+//            @Value("${telegram.bot.name}") String botName,
+//            @Value("${telegram.bot.creatorId}") Long creatorId) {
+//        super(botToken, botName);
+//        this.creatorID = creatorId;
+//    }
 
     @Override
     public long creatorId() {

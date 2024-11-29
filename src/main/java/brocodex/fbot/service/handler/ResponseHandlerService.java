@@ -31,7 +31,7 @@ public class ResponseHandlerService {
 
     public ResponseHandlerService(SilentSender sender, DBContext dbContext) {
         this.sender = sender;
-        this.chatStates = dbContext.getMap("CHAT_STATES");
+        chatStates = dbContext.getMap("CHAT_STATES");
     }
 
     public void updateChatState(Long chatId, ChatState state) {
