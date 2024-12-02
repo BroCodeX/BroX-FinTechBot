@@ -4,7 +4,7 @@ import brocodex.fbot.constants.ChatState;
 import brocodex.fbot.dto.transaction.TransactionDTO;
 import brocodex.fbot.factory.KeyboardFactory;
 import brocodex.fbot.service.TransactionService;
-import brocodex.fbot.handler.CallbackHandlerService;
+import brocodex.fbot.handler.CallbackHandler;
 import brocodex.fbot.handler.ResponseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -22,14 +22,14 @@ public class TransactionsController {
     private final ResponseHandler responseHandler;
 
     @Autowired
-    private CallbackHandlerService callbackHandler;
+    private CallbackHandler callbackHandler;
 
     @Autowired
     private TransactionService service;
 
 
     public TransactionsController(ResponseHandler responseHandler,
-                                  CallbackHandlerService callbackHandler) {
+                                  CallbackHandler callbackHandler) {
         this.responseHandler = responseHandler;
         this.callbackHandler = callbackHandler;
     }
