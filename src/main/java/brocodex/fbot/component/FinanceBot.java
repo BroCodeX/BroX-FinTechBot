@@ -1,8 +1,8 @@
 package brocodex.fbot.component;
 
 import brocodex.fbot.controller.bot.*;
-import brocodex.fbot.service.handler.CallbackHandlerService;
-import brocodex.fbot.service.handler.ResponseHandler;
+import brocodex.fbot.handler.CallbackHandlerService;
+import brocodex.fbot.handler.ResponseHandler;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

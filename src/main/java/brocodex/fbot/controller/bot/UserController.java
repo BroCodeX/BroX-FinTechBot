@@ -2,7 +2,7 @@ package brocodex.fbot.controller.bot;
 
 import brocodex.fbot.constants.ChatState;
 import brocodex.fbot.dto.user.UserDTO;
-import brocodex.fbot.service.handler.ResponseHandler;
+import brocodex.fbot.handler.ResponseHandler;
 import brocodex.fbot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

@@ -1,6 +1,6 @@
 package brocodex.fbot.controller.bot;
 
-import brocodex.fbot.service.handler.ResponseHandler;
+import brocodex.fbot.handler.ResponseHandler;
 import org.telegram.abilitybots.api.objects.Ability;
 
 
