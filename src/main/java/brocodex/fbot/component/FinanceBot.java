@@ -37,12 +37,11 @@ public class FinanceBot extends AbilityBot {
             @Value("${telegram.bot.creatorId}") Long creatorId) {
         super(botToken, botName);
         this.creatorID = creatorId;
-        this.responseHandler = new ResponseHandler(this.silent(), this.db());
-        this.userController = new UserController(responseHandler);
-        this.budgetController = new BudgetController(responseHandler);
-        this.reportController = new ReportController(responseHandler);
-        this.transactionsController = new TransactionsController(responseHandler, callbackHandlerService);
-
+        responseHandler = new ResponseHandler(silent, db());
+        userController = new UserController(responseHandler);
+        budgetController = new BudgetController(responseHandler);
+        reportController = new ReportController(responseHandler);
+        transactionsController = new TransactionsController(responseHandler, callbackHandlerService);
     }
 
 //@Component
@@ -82,20 +81,23 @@ public class FinanceBot extends AbilityBot {
     }
 
     public Ability start() {
-        return Ability.builder()
+        return Ability
+                .builder()
                 .name("start")
                 .info("Starts the bot")
                 .locality(Locality.USER)
                 .privacy(Privacy.PUBLIC)
                 .action(ctx -> {
                     Long chatId = ctx.chatId();
+                    System.out.println("Start command received from chatId: " + chatId);
                     userController.welcomeUser(chatId);
                 })
                 .build();
     }
 
     public Ability addTransaction() {
-        return Ability.builder()
+        return Ability
+                .builder()
                 .name("add_transaction")
                 .info("Add an income / expense transaction")
                 .locality(Locality.USER)
@@ -110,7 +112,8 @@ public class FinanceBot extends AbilityBot {
 
 
     public Ability viewTransactionsReport() {
-        return Ability.builder()
+        return Ability
+                .builder()
                 .name("view_transactions")
                 .info("Watch your transactions, optionally set period")
                 .locality(Locality.USER)
@@ -124,7 +127,8 @@ public class FinanceBot extends AbilityBot {
     }
 
     public Ability editBudget() {
-        return Ability.builder()
+        return Ability
+                .builder()
                 .name("edit_budget")
                 .info("Set a new budget amount")
                 .locality(Locality.USER)
@@ -138,7 +142,8 @@ public class FinanceBot extends AbilityBot {
     }
 
     public Ability getBudgetReport() {
-        return Ability.builder()
+        return Ability
+                .builder()
                 .name("view_budget")
                 .info("Watch your budget")
                 .locality(Locality.USER)
@@ -152,7 +157,8 @@ public class FinanceBot extends AbilityBot {
     }
 
     public Ability help() {
-        return Ability.builder()
+        return Ability
+                .builder()
                 .name("help")
                 .info("Displays a list of all available commands")
                 .locality(Locality.USER)

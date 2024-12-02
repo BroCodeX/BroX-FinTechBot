@@ -12,21 +12,24 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
+import java.util.logging.Logger;
+
 @SpringBootApplication
 @EnableJpaAuditing
-public class FbotApplication {
 
-//	@Autowired
-//	private FinanceBot bot;
+public class FbotApplication {
+	private static final Logger logger = Logger.getLogger(FbotApplication.class.getName());
 
 	public static void main(String[] args) {
-		//SpringApplication.run(FbotApplication.class, args);
 		ConfigurableApplicationContext ctx = SpringApplication.run(FbotApplication.class, args);
 		try {
 			TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-			botsApi.registerBot(ctx.getBean(FinanceBot.class, AbilityBot.class));
+			FinanceBot bot = ctx.getBean(FinanceBot.class, AbilityBot.class);
+			botsApi.registerBot(bot);
 		} catch (TelegramApiException ex) {
-			throw new RuntimeException();
+			logger.severe("Failed to register the bot: " + ex.getMessage());
+			ex.printStackTrace();
+			System.exit(1);
 		}
 	}
 }
