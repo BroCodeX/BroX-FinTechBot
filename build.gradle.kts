@@ -89,8 +89,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-amqp")
 
 	// Telegram
-	implementation("org.telegram:telegrambots-spring-boot-starter:6.9.7.1")
-	implementation("org.telegram:telegrambots:6.9.7.1")
+	implementation("org.telegram:telegrambots-springboot-longpolling-starter:8.0.0")
+//	implementation("org.telegram:telegrambots:6.9.7.1")
 
 
 
