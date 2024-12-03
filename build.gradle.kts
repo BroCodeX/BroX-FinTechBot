@@ -91,6 +91,7 @@ dependencies {
 	// Telegram
 	implementation("org.telegram:telegrambots-springboot-longpolling-starter:8.0.0")
 //	implementation("org.telegram:telegrambots:6.9.7.1")
+	implementation ("org.telegram:telegrambots-client:8.0.0")
 
 
 

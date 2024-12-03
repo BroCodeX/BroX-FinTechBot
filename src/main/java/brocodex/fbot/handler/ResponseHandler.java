@@ -1,16 +1,15 @@
 package brocodex.fbot.handler;
 
 import brocodex.fbot.constants.ChatState;
-import brocodex.fbot.controller.bot.BudgetController;
-import brocodex.fbot.controller.bot.TransactionsController;
-import brocodex.fbot.controller.bot.UserController;
+//import brocodex.fbot.controller.bot.BudgetController;
+//import brocodex.fbot.controller.bot.TransactionsController;
+//import brocodex.fbot.controller.bot.UserController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,103 +18,132 @@ import java.util.Map;
 @Component
 public class ResponseHandler {
 
-    private final TelegramLongPollingBot bot;
+    private TelegramClient telegramClient;
+
     private final Map<Long, ChatState> chatStates = new HashMap<>();
-    private final UserController userController;
-    private final BudgetController budgetController;
-    private final TransactionsController transactionsController;
+//    private final UserController userController;
+//    private final BudgetController budgetController;
+//    private final TransactionsController transactionsController;
 
-    public ResponseHandler(TelegramLongPollingBot bot,
-                           UserController userController,
-                           BudgetController budgetController,
-                           TransactionsController transactionsController) {
-        this.bot = bot;
-        this.userController = userController;
-        this.budgetController = budgetController;
-        this.transactionsController = transactionsController;
-    }
-
-    public void handleUpdate(Update update) {
+    public void handleUpdate(Update update, TelegramClient telegramClient) {
+        this.telegramClient = telegramClient;
+        // We check if the update has a message and the message has text
         if (update.hasMessage() && update.getMessage().hasText()) {
-            handleMessage(update.getMessage());
+            // Set variables
+            String receivedMessage = update.getMessage().getText();
+            long chatId = update.getMessage().getChatId();
+            long userId = update.getMessage().getFrom().getId();
+            String userName = update.getMessage().getFrom().getUserName();
+
+            botAnswerUtils(chatId, receivedMessage, userName);
         } else if (update.hasCallbackQuery()) {
-            // Обработка коллбэков
-            // пример: callbackHandler.handleCallback(update.getCallbackQuery());
+            String receivedMessage = update.getCallbackQuery().getData();
+            long chatId = update.getCallbackQuery().getMessage().getChatId();
+            long userId = update.getCallbackQuery().getFrom().getId();
+            String userName = update.getMessage().getFrom().getUserName();
+
+            //тут будет callbackHandler
         }
     }
 
-    private void handleMessage(Message message) {
-        Long chatId = message.getChatId();
-        String messageText = message.getText();
+    public void start(Long chatId, String message, String name) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Welcome to the Finance Bot!").append("\n");
+        builder.append("Please enter your name or type yes if your name is: " + name);
 
-        switch (messageText) {
-            case "/start" -> sendResponse(chatId, "Welcome! Use /help to see available commands.");
-            case "/help" -> sendResponse(chatId, """
-                    Available commands:
-                    /start - Start the bot
-                    /help - Show available commands
-                    /add_transaction - Add a new transaction
-                    /view_transactions - View your transactions
-                    /edit_budget - Edit your budget
-                    /view_budget - View your current budget
-                    """);
-            case "/add_transaction" -> transactionsController.replyToAddTransaction(chatId, message.getFrom().getId());
-            default -> replyToButtons(chatId, message);
-        }
-    }
+        SendMessage sendMessage = SendMessage // Create a message object
+                .builder()
+                .chatId(chatId)
+                .text(builder.toString())
+                .build();
 
-    public void replyToButtons(long chatId, Message message) {
-        if ("/stop".equals(message.getText())) {
-            stopChat(chatId);
-            return;
-        }
-
-        chatStates.putIfAbsent(chatId, ChatState.READY);
-        log.warn("ChatId {} was null. Defaulting to READY", chatId);
-
-        switch (chatStates.get(chatId)) {
-            case WAITING_FOR_USERNAME -> userController.saveUsername(chatId, message);
-            case WAITING_FOR_BUDGET -> budgetController.setBudget(chatId, message);
-            case READY -> infoMessage(chatId, message);
-            case WAITING_FOR_TRANSACTION_AMOUNT -> transactionsController.addTransactionAmount(chatId, message);
-            case WAITING_FOR_TRANSACTION_TYPE -> transactionsController.sendTransactionTypeButtons(chatId);
-            case WAITING_FOR_TRANSACTION_DESCRIPTION -> transactionsController.addTransactionDescription(chatId, message);
-            case WAITING_FOR_TRANSACTION_CATEGORY -> transactionsController.addTransactionCategory(chatId, message);
-            default -> handleUnexpectedState(chatId, chatStates.get(chatId));
-        }
-    }
-
-    public void stopChat(long chatId) {
-        sendResponse(chatId, "Thanks for using our bot. See you soon and have a nice day!");
-        chatStates.remove(chatId);
-    }
-
-    public void handleUnexpectedState(long chatId, ChatState state) {
-        log.error("Unexpected state {} for chatID {}", state, chatId);
-        updateChatState(chatId, ChatState.READY);
-        sendResponse(chatId, "An unexpected error occurred. Please try again or type /help for assistance.");
-    }
-
-    public void infoMessage(long chatId, Message userMessage) {
-        sendResponse(chatId, "I don't understand your message:\nYou can type /help for assistance.");
-    }
-
-    public void updateChatState(Long chatId, ChatState state) {
-        chatStates.put(chatId, state);
-    }
-
-    public boolean userIsActive(Long chatId) {
-        return chatStates.containsKey(chatId);
-    }
-
-    private void sendResponse(Long chatId, String text) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId.toString());
-        sendMessage.setText(text);
         try {
-            bot.execute(sendMessage);
+            telegramClient.execute(sendMessage); // Sending our message object to user
         } catch (TelegramApiException e) {
-            log.error("Error sending message to {}: {}", chatId, e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void addTransaction(Long chatId, TelegramClient telegramClient, String name) {
+    }
+
+    public void viewTransactions(Long chatId, TelegramClient telegramClient, String name) {
+    }
+
+    public void editBudget(Long chatId, TelegramClient telegramClient, String name) {
+    }
+
+    public void viewBudget(Long chatId, TelegramClient telegramClient, String name) {
+    }
+
+    public void getReport(Long chatId, TelegramClient telegramClient, String name) {
+    }
+
+    public void help(Long chatId, TelegramClient telegramClient, String name) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Available commands: \n");
+        builder.append("/start - Start the bot \n");
+        builder.append("/help - Show available commands \n");
+        builder.append("/add_transaction - Add a new income or expense transaction \n");
+        builder.append("/view_transactions - View your transactions from the period \n");
+        builder.append("/edit_budget - Edit your budget \n");
+        builder.append("/view_budget - View your current budget \n");
+        builder.append("/get_report - Make a financial report of your budget and transactions \n");
+        builder.append("/stop - Stop the bot \n");
+
+        SendMessage sendMessage = SendMessage
+                .builder()
+                .chatId(chatId)
+                .text(builder.toString())
+                .build();
+
+        try {
+            telegramClient.execute(sendMessage);
+        } catch (TelegramApiException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void stop(Long chatId, TelegramClient telegramClient, String name) {
+    }
+
+    private void botAnswerUtils(Long chatId, String message, String name) {
+        switch (message) {
+            case "/start":
+                start(chatId, message, name);
+                break;
+            case "/help":
+                break;
+            case "/add_transaction":
+                break;
+            case "/view_transactions":
+                break;
+            case "/edit_budget":
+                break;
+            case "/view_budget":
+                break;
+            case "/get_report":
+                break;
+            case "/stop":
+                break;
+            default: handleUnexpectedMessage(chatId, message);
+        }
+    }
+
+    public void handleUnexpectedMessage(Long chatId, String message) {
+        log.error("");
+        StringBuilder builder = new StringBuilder();
+        builder.append("I don't understand your message: ").append(message).append(" \n");
+        builder.append("You can type /help for assistance.");
+        SendMessage sendMessage = SendMessage // Create a message object
+                .builder()
+                .chatId(chatId)
+                .text(builder.toString())
+                .build();
+        try {
+            telegramClient.execute(sendMessage); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
     }
 }
