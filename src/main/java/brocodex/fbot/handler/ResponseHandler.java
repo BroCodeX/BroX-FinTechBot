@@ -64,22 +64,22 @@ public class ResponseHandler {
         }
     }
 
-    public void addTransaction(Long chatId, TelegramClient telegramClient, String name) {
+    public void addTransaction(Long chatId, String name) {
     }
 
-    public void viewTransactions(Long chatId, TelegramClient telegramClient, String name) {
+    public void viewTransactions(Long chatId, String name) {
     }
 
-    public void editBudget(Long chatId, TelegramClient telegramClient, String name) {
+    public void editBudget(Long chatId, String name) {
     }
 
-    public void viewBudget(Long chatId, TelegramClient telegramClient, String name) {
+    public void viewBudget(Long chatId, String name) {
     }
 
-    public void getReport(Long chatId, TelegramClient telegramClient, String name) {
+    public void getReport(Long chatId, String name) {
     }
 
-    public void help(Long chatId, TelegramClient telegramClient, String name) {
+    public void help(Long chatId, String name) {
         StringBuilder builder = new StringBuilder();
         builder.append("Available commands: \n");
         builder.append("/start - Start the bot \n");
@@ -104,7 +104,7 @@ public class ResponseHandler {
         }
     }
 
-    public void stop(Long chatId, TelegramClient telegramClient, String name) {
+    public void stop(Long chatId, String name) {
     }
 
     private void botAnswerUtils(Long chatId, String message, String name) {
@@ -113,18 +113,25 @@ public class ResponseHandler {
                 start(chatId, message, name);
                 break;
             case "/help":
+                help(chatId, name);
                 break;
             case "/add_transaction":
+                addTransaction(chatId, name);
                 break;
             case "/view_transactions":
+                viewTransactions(chatId, name);
                 break;
             case "/edit_budget":
+                editBudget(chatId, name);
                 break;
             case "/view_budget":
+                viewBudget(chatId, name);
                 break;
             case "/get_report":
+                getReport(chatId, name);
                 break;
             case "/stop":
+                stop(chatId, name);
                 break;
             default: handleUnexpectedMessage(chatId, message);
         }
