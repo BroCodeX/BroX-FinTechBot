@@ -7,11 +7,11 @@ public enum CommandMessages {
     HELP_MESSAGE("Available commands: \n" +
             "/start - Start the bot \n" +
             "/help - Show available commands \n" +
-            "/add_transaction - Add a new income or expense transaction \n" +
+            "/add_transaction - Add a new transaction \n" +
             "/view_transactions - View your transactions from the period \n" +
             "/edit_budget - Edit your budget \n" +
             "/view_budget - View your current budget \n" +
-            "/get_report - Make a financial report of your budget and transactions \n" +
+            "/get_report - Make a financial report  \n" +
             "/stop - Stop the bot \n");
 
     @Getter

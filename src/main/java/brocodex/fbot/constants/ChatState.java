@@ -3,7 +3,6 @@ package brocodex.fbot.constants;
 import lombok.Getter;
 
 public enum ChatState {
-    WAITING_FOR_USERNAME("Waiting for username input"),
     WAITING_FOR_BUDGET("Waiting for budget input"),
     WAITING_FOR_TRANSACTION_AMOUNT("Waiting for transaction amount input"),
     WAITING_FOR_TRANSACTION_TYPE("Waiting for transaction type input"),
