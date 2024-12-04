@@ -22,11 +22,12 @@ public class StateHandler {
     public void handleState(Update update) {
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         var actualState = chatStateService.getChatState(chatId);
+        long userId = update.getMessage().getFrom().getId();
         String message = update.getMessage().getText();
 
         switch (actualState) {
             case WAITING_FOR_USERNAME -> {
-                var result = userController.saveUsername(chatId, message);
+                var result = userController.saveUsername(userId, message, chatId);
                 sendMessage(result);
             }
 //            case WAITING_FOR_BUDGET -> budgetController.setBudget(chatID, message);

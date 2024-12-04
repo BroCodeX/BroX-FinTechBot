@@ -16,10 +16,10 @@ public class UserController {
     @Autowired
     private ChatStateService chatStateService;
 
-    public SendMessage saveUsername(Long chatId, String name) {
+    public SendMessage saveUsername(Long userId, String name, Long chatId) {
         UserDTO dto = new UserDTO();
         dto.setUsername(name);
-        dto.setTelegramId(chatId);
+        dto.setTelegramId(userId);
 
         var savedUser = userService.createUser(dto);
         chatStateService.removeChatState(chatId);
