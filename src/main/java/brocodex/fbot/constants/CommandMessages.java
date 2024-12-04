@@ -3,9 +3,7 @@ package brocodex.fbot.constants;
 import lombok.Getter;
 
 public enum CommandMessages {
-    START_MESSAGE("Welcome to the Finance Bot!" +
-            "\n" +
-            "Please enter your name or type yes if your name is: "),
+    START_MESSAGE("Welcome to the Finance Bot! \n "),
     HELP_MESSAGE("Available commands: \n" +
             "/start - Start the bot \n" +
             "/help - Show available commands \n" +

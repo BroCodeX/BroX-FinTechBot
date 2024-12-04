@@ -14,9 +14,6 @@ public class StateHandler {
     @Autowired
     private ChatStateService chatStateService;
 
-    @Autowired
-    private UserController userController;
-
     private TelegramClient telegramClient;
 
     public void handleState(Update update) {
@@ -26,8 +23,8 @@ public class StateHandler {
         String message = update.getMessage().getText();
 
         switch (actualState) {
-            case WAITING_FOR_USERNAME -> {
-                var result = userController.saveUsername(userId, message, chatId);
+            case WAITING_FOR_BUDGET -> {
+                var result = ;
                 sendMessage(result);
             }
 //            case WAITING_FOR_BUDGET -> budgetController.setBudget(chatID, message);
