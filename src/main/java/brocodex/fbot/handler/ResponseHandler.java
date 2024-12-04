@@ -53,7 +53,7 @@ public class ResponseHandler {
     private void botAnswerUtils(Update update) {
         String commandMessage = update.getMessage().getText();
         long chatId = update.getMessage().getChatId();
-        if(!commandMap.containsKey(commandMessage)) {
+        if(!commandMap.containsKey(commandMessage) && chatStateService.getChatState(chatId) == null) {
             handleUnexpectedMessage(update);
         }
         // тут надо продумать как обрабатывать chat states
