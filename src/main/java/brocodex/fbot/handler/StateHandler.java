@@ -1,6 +1,7 @@
 package brocodex.fbot.handler;
 
 import brocodex.fbot.controller.bot.BudgetController;
+import brocodex.fbot.controller.bot.TransactionsController;
 import brocodex.fbot.controller.bot.UserController;
 import brocodex.fbot.service.ChatStateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class StateHandler {
     @Autowired
     private BudgetController budgetController;
 
+    @Autowired
+    private TransactionsController transactionsController;
+
     private TelegramClient telegramClient;
 
     public void handleState(Update update, TelegramClient telegramClient) {
@@ -25,21 +29,27 @@ public class StateHandler {
         long chatId = update.getMessage().getChatId();
         var actualState = chatStateService.getChatState(chatId);
         long userId = update.getMessage().getFrom().getId();
-        String message = update.getMessage().getText();
+        String receivedMessage = update.getMessage().getText();
 
         switch (actualState) {
             case WAITING_FOR_BUDGET -> {
-                var result = budgetController.setBudget(chatId, message, userId);
-                sendMessage(result);
+                var message = budgetController.setBudget(chatId, receivedMessage, userId);
+                sendMessage(message);
             }
-//            case WAITING_FOR_BUDGET -> budgetController.setBudget(chatID, message);
+            case WAITING_FOR_TRANSACTION_AMOUNT -> {
+                var message = transactionsController.addTransactionAmount(chatId, receivedMessage, userId);
+                sendMessage(message);
+            }
+            case WAITING_FOR_TRANSACTION_TYPE -> {
+                transactionsController.sendTransactionTypeButtons();
+            }
+            case WAITING_FOR_TRANSACTION_DESCRIPTION -> {
+                transactionsController.addTransactionDescription(chatId, receivedMessage, userId);
+            }
+            case WAITING_FOR_TRANSACTION_CATEGORY -> {
+                transactionsController.addTransactionCategory(chatId, receivedMessage, userId);
+            }
 //            case READY -> infoMessage(chatID, message);
-//            case WAITING_FOR_TRANSACTION_AMOUNT -> transactionsController.addTransactionAmount(chatID, message);
-//            case WAITING_FOR_TRANSACTION_TYPE -> transactionsController.sendTransactionTypeButtons(chatID);
-//            case WAITING_FOR_TRANSACTION_DESCRIPTION ->
-//                    transactionsController.addTransactionDescription(chatID, message);
-//            case WAITING_FOR_TRANSACTION_CATEGORY ->
-//                    transactionsController.addTransactionCategory(chatID, message);
 //            case TRANSACTION_REPORT_FILTERS -> ;
 //            case ADMIN_MODE -> ;
             default -> chatStateService.removeChatState(chatId);

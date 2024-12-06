@@ -12,7 +12,8 @@ public enum CommandMessages {
             "/edit_budget - Edit your budget \n" +
             "/view_budget - View your current budget \n" +
             "/get_report - Make a financial report  \n" +
-            "/stop - Stop the bot \n");
+            "/stop - Stop the bot \n"),
+    WAIT_TRANSACTION_AMOUNT("Please enter the transaction amount");
 
     @Getter
     private final String description;

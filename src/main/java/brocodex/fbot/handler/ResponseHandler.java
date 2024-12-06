@@ -28,10 +28,12 @@ public class ResponseHandler {
     private final Map<String, Command> commandMap;
 
     public ResponseHandler (Command startCommand,
-                            Command helpCommand) {
+                            Command helpCommand,
+                            Command addTransactionCommand) {
         this.commandMap = Map.of(
                 "/start", startCommand,
-                "/help", helpCommand
+                "/help", helpCommand,
+                "/add_transaction", addTransactionCommand
         );
     }
 
