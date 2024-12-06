@@ -1,5 +1,6 @@
 package brocodex.fbot.handler;
 
+import brocodex.fbot.controller.bot.BudgetController;
 import brocodex.fbot.controller.bot.UserController;
 import brocodex.fbot.service.ChatStateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +15,21 @@ public class StateHandler {
     @Autowired
     private ChatStateService chatStateService;
 
+    @Autowired
+    private BudgetController budgetController;
+
     private TelegramClient telegramClient;
 
-    public void handleState(Update update) {
-        long chatId = update.getCallbackQuery().getMessage().getChatId();
+    public void handleState(Update update, TelegramClient telegramClient) {
+        this.telegramClient = telegramClient;
+        long chatId = update.getMessage().getChatId();
         var actualState = chatStateService.getChatState(chatId);
         long userId = update.getMessage().getFrom().getId();
         String message = update.getMessage().getText();
 
         switch (actualState) {
             case WAITING_FOR_BUDGET -> {
-                var result = ;
+                var result = budgetController.setBudget(chatId, message, userId);
                 sendMessage(result);
             }
 //            case WAITING_FOR_BUDGET -> budgetController.setBudget(chatID, message);

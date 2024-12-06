@@ -22,6 +22,7 @@ public class ResponseHandler {
 
     private TelegramClient telegramClient;
 
+    @Autowired
     private StateHandler stateHandler;
 
     private final Map<String, Command> commandMap;
@@ -51,18 +52,18 @@ public class ResponseHandler {
     }
 
     private void botAnswerUtils(Update update) {
-        String commandMessage = update.getMessage().getText();
+        String receivedMessage = update.getMessage().getText();
         long chatId = update.getMessage().getChatId();
-        if(!commandMap.containsKey(commandMessage) && chatStateService.getChatState(chatId) == null) {
+        if(!commandMap.containsKey(receivedMessage) && chatStateService.getChatState(chatId) == null) {
             handleUnexpectedMessage(update);
+        } else if(!commandMap.containsKey(receivedMessage) && chatStateService.getChatState(chatId) != null) {
+            stateHandler.handleState(update, telegramClient);
+        } else {
+            var command = commandMap.get(receivedMessage);
+            var message = command.apply(update);
+            sendMessage(message);
         }
-        // тут надо продумать как обрабатывать chat states
-        if(!commandMap.containsKey(commandMessage) && chatStateService.getChatState(chatId) != null) {
-            stateHandler.handleState(update);
-        }
-        var command = commandMap.get(commandMessage);
-        var message = command.apply(update);
-        sendMessage(message);
+        // тут надо продумать как callback
     }
 
     public void handleUnexpectedMessage(Update update) {

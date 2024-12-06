@@ -26,7 +26,9 @@ public class StartCommand implements Command {
 
         userController.saveUsername(userId, userName, chatId);
 
-        String text = CommandMessages.START_MESSAGE.getDescription() + firstName +
+        String text = CommandMessages.START_MESSAGE.getDescription() +
+                firstName +
+                "\n" +
                 "Please, set your budget or type /help to show the commands";
 
         SendMessage sendMessage = SendMessage // Create a message object
@@ -35,7 +37,7 @@ public class StartCommand implements Command {
                 .text(text)
                 .build();
 
-        stateService.setChatState(userId, ChatState.WAITING_FOR_BUDGET);
+        stateService.setChatState(chatId, ChatState.WAITING_FOR_BUDGET);
 
         return sendMessage;
     }
