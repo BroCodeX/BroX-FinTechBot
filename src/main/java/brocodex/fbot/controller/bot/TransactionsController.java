@@ -23,23 +23,16 @@ public class TransactionsController {
     @Autowired
     private TransactionService service;
 
-    public SendMessage addTransactionAmount(Long chatId, String amount, Long userId) {
-        try {
-            dto.setAmount(Double.parseDouble(amount));
+    public InlineKeyboardMarkup addTransactionAmount
+            (Long chatId, String amount, Long userId) throws NumberFormatException {
+        dto.setAmount(Double.parseDouble(amount));
 
-            chatStateService.setChatState(chatId, ChatState.WAITING_FOR_TRANSACTION_TYPE);
+        chatStateService.setChatState(chatId, ChatState.WAITING_FOR_TRANSACTION_TYPE);
 
-            sendTransactionTypeButtons(chatId);
-        } catch (NumberFormatException ex) {
-            SendMessage sendMessage = SendMessage
-                    .builder()
-                    .chatId(chatId)
-                    .text("Invalid amount. Please enter a valid number.")
-                    .build();
-        }
+        return sendTransactionTypeButtons(chatId);
     }
 
-    public void sendTransactionTypeButtons(Long chatId) {
+    public InlineKeyboardMarkup sendTransactionTypeButtons(Long chatId) {
         InlineKeyboardButton incomeButton = new InlineKeyboardButton();
         incomeButton.setText("income");
         incomeButton.setCallbackData("transaction_type_income");

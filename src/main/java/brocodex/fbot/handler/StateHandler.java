@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
@@ -37,8 +38,17 @@ public class StateHandler {
                 sendMessage(message);
             }
             case WAITING_FOR_TRANSACTION_AMOUNT -> {
-                var message = transactionsController.addTransactionAmount(chatId, receivedMessage, userId);
-                sendMessage(message);
+                try {
+                    var message = transactionsController.addTransactionAmount(chatId, receivedMessage, userId);
+                    sendButtons(message);
+                } catch (NumberFormatException ex) {
+                    SendMessage errMessage = SendMessage
+                            .builder()
+                            .chatId(chatId)
+                            .text("Invalid amount. Please enter a valid amount.")
+                            .build();
+                    sendMessage(errMessage);
+                }
             }
             case WAITING_FOR_TRANSACTION_TYPE -> {
                 transactionsController.sendTransactionTypeButtons();
@@ -59,6 +69,14 @@ public class StateHandler {
     public void sendMessage(SendMessage sendMessage) {
         try {
             telegramClient.execute(sendMessage);
+        } catch (TelegramApiException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void sendButtons(InlineKeyboardMarkup buttons) {
+        try {
+            telegramClient.execute(buttons);
         } catch (TelegramApiException ex) {
             ex.printStackTrace();
         }
