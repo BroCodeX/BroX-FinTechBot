@@ -25,12 +25,9 @@ public class StateHandler {
 
     private TelegramClient telegramClient;
 
-    public void handleState(Update update, TelegramClient telegramClient) {
+    public void handleState(String receivedMessage, TelegramClient telegramClient, Long chatId, Long userId) {
         this.telegramClient = telegramClient;
-        long chatId = update.getMessage().getChatId();
         var actualState = chatStateService.getChatState(chatId);
-        long userId = update.getMessage().getFrom().getId();
-        String receivedMessage = update.getMessage().getText();
 
         switch (actualState) {
             case WAITING_FOR_BUDGET -> {
@@ -38,26 +35,19 @@ public class StateHandler {
                 sendMessage(message);
             }
             case WAITING_FOR_TRANSACTION_AMOUNT -> {
-                try {
-                    var message = transactionsController.addTransactionAmount(chatId, receivedMessage, userId);
-                    sendButtons(message);
-                } catch (NumberFormatException ex) {
-                    SendMessage errMessage = SendMessage
-                            .builder()
-                            .chatId(chatId)
-                            .text("Invalid amount. Please enter a valid amount.")
-                            .build();
-                    sendMessage(errMessage);
-                }
+                var message = transactionsController.addTransactionAmount(chatId, receivedMessage, userId);
+                sendMessage(message);
             }
             case WAITING_FOR_TRANSACTION_TYPE -> {
-                transactionsController.sendTransactionTypeButtons();
+                var message = transactionsController.addTransactionType(chatId, receivedMessage);
+                sendMessage(message);
             }
+//            case WAITING_FOR_TRANSACTION_CATEGORY -> {
+//                transactionsController.addTransactionCategory(chatId, receivedMessage);
+//            }
             case WAITING_FOR_TRANSACTION_DESCRIPTION -> {
-                transactionsController.addTransactionDescription(chatId, receivedMessage, userId);
-            }
-            case WAITING_FOR_TRANSACTION_CATEGORY -> {
-                transactionsController.addTransactionCategory(chatId, receivedMessage, userId);
+                var message = transactionsController.addTransactionDescription(chatId, receivedMessage);
+                sendMessage(message);
             }
 //            case READY -> infoMessage(chatID, message);
 //            case TRANSACTION_REPORT_FILTERS -> ;
@@ -69,14 +59,6 @@ public class StateHandler {
     public void sendMessage(SendMessage sendMessage) {
         try {
             telegramClient.execute(sendMessage);
-        } catch (TelegramApiException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void sendButtons(InlineKeyboardMarkup buttons) {
-        try {
-            telegramClient.execute(buttons);
         } catch (TelegramApiException ex) {
             ex.printStackTrace();
         }

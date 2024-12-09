@@ -2,14 +2,14 @@ package brocodex.fbot.controller.bot;
 
 import brocodex.fbot.constants.ChatState;
 import brocodex.fbot.dto.transaction.TransactionDTO;
-import brocodex.fbot.factory.KeyboardFactory;
 import brocodex.fbot.service.ChatStateService;
 import brocodex.fbot.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
 import java.util.List;
 
@@ -18,138 +18,108 @@ public class TransactionsController {
     private TransactionDTO dto;
 
     @Autowired
-    private ChatStateService chatStateService;
+    private ChatStateService chatState;
 
     @Autowired
     private TransactionService service;
 
-    public InlineKeyboardMarkup addTransactionAmount
-            (Long chatId, String amount, Long userId) throws NumberFormatException {
-        dto.setAmount(Double.parseDouble(amount));
-
-        chatStateService.setChatState(chatId, ChatState.WAITING_FOR_TRANSACTION_TYPE);
-
-        return sendTransactionTypeButtons(chatId);
-    }
-
-    public InlineKeyboardMarkup sendTransactionTypeButtons(Long chatId) {
-        InlineKeyboardButton incomeButton = new InlineKeyboardButton();
-        incomeButton.setText("income");
-        incomeButton.setCallbackData("transaction_type_income");
-
-        InlineKeyboardButton expenseButton = new InlineKeyboardButton();
-        incomeButton.setText("expense");
-        incomeButton.setCallbackData("transaction_type_expense");
-
-        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
-        markup.setKeyboard(List.of(List.of(incomeButton), List.of(expenseButton)));
-
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.setText("Please choose the type of transaction.");
-        sendMessage.setReplyMarkup(markup);
+    public SendMessage addTransactionAmount(Long chatId, String amount, Long userId) {
         try {
-            responseHandler.getSender().execute(sendMessage);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            dto.setAmount(Double.parseDouble(amount));
+            dto.setTelegramId(userId);
+
+            InlineKeyboardButton incomeButton = new InlineKeyboardButton("Income");
+            InlineKeyboardButton expenseButton = new InlineKeyboardButton("Expense");
+
+            incomeButton.setCallbackData("income");
+            expenseButton.setCallbackData("expense");
+
+            InlineKeyboardRow row = new InlineKeyboardRow(incomeButton, expenseButton);
+
+            List<InlineKeyboardRow> keyboard = List.of(row);
+
+            InlineKeyboardMarkup markup = new InlineKeyboardMarkup(keyboard);
+
+            SendMessage sendMessage = SendMessage
+                    .builder()
+                    .chatId(chatId)
+                    .replyMarkup(markup)
+                    .text("Choose a transaction type: ")
+                    .build();
+
+            chatState.setChatState(chatId, ChatState.WAITING_FOR_TRANSACTION_TYPE);
+
+            return sendMessage;
+        } catch (NumberFormatException ex) {
+            return SendMessage
+                    .builder()
+                    .chatId(chatId)
+                    .text("Invalid amount. Please enter a valid amount.")
+                    .build();
         }
+
     }
 
-    public void addTransactionType(Long chatId, String type) {
+    public SendMessage addTransactionType(Long chatId, String type) {
         try {
+            if(!type.equals("income") || !type.equals("expense")) {
+                throw new NumberFormatException();
+            }
             dto.setType(type);
-            replyToAddTransactionDescription(chatId);
-            responseHandler.updateChatState(chatId, ChatState.WAITING_FOR_TRANSACTION_DESCRIPTION);
+            SendMessage sendMessage = SendMessage
+                    .builder()
+                    .chatId(chatId)
+                    .text("Please enter a description of the transaction")
+                    .build();
+            chatState.setChatState(chatId, ChatState.WAITING_FOR_TRANSACTION_DESCRIPTION);
+            return sendMessage;
         } catch (NumberFormatException ex) {
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.setChatId(chatId);
-            sendMessage.setText("Invalid type of transaction. Please choose income or expense");
+            return SendMessage
+                    .builder()
+                    .chatId(chatId)
+                    .text("Invalid type of transaction. Please choose income or expense")
+                    .build();
         }
     }
 
-    public void replyToAddTransactionDescription(Long chatId) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.setText("Please enter the transaction description.");
-
-        responseHandler.getSender().execute(sendMessage);
-    }
-
-    public void addTransactionDescription(Long chatId, Message message) {
+    public SendMessage addTransactionDescription(Long chatId, String message) {
         try {
-            dto.setDescription(message.getText());
-            responseHandler.updateChatState(chatId, ChatState.WAITING_FOR_TRANSACTION_CATEGORY);
-            replyToAddTransactionCategory(chatId);
+            dto.setDescription(message);
+            return transactionSuccess(chatId);
         } catch (NumberFormatException ex) {
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.setChatId(chatId);
-            sendMessage.setText("Sorry, something went wrong. Please retype the description");
+            return SendMessage
+                    .builder()
+                    .chatId(chatId)
+                    .text("Sorry, something went wrong. Please retype the description")
+                    .build();
         }
     }
 
-    public void replyToAddTransactionCategory(Long chatId) {
-        String text = "Please choose the transaction's category.";
-        var state = ChatState.WAITING_FOR_TRANSACTION_CATEGORY;
-        String type = dto.getType();
 
-        if (type.equals("income")) {
-            var variant = KeyboardFactory.getIncomeCategories();
-            promptWithKeyboardForState(chatId, text, variant, state);
-        } else if(type.equals("expense")) {
-            var variant = KeyboardFactory.getExpenseCategories();
-            promptWithKeyboardForState(chatId, text, variant, state);
-        } else {
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.setChatId(chatId);
-            sendMessage.setText("You should set only income or expense");
-            responseHandler.getSender().execute(sendMessage);
-            responseHandler.updateChatState(chatId, ChatState.WAITING_FOR_TRANSACTION_TYPE);
-            sendTransactionTypeButtons(chatId);
-        }
-    }
-
-    public void addTransactionCategory(Long chatId, Message message) {
-        try {
-            dto.setCategoryName(message.getText());
-            replyTransactionSuccess(chatId);
-        } catch (NumberFormatException ex) {
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.setChatId(chatId);
-            sendMessage.setText("Sorry, something went wrong. Please retype the description");
-            replyToAddTransactionCategory(chatId);
-        }
-    }
-
-    public void replyTransactionSuccess(Long chatId) {
+    public SendMessage transactionSuccess(Long chatId) {
         var transaction = service.createTransaction(dto);
 
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
         StringBuilder builder = new StringBuilder();
         builder.append("Transaction success\n");
         builder.append("amount: ").append(transaction.getAmount()).append("\n");
         builder.append("type: ").append(transaction.getType()).append("\n");
-        builder.append("description: ").append(transaction.getDescription()).append("\n");
         builder.append("category: ").append(transaction.getCategoryName()).append("\n");
-        sendMessage.setText(builder.toString());
+        builder.append("description: ").append(transaction.getDescription()).append("\n");
 
-        responseHandler.getSender().execute(sendMessage);
-        responseHandler.updateChatState(chatId, ChatState.READY);
+        SendMessage sendMessage = SendMessage
+                .builder()
+                .chatId(chatId)
+                .text(builder.toString())
+                .build();
 
+        chatState.setChatState(chatId, null);
         dto = null;
+
+        return sendMessage;
     }
 
     public void viewTransactions() {
 
-    }
-
-    private void promptWithKeyboardForState(long chatId, String text, ReplyKeyboard variant, ChatState state) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.setText(text);
-        sendMessage.setReplyMarkup(variant);
-        responseHandler.getSender().execute(sendMessage);
-        responseHandler.updateChatState(chatId, state);
     }
 
 }

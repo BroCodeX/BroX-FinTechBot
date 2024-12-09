@@ -1,7 +1,9 @@
 package brocodex.fbot.handler;
 
+import brocodex.fbot.commands.AddTransactionCommand;
 import brocodex.fbot.commands.Command;
-import brocodex.fbot.constants.ChatState;
+import brocodex.fbot.commands.HelpCommand;
+import brocodex.fbot.commands.StartCommand;
 import brocodex.fbot.service.ChatStateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,25 +13,27 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
 @Component
 public class ResponseHandler {
     @Autowired
-    private ChatStateService chatStateService;
+    private ChatStateService chatState;
 
     private TelegramClient telegramClient;
 
     @Autowired
     private StateHandler stateHandler;
 
+    @Autowired
+    private CallbackHandler callbackHandler;
+
     private final Map<String, Command> commandMap;
 
-    public ResponseHandler (Command startCommand,
-                            Command helpCommand,
-                            Command addTransactionCommand) {
+    public ResponseHandler (StartCommand startCommand,
+                            HelpCommand helpCommand,
+                            AddTransactionCommand addTransactionCommand) {
         this.commandMap = Map.of(
                 "/start", startCommand,
                 "/help", helpCommand,
@@ -44,22 +48,21 @@ public class ResponseHandler {
             // Set variables
             botAnswerUtils(update);
         } else if (update.hasCallbackQuery()) {
-            String receivedMessage = update.getCallbackQuery().getData();
-            long chatId = update.getCallbackQuery().getMessage().getChatId();
-            long userId = update.getCallbackQuery().getFrom().getId();
-            String userName = update.getMessage().getFrom().getUserName();
-
-            //тут будет callbackHandler
+            var chatId = update.getCallbackQuery().getMessage().getChatId();
+            var userId = update.getCallbackQuery().getFrom().getId();
+            var callbackMessage = update.getCallbackQuery().getData();
+            stateHandler.handleState(callbackMessage, telegramClient, chatId, userId);
         }
     }
 
     private void botAnswerUtils(Update update) {
         String receivedMessage = update.getMessage().getText();
         long chatId = update.getMessage().getChatId();
-        if(!commandMap.containsKey(receivedMessage) && chatStateService.getChatState(chatId) == null) {
+        long userId = update.getMessage().getFrom().getId();
+        if(!commandMap.containsKey(receivedMessage) && chatState.getChatState(chatId) == null) {
             handleUnexpectedMessage(update);
-        } else if(!commandMap.containsKey(receivedMessage) && chatStateService.getChatState(chatId) != null) {
-            stateHandler.handleState(update, telegramClient);
+        } else if(!commandMap.containsKey(receivedMessage) && chatState.getChatState(chatId) != null) {
+            stateHandler.handleState(receivedMessage, telegramClient, chatId, userId);
         } else {
             var command = commandMap.get(receivedMessage);
             var message = command.apply(update);
