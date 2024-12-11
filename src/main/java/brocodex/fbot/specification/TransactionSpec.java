@@ -17,19 +17,21 @@ public class TransactionSpec {
     }
 
     public Specification<Transaction> withStartDate(LocalDateTime startDate) {
-        return ((root, query, cb) -> startDate == null ? cb.conjunction() :
+        return ((root, query, cb) ->
+                startDate == null ? cb.conjunction() :
                 cb.greaterThanOrEqualTo(root.get("transactionDate"), startDate));
     }
 
     public Specification<Transaction> withEndDate(LocalDateTime endDate) {
-        return ((root, query, cb) -> endDate == null ? cb.conjunction() :
+        return ((root, query, cb) ->
+                endDate == null ? cb.conjunction() :
                 cb.lessThanOrEqualTo(root.get("transactionDate"), endDate));
     }
 
     public Specification<Transaction> withOperationType(String operationType) {
-        return ((root, query, cb) -> operationType == null || operationType.isBlank() ?
-                cb.conjunction() :
-                cb.equal(root.get("type"), operationType));
+        return ((root, query, cb) ->
+                operationType == null || operationType.isBlank() ?
+                cb.conjunction() : cb.equal(root.get("type"), operationType));
     }
 
     public Specification<Transaction> withCategory(String category) {

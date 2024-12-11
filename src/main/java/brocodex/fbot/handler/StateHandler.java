@@ -42,9 +42,10 @@ public class StateHandler {
                 var message = transactionsController.addTransactionType(chatId, receivedMessage);
                 sendMessage(message);
             }
-//            case WAITING_FOR_TRANSACTION_CATEGORY -> {
-//                transactionsController.addTransactionCategory(chatId, receivedMessage);
-//            }
+            case WAITING_FOR_TRANSACTION_CATEGORY -> {
+                var message = transactionsController.addTransactionCategory(chatId, receivedMessage);
+                sendMessage(message);
+            }
             case WAITING_FOR_TRANSACTION_DESCRIPTION -> {
                 var message = transactionsController.addTransactionDescription(chatId, receivedMessage);
                 sendMessage(message);

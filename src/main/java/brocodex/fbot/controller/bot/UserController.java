@@ -22,6 +22,5 @@ public class UserController {
         dto.setTelegramId(userId);
 
         userService.createUser(dto);
-        chatStateService.setChatState(chatId, ChatState.WAITING_FOR_BUDGET);
     }
 }

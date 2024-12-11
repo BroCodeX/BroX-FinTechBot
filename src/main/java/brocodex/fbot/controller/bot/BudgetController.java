@@ -26,7 +26,7 @@ public class BudgetController {
             SendMessage sendMessage = SendMessage
                     .builder()
                     .chatId(chatId)
-                    .text("Your budget is set to: " + budget.getAmount())
+                    .text("Your budget is set to: " + budget.getAmount() + "\n" + "You can work now")
                     .build();
             sendMessage.setChatId(chatId);
             chatStateService.setChatState(chatId, null);

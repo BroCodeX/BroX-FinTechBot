@@ -26,9 +26,6 @@ public class ResponseHandler {
     @Autowired
     private StateHandler stateHandler;
 
-    @Autowired
-    private CallbackHandler callbackHandler;
-
     private final Map<String, Command> commandMap;
 
     public ResponseHandler (StartCommand startCommand,

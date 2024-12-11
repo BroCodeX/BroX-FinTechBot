@@ -2,18 +2,14 @@ package brocodex.fbot.controller.bot;
 
 import brocodex.fbot.constants.ChatState;
 import brocodex.fbot.dto.transaction.TransactionDTO;
+import brocodex.fbot.factory.KeyboardFactory;
 import brocodex.fbot.service.ChatStateService;
 import brocodex.fbot.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
-import java.util.List;
-
-
+@Component
 public class TransactionsController {
     private TransactionDTO dto;
 
@@ -25,20 +21,11 @@ public class TransactionsController {
 
     public SendMessage addTransactionAmount(Long chatId, String amount, Long userId) {
         try {
+            dto = new TransactionDTO();
             dto.setAmount(Double.parseDouble(amount));
             dto.setTelegramId(userId);
 
-            InlineKeyboardButton incomeButton = new InlineKeyboardButton("Income");
-            InlineKeyboardButton expenseButton = new InlineKeyboardButton("Expense");
-
-            incomeButton.setCallbackData("income");
-            expenseButton.setCallbackData("expense");
-
-            InlineKeyboardRow row = new InlineKeyboardRow(incomeButton, expenseButton);
-
-            List<InlineKeyboardRow> keyboard = List.of(row);
-
-            InlineKeyboardMarkup markup = new InlineKeyboardMarkup(keyboard);
+            var markup = KeyboardFactory.getTransactionTypes();
 
             SendMessage sendMessage = SendMessage
                     .builder()
@@ -57,27 +44,67 @@ public class TransactionsController {
                     .text("Invalid amount. Please enter a valid amount.")
                     .build();
         }
-
     }
+
+//    public SendMessage addTransactionType(Long chatId, String type) {
+//        try {
+//            dto.setType(type);
+//            SendMessage sendMessage = SendMessage
+//                    .builder()
+//                    .chatId(chatId)
+//                    .text("Please enter a description of the transaction")
+//                    .build();
+//            chatState.setChatState(chatId, ChatState.WAITING_FOR_TRANSACTION_DESCRIPTION);
+//            return sendMessage;
+//        } catch (NumberFormatException ex) {
+//            return SendMessage
+//                    .builder()
+//                    .chatId(chatId)
+//                    .text("Invalid type of transaction. Please choose income or expense")
+//                    .build();
+//        }
+//    }
 
     public SendMessage addTransactionType(Long chatId, String type) {
         try {
-            if(!type.equals("income") || !type.equals("expense")) {
-                throw new NumberFormatException();
-            }
             dto.setType(type);
+            var markup = type.equals("income") ? KeyboardFactory.getIncomeCategories()
+                    : KeyboardFactory.getExpenseCategories();
             SendMessage sendMessage = SendMessage
                     .builder()
                     .chatId(chatId)
-                    .text("Please enter a description of the transaction")
+                    .replyMarkup(markup)
+                    .text("Please choose a category of the transaction")
                     .build();
-            chatState.setChatState(chatId, ChatState.WAITING_FOR_TRANSACTION_DESCRIPTION);
+            chatState.setChatState(chatId, ChatState.WAITING_FOR_TRANSACTION_CATEGORY);
+
             return sendMessage;
         } catch (NumberFormatException ex) {
             return SendMessage
                     .builder()
                     .chatId(chatId)
                     .text("Invalid type of transaction. Please choose income or expense")
+                    .build();
+        }
+    }
+
+    public SendMessage addTransactionCategory(Long chatId, String message) {
+        try {
+            dto.setCategoryName(message);
+            SendMessage sendMessage = SendMessage
+                    .builder()
+                    .chatId(chatId)
+                    .text("Please enter a description of the transaction")
+                    .build();
+
+            chatState.setChatState(chatId, ChatState.WAITING_FOR_TRANSACTION_DESCRIPTION);
+
+            return sendMessage;
+        } catch (NumberFormatException ex) {
+            return SendMessage
+                    .builder()
+                    .chatId(chatId)
+                    .text("Sorry, something went wrong. Please choose a category")
                     .build();
         }
     }

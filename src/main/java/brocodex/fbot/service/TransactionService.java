@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 
 @Service
@@ -30,7 +31,7 @@ public class TransactionService {
     }
 
     public TransactionDTO createTransaction(TransactionDTO dto) {
-        String type = dto.getType();
+        String type = dto.getType().toLowerCase(Locale.ROOT);
         Long telegramId = dto.getTelegramId();
         Double trnAmount = dto.getAmount();
         var transaction = mapper.map(dto);
