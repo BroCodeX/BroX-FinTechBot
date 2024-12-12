@@ -43,8 +43,4 @@ public class Transaction implements BaseModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private TransactionCategory category;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "budget_id")
-    private Budget budget;
 }

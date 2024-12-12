@@ -2,7 +2,6 @@ package brocodex.fbot.commands;
 
 import brocodex.fbot.constants.ChatState;
 import brocodex.fbot.constants.CommandMessages;
-import brocodex.fbot.controller.bot.UserController;
 import brocodex.fbot.service.ChatStateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,9 +12,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class AddTransactionCommand implements Command {
     @Autowired
     private ChatStateService stateService;
-
-    @Autowired
-    private UserController userController;
 
     @Override
     public SendMessage apply(Update update) {

@@ -2,13 +2,10 @@ package brocodex.fbot.handler;
 
 import brocodex.fbot.controller.bot.BudgetController;
 import brocodex.fbot.controller.bot.TransactionsController;
-import brocodex.fbot.controller.bot.UserController;
 import brocodex.fbot.service.ChatStateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 

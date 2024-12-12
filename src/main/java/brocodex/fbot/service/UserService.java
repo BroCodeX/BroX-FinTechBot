@@ -41,4 +41,8 @@ public class UserService {
     public void destroyUser(Long id) {
 
     }
+
+    public boolean isUserPresent(Long id) {
+        return repository.findByTelegramId(id).isPresent();
+    }
 }

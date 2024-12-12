@@ -5,6 +5,7 @@ import lombok.Getter;
 public enum CommandMessages {
     START_MESSAGE("Welcome to the Finance Bot! "),
     HELP_MESSAGE("Available commands: \n" +
+            "=== \n" +
             "/start - Start the bot \n" +
             "/help - Show available commands \n" +
             "/add_transaction - Add a new transaction \n" +

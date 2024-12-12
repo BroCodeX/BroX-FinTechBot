@@ -2,8 +2,9 @@ package brocodex.fbot.commands;
 
 import brocodex.fbot.constants.ChatState;
 import brocodex.fbot.constants.CommandMessages;
-import brocodex.fbot.controller.bot.UserController;
+import brocodex.fbot.dto.user.UserDTO;
 import brocodex.fbot.service.ChatStateService;
+import brocodex.fbot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -15,7 +16,7 @@ public class StartCommand implements Command {
     private ChatStateService stateService;
 
     @Autowired
-    private UserController userController;
+    private UserService userService;
 
     @Override
     public SendMessage apply(Update update) {
@@ -24,7 +25,19 @@ public class StartCommand implements Command {
         String userName = update.getMessage().getFrom().getUserName();
         String firstName = update.getMessage().getFrom().getFirstName();
 
-        userController.saveUsername(userId, userName, chatId);
+        UserDTO dto = new UserDTO();
+        dto.setUsername(userName);
+        dto.setTelegramId(userId);
+
+        if(userService.isUserPresent(userId)) {
+            return SendMessage // Create a message object
+                    .builder()
+                    .chatId(chatId)
+                    .text(CommandMessages.HELP_MESSAGE.getDescription())
+                    .build();
+        }
+
+        userService.createUser(dto);
 
         String text = CommandMessages.START_MESSAGE.getDescription() +
                 firstName +

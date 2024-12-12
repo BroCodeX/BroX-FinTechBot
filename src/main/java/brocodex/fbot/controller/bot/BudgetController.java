@@ -1,5 +1,6 @@
 package brocodex.fbot.controller.bot;
 
+import brocodex.fbot.constants.CommandMessages;
 import brocodex.fbot.dto.budget.BudgetDTO;
 import brocodex.fbot.service.BudgetService;
 import brocodex.fbot.service.ChatStateService;
@@ -26,7 +27,8 @@ public class BudgetController {
             SendMessage sendMessage = SendMessage
                     .builder()
                     .chatId(chatId)
-                    .text("Your budget is set to: " + budget.getAmount() + "\n" + "You can work now")
+                    .text("Your budget is set to: " + budget.getAmount() + "\n" + "\n" +
+                            CommandMessages.HELP_MESSAGE.getDescription())
                     .build();
             sendMessage.setChatId(chatId);
             chatStateService.setChatState(chatId, null);
