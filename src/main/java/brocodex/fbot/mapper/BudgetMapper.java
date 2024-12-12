@@ -12,7 +12,7 @@ import org.mapstruct.*;
         unmappedTargetPolicy = ReportingPolicy.WARN
 )
 public abstract class BudgetMapper {
-//    @Mapping(source = "telegramId", target = "user.telegramId")
+//    @Mapping(source = "telegramId", target = "user")
     @Mapping(source = "telegramId", target = "user", qualifiedByName = "toUserEntity")
     public abstract Budget map(BudgetDTO dto);
 
