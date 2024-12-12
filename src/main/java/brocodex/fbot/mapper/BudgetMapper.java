@@ -13,9 +13,9 @@ import org.mapstruct.*;
 )
 public abstract class BudgetMapper {
 //    @Mapping(source = "telegramId", target = "user")
-    @Mapping(source = "telegramId", target = "user", qualifiedByName = "toUserEntity")
+//    @Mapping(source = "telegramId", target = "user", qualifiedByName = "toUserEntity")
     public abstract Budget map(BudgetDTO dto);
 
-    @Mapping(source = "user.telegramId", target = "telegramId")
+//    @Mapping(source = "user.telegramId", target = "telegramId")
     public abstract BudgetDTO map(Budget budget);
 }

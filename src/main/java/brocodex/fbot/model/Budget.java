@@ -36,6 +36,6 @@ public class Budget implements BaseModel {
     @LastModifiedDate
     private LocalDate updatedAt;
 
-    @OneToOne(mappedBy = "budget")
-    private User user;
+//    @OneToOne(mappedBy = "budget")
+//    private User user;
 }
