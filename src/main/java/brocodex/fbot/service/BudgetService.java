@@ -1,7 +1,7 @@
 package brocodex.fbot.service;
 
+import brocodex.fbot.constants.CommandMessages;
 import brocodex.fbot.dto.budget.BudgetDTO;
-import brocodex.fbot.dto.user.UserDTO;
 import brocodex.fbot.mapper.BudgetMapper;
 import brocodex.fbot.repository.BudgetRepository;
 import brocodex.fbot.repository.UserRepository;
@@ -19,6 +19,36 @@ public class BudgetService {
 
     @Autowired
     private BudgetMapper mapper;
+
+    @Autowired
+    private ChatStateService chatStateService;
+
+    public SendMessage setBudget(Long chatId, String amount, Long userId) {
+        try {
+            BudgetDTO dto = new BudgetDTO();
+            dto.setAmount(Double.parseDouble(amount));
+            dto.setTelegramId(userId);
+
+            var budget = createBudget(dto);
+
+            SendMessage sendMessage = SendMessage
+                    .builder()
+                    .chatId(chatId)
+                    .text("Your budget is set to: " + budget.getAmount() + "\n" + "\n" +
+                            CommandMessages.HELP_MESSAGE.getDescription())
+                    .build();
+            sendMessage.setChatId(chatId);
+            chatStateService.setChatState(chatId, null);
+
+            return sendMessage;
+        } catch (NumberFormatException ex) {
+            return SendMessage
+                    .builder()
+                    .chatId(chatId)
+                    .text("Your message is incorrect. Please enter a valid data for your budget")
+                    .build();
+        }
+    }
 
     public SendMessage showBudget(Long userID, Long chatID) {
         var maybeBudget = userRepository.findByTelegramId(userID).orElse(null);

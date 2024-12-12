@@ -1,7 +1,7 @@
 package brocodex.fbot.handler;
 
-import brocodex.fbot.controller.bot.BudgetController;
 import brocodex.fbot.controller.bot.TransactionsController;
+import brocodex.fbot.service.BudgetService;
 import brocodex.fbot.service.ChatStateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ public class StateHandler {
     private ChatStateService chatStateService;
 
     @Autowired
-    private BudgetController budgetController;
+    private BudgetService budgetService;
 
     @Autowired
     private TransactionsController transactionsController;
@@ -28,7 +28,7 @@ public class StateHandler {
 
         switch (actualState) {
             case WAITING_FOR_BUDGET -> {
-                var message = budgetController.setBudget(chatId, receivedMessage, userId);
+                var message = budgetService.setBudget(chatId, receivedMessage, userId);
                 sendMessage(message);
             }
             case WAITING_FOR_TRANSACTION_AMOUNT -> {
