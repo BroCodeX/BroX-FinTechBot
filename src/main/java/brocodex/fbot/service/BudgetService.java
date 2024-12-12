@@ -7,6 +7,7 @@ import brocodex.fbot.repository.BudgetRepository;
 import brocodex.fbot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @Service
 public class BudgetService {
@@ -19,8 +20,22 @@ public class BudgetService {
     @Autowired
     private BudgetMapper mapper;
 
-    public BudgetDTO showBudget(Long id) {
-        return null;
+    public SendMessage showBudget(Long userID, Long chatID) {
+        var maybeBudget = userRepository.findByTelegramId(userID).orElse(null);
+        if(maybeBudget == null) {
+            return SendMessage
+                    .builder()
+                    .chatId(chatID)
+                    .text("Budget with this user id: " + userID + " not found")
+                    .build();
+        }
+        return SendMessage
+                .builder()
+                .chatId(chatID)
+                .text("Your current budget: \n" +
+                        "amount: " + maybeBudget.getBudget().getAmount() + "\n" +
+                        "created at: " + maybeBudget.getBudget().getCreatedAt())
+                .build();
     }
 
     public BudgetDTO createBudget(BudgetDTO dto) {

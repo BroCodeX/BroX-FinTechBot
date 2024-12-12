@@ -1,9 +1,6 @@
 package brocodex.fbot.handler;
 
-import brocodex.fbot.commands.AddTransactionCommand;
-import brocodex.fbot.commands.Command;
-import brocodex.fbot.commands.HelpCommand;
-import brocodex.fbot.commands.StartCommand;
+import brocodex.fbot.commands.*;
 import brocodex.fbot.service.ChatStateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +27,13 @@ public class ResponseHandler {
 
     public ResponseHandler (StartCommand startCommand,
                             HelpCommand helpCommand,
-                            AddTransactionCommand addTransactionCommand) {
+                            AddTransactionCommand addTransactionCommand,
+                            ViewBudgetCommand viewBudgetCommand) {
         this.commandMap = Map.of(
                 "/start", startCommand,
                 "/help", helpCommand,
-                "/add_transaction", addTransactionCommand
+                "/add_transaction", addTransactionCommand,
+                "/view_budget", viewBudgetCommand
         );
     }
 
