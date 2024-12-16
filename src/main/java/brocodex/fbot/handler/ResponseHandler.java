@@ -28,12 +28,14 @@ public class ResponseHandler {
     public ResponseHandler (StartCommand startCommand,
                             HelpCommand helpCommand,
                             AddTransactionCommand addTransactionCommand,
-                            ViewBudgetCommand viewBudgetCommand) {
+                            ViewBudgetCommand viewBudgetCommand,
+                            SetNewBudgetCommand setNewBudget) {
         this.commandMap = Map.of(
                 "/start", startCommand,
                 "/help", helpCommand,
                 "/add_transaction", addTransactionCommand,
-                "/view_budget", viewBudgetCommand
+                "/view_budget", viewBudgetCommand,
+                "/edit_budget", setNewBudget
         );
     }
 
