@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
-public class StopCommand implements Command {
+public class Stop implements Command {
 
     @Override
     public SendMessage apply(Update update) {

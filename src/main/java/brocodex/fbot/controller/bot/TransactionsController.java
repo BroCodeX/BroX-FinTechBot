@@ -46,25 +46,6 @@ public class TransactionsController {
         }
     }
 
-//    public SendMessage addTransactionType(Long chatId, String type) {
-//        try {
-//            dto.setType(type);
-//            SendMessage sendMessage = SendMessage
-//                    .builder()
-//                    .chatId(chatId)
-//                    .text("Please enter a description of the transaction")
-//                    .build();
-//            chatState.setChatState(chatId, ChatState.WAITING_FOR_TRANSACTION_DESCRIPTION);
-//            return sendMessage;
-//        } catch (NumberFormatException ex) {
-//            return SendMessage
-//                    .builder()
-//                    .chatId(chatId)
-//                    .text("Invalid type of transaction. Please choose income or expense")
-//                    .build();
-//        }
-//    }
-
     public SendMessage addTransactionType(Long chatId, String type) {
         try {
             dto.setType(type);

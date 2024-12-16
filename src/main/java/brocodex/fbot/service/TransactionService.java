@@ -63,7 +63,4 @@ public class TransactionService {
         return null;
     }
 
-    public void destroyTransaction(Long id) {
-
-    }
 }

@@ -25,16 +25,16 @@ public class ResponseHandler {
 
     private final Map<String, Command> commandMap;
 
-    public ResponseHandler (StartCommand startCommand,
-                            HelpCommand helpCommand,
-                            AddTransactionCommand addTransactionCommand,
-                            ViewBudgetCommand viewBudgetCommand,
-                            SetNewBudgetCommand setNewBudget) {
+    public ResponseHandler (Start start,
+                            Help help,
+                            AddTransaction addTransaction,
+                            ViewBudget viewBudget,
+                            SetNewBudget setNewBudget) {
         this.commandMap = Map.of(
-                "/start", startCommand,
-                "/help", helpCommand,
-                "/add_transaction", addTransactionCommand,
-                "/view_budget", viewBudgetCommand,
+                "/start", start,
+                "/help", help,
+                "/add_transaction", addTransaction,
+                "/view_budget", viewBudget,
                 "/edit_budget", setNewBudget
         );
     }
@@ -70,7 +70,6 @@ public class ResponseHandler {
     }
 
     public void handleUnexpectedMessage(Update update) {
-        long userId = update.getMessage().getFrom().getId();
         long chatId = update.getMessage().getChatId();
         String receivedMessage = update.getMessage().getText();
 

@@ -35,14 +35,14 @@ public class BudgetService {
                 return SendMessage
                         .builder()
                         .chatId(chatId)
-                        .text("User with such id not found: " + userId + " register first")
+                        .text("User with such id not found: " + userId + "\nYou need to register first")
                         .build();
             }
 
             BudgetDTO budget;
 
             if(maybeUser.getBudget() != null) {
-                budget = updateBudget(dto);
+                budget = updateBudget(chatId, dto);
             } else {
                 budget = createBudget(dto);
             }
@@ -96,16 +96,23 @@ public class BudgetService {
         return mapper.map(budget);
         }
 
-    public BudgetDTO updateBudget(BudgetDTO dto) {
+//    public BudgetDTO updateBudget(BudgetDTO dto) {
+//        var maybeUser = userRepository.findByTelegramId(dto.getTelegramId()).get();
+//
+//        var currentBudget = maybeUser.getBudget();
+//        currentBudget.setAmount(dto.getAmount());
+//        repository.save(currentBudget);
+//        return mapper.map(currentBudget);
+//    }
+
+    public BudgetDTO updateBudget(Long chatId, BudgetDTO dto) {
         var maybeUser = userRepository.findByTelegramId(dto.getTelegramId()).get();
 
         var currentBudget = maybeUser.getBudget();
-        currentBudget.setAmount(dto.getAmount());
-        repository.save(currentBudget);
-        return mapper.map(currentBudget);
-    }
+        maybeUser.setBudget(null);
+        repository.delete(currentBudget);
+        userRepository.save(maybeUser);
 
-    public void destroyBudget(Long id) {
-
+        return createBudget(dto);
     }
 }
