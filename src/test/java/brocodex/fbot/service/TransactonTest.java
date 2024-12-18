@@ -62,9 +62,9 @@ public class TransactonTest {
 
     @BeforeEach
     public void prepareData() {
+        userRepository.deleteAll();
         budgetRepository.deleteAll();
         transactionRepository.deleteAll();
-        userRepository.deleteAll();
         categoryRepository.deleteAll();
 
         incomeTransaction = Instancio.of(generator.makeIncomeTransaction()).create();
@@ -79,8 +79,8 @@ public class TransactonTest {
         dto.setTransactionDate(NOW);
 
         user = Instancio.of(generator.makeUser()).create();
-        budget.setUser(user);
-        user.setBudget(budget);
+//        budget.setUser(user);
+//        user.setBudget(budget);
 
         category = new TransactionCategory();
         category.setSlug("Yandex");
@@ -91,10 +91,14 @@ public class TransactonTest {
     public void testIncomeTransaction() {
         dto.setType("income");
         dto.setTelegramId(user.getTelegramId());
+
         userRepository.save(user);
 
         var currentBudget = budgetRepository.save(budget);
         Long budgetId = currentBudget.getId();
+
+        user.setBudget(currentBudget);
+        userRepository.save(user);
 
         var currentTransaction = service.createTransaction(dto);
         Long transactionId = currentTransaction.getId();
@@ -117,6 +121,9 @@ public class TransactonTest {
 
         var currentBudget = budgetRepository.save(budget);
         Long budgetId = currentBudget.getId();
+
+        user.setBudget(currentBudget);
+        userRepository.save(user);
 
         var currentTransaction = service.createTransaction(dto);
         Long transactionId = currentTransaction.getId();

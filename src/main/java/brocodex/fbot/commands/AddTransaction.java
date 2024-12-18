@@ -16,9 +16,6 @@ public class AddTransaction implements Command {
     @Override
     public SendMessage apply(Update update) {
         long chatId = update.getMessage().getChatId();
-        long userId = update.getMessage().getFrom().getId();
-        String userName = update.getMessage().getFrom().getUserName();
-        String firstName = update.getMessage().getFrom().getFirstName();
 
         SendMessage sendMessage = SendMessage
                 .builder()

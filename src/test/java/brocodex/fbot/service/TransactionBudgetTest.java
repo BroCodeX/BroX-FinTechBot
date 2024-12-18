@@ -93,7 +93,7 @@ public class TransactionBudgetTest {
 
         when(userRepository.findByTelegramId(user.getTelegramId())).thenReturn(Optional.of(user));
         user.setBudget(budget);
-        budget.setUser(user);
+//        budget.setUser(user);
 
         when(mapper.map(any(Transaction.class))).thenAnswer(invocation -> {
             Transaction transaction = invocation.getArgument(0);
@@ -119,7 +119,7 @@ public class TransactionBudgetTest {
 
         when(userRepository.findByTelegramId(user.getTelegramId())).thenReturn(Optional.of(user));
         user.setBudget(budget);
-        budget.setUser(user);
+//        budget.setUser(user);
 
         when(mapper.map(dto)).thenAnswer(invocation -> {
             Transaction transaction = new Transaction();

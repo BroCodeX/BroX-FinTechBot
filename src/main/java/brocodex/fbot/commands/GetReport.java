@@ -1,7 +1,6 @@
 package brocodex.fbot.commands;
 
-import brocodex.fbot.service.BudgetService;
-import brocodex.fbot.service.ChatStateService;
+import brocodex.fbot.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -9,17 +8,14 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
 public class GetReport implements Command {
-    @Autowired
-    private ChatStateService stateService;
 
     @Autowired
-    private BudgetService budgetService;
+    private ReportService reportService;
 
     @Override
     public SendMessage apply(Update update) {
         long chatId = update.getMessage().getChatId();
-        long userId = update.getMessage().getFrom().getId();
 
-        return budgetService.showBudget(userId, chatId);
+        return reportService.welcomeMessage(chatId);
     }
 }

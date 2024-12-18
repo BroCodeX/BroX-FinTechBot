@@ -15,7 +15,9 @@ public enum CommandMessages {
             "/view_budget - View your current budget \n" +
             "/stop - Stop the bot \n"),
     WAIT_TRANSACTION_AMOUNT("Please enter the transaction amount"),
-    WAIT_FOR_NEW_BUDGET("Please type a new amount of the budget");
+    WAIT_FOR_NEW_BUDGET("Please type a new amount of the budget"),
+    WAIT_FOR_DATA_FILTER("Please choose a data interval for the report"),
+    WAIT_FOR_TYPE_FILTER("Please choose a type of transaction for the report");
 
     private final String description;
 

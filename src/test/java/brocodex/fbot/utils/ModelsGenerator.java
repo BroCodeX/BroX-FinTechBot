@@ -33,6 +33,7 @@ public class ModelsGenerator {
     public Model<User> makeUser() {
         return Instancio.of(User.class)
                 .ignore(Select.field(User::getId))
+                .ignore(Select.field(User::getBudget))
                 .supply(Select.field(User::getUsername), () -> faker.name().name())
                 .supply(Select.field(User::getTelegramId), () -> faker.number().randomNumber())
                 .toModel();
@@ -69,7 +70,6 @@ public class ModelsGenerator {
         return Instancio.of(Budget.class)
                 .ignore(Select.field(Budget::getId))
                 .ignore(Select.field(Budget::getSpentAmount))
-                .ignore(Select.field(Budget::getUser))
                 .supply(Select.field(Budget::getAmount), () -> 10.000)
                 .toModel();
     }

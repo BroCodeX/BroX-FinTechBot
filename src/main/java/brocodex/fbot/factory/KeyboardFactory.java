@@ -4,6 +4,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class KeyboardFactory {
@@ -62,4 +64,43 @@ public class KeyboardFactory {
 
         return new InlineKeyboardMarkup(keyboard);
     }
+
+    public static InlineKeyboardMarkup getDataFilters() {
+        var now = LocalDateTime.now();
+        InlineKeyboardButton lastWeek = new InlineKeyboardButton("Last Week");
+        InlineKeyboardButton lastTwoWeeks = new InlineKeyboardButton("Last Two Weeks");
+        InlineKeyboardButton lastMonth = new InlineKeyboardButton("Last Month");
+        InlineKeyboardButton allTime = new InlineKeyboardButton("All time");
+
+        lastWeek.setCallbackData(now.minusWeeks(1).toString());
+        lastTwoWeeks.setCallbackData(now.minusWeeks(2).toString());
+        lastMonth.setCallbackData(now.minusMonths(1).toString());
+        allTime.setCallbackData(now.minusYears(100).toString());
+
+        InlineKeyboardRow row = new InlineKeyboardRow(lastWeek, lastTwoWeeks);
+        InlineKeyboardRow row2 = new InlineKeyboardRow(lastMonth, allTime);
+
+        List<InlineKeyboardRow> keyboard = List.of(row, row2);
+
+        return new InlineKeyboardMarkup(keyboard);
+    }
+
+    public static InlineKeyboardMarkup getTypeFilters() {
+
+        InlineKeyboardButton incomeButton = new InlineKeyboardButton("Income");
+        InlineKeyboardButton expenseButton = new InlineKeyboardButton("Expense");
+        InlineKeyboardButton bothButton = new InlineKeyboardButton("Both types");
+
+        incomeButton.setCallbackData("income");
+        expenseButton.setCallbackData("expense");
+        bothButton.setCallbackData("both");
+
+        InlineKeyboardRow row = new InlineKeyboardRow(incomeButton, expenseButton);
+        InlineKeyboardRow row2 = new InlineKeyboardRow(bothButton);
+
+        List<InlineKeyboardRow> keyboard = List.of(row, row2);
+
+        return new InlineKeyboardMarkup(keyboard);
+    }
+
 }
