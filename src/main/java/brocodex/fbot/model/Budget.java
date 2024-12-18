@@ -6,11 +6,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "budgets")
+@EntityListeners(AuditingEntityListener.class)
 @Setter
 @Getter
 public class Budget implements BaseModel {
@@ -34,6 +38,6 @@ public class Budget implements BaseModel {
     @LastModifiedDate
     private LocalDate updatedAt;
 
-    @OneToOne(mappedBy = "budget")
-    private User user;
+//    @OneToOne(mappedBy = "budget")
+//    private User user;
 }

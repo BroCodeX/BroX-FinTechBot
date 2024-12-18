@@ -65,9 +65,9 @@ dependencies {
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
 	// Spring security
-	implementation("org.springframework.boot:spring-boot-starter-security")
-	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-	testImplementation("org.springframework.security:spring-security-test")
+//	implementation("org.springframework.boot:spring-boot-starter-security")
+//	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+//	testImplementation("org.springframework.security:spring-security-test")
 
 	// Logger
 	implementation("io.sentry:sentry-spring-boot-starter-jakarta:7.15.0")
@@ -87,6 +87,14 @@ dependencies {
 
 	// Spring AMQP
 	implementation("org.springframework.boot:spring-boot-starter-amqp")
+
+	// Telegram
+	implementation("org.telegram:telegrambots-springboot-longpolling-starter:8.0.0")
+//	implementation("org.telegram:telegrambots:6.9.7.1")
+	implementation ("org.telegram:telegrambots-client:8.0.0")
+
+
+
 }
 
 tasks.withType<Test> {

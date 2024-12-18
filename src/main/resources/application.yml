@@ -18,12 +18,10 @@ server:
 logging:
   level:
     root: DEBUG
-    org:
-      springframework:
-        security: DEBUG
 
-springdoc:
-  api-docs:
-    path: /documentation/api-docs
-  swagger-ui:
-    path: /documentation/swagger-ui.html
+
+telegram:
+  bot:
+    token: ${BOT_TOKEN}
+    name: ${BOT_NAME}
+    creatorId: ${CREATOR_ID}

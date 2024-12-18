@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class TransactionFilterDTO {
+    private Long telegramId;
     private LocalDateTime startDate; // Начальная дата фильтрации
     private LocalDateTime endDate; // Конечная дата фильтрации
     private String operationType; // тип операции доход / расход
