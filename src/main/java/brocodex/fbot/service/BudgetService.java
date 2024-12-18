@@ -3,6 +3,7 @@ package brocodex.fbot.service;
 import brocodex.fbot.constants.CommandMessages;
 import brocodex.fbot.dto.budget.BudgetDTO;
 import brocodex.fbot.mapper.BudgetMapper;
+import brocodex.fbot.model.User;
 import brocodex.fbot.repository.BudgetRepository;
 import brocodex.fbot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,9 @@ public class BudgetService {
             dto.setAmount(Double.parseDouble(amount));
             dto.setTelegramId(userId);
 
-            var maybeUser = userRepository.findByTelegramId(dto.getTelegramId())
+            var user = userRepository.findByTelegramId(dto.getTelegramId())
                     .orElse(null);
-            if(maybeUser == null) {
+            if(user == null) {
                 return SendMessage
                         .builder()
                         .chatId(chatId)
@@ -41,8 +42,8 @@ public class BudgetService {
 
             BudgetDTO budget;
 
-            if(maybeUser.getBudget() != null) {
-                budget = updateBudget(chatId, dto);
+            if(user.getBudget() != null) {
+                budget = updateBudget(dto);
             } else {
                 budget = createBudget(dto);
             }
@@ -67,8 +68,8 @@ public class BudgetService {
     }
 
     public SendMessage showBudget(Long userID, Long chatID) {
-        var maybeBudget = userRepository.findByTelegramId(userID).orElse(null);
-        if(maybeBudget == null) {
+        var maybeUser = userRepository.findByTelegramId(userID).orElse(null);
+        if(maybeUser == null) {
             return SendMessage
                     .builder()
                     .chatId(chatID)
@@ -79,8 +80,8 @@ public class BudgetService {
                 .builder()
                 .chatId(chatID)
                 .text("Your current budget: \n" +
-                        "amount: " + maybeBudget.getBudget().getAmount() + "\n" +
-                        "created at: " + maybeBudget.getBudget().getCreatedAt())
+                        "amount: " + maybeUser.getBudget().getAmount() + "\n" +
+                        "created at: " + maybeUser.getBudget().getCreatedAt())
                 .build();
     }
 
@@ -88,7 +89,7 @@ public class BudgetService {
         var maybeUser = userRepository.findByTelegramId(dto.getTelegramId()).get();
 
         var budget = mapper.map(dto);
-        repository.save(budget);
+//        repository.save(budget);
 
         maybeUser.setBudget(budget);       // Связываем бюджет с пользователем
         userRepository.save(maybeUser);   // Сохраняем пользователя
@@ -96,23 +97,15 @@ public class BudgetService {
         return mapper.map(budget);
         }
 
-//    public BudgetDTO updateBudget(BudgetDTO dto) {
-//        var maybeUser = userRepository.findByTelegramId(dto.getTelegramId()).get();
-//
-//        var currentBudget = maybeUser.getBudget();
-//        currentBudget.setAmount(dto.getAmount());
-//        repository.save(currentBudget);
-//        return mapper.map(currentBudget);
-//    }
-
-    public BudgetDTO updateBudget(Long chatId, BudgetDTO dto) {
+    public BudgetDTO updateBudget(BudgetDTO dto) {
         var maybeUser = userRepository.findByTelegramId(dto.getTelegramId()).get();
 
         var currentBudget = maybeUser.getBudget();
-        maybeUser.setBudget(null);
-        repository.delete(currentBudget);
+        currentBudget.setAmount(dto.getAmount());
+
+        maybeUser.setBudget(currentBudget);
         userRepository.save(maybeUser);
 
-        return createBudget(dto);
+        return mapper.map(currentBudget);
     }
 }
