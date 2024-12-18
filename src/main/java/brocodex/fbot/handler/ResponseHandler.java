@@ -29,13 +29,15 @@ public class ResponseHandler {
                             Help help,
                             AddTransaction addTransaction,
                             ViewBudget viewBudget,
-                            SetNewBudget setNewBudget) {
+                            SetNewBudget setNewBudget,
+                            GetReport getReport) {
         this.commandMap = Map.of(
                 "/start", start,
                 "/help", help,
                 "/add_transaction", addTransaction,
                 "/view_budget", viewBudget,
-                "/edit_budget", setNewBudget
+                "/edit_budget", setNewBudget,
+                "/get_report", getReport
         );
     }
 
@@ -66,7 +68,6 @@ public class ResponseHandler {
             var message = command.apply(update);
             sendMessage(message);
         }
-        // тут надо продумать как callback
     }
 
     public void handleUnexpectedMessage(Update update) {

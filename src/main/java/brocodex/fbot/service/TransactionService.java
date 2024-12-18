@@ -5,6 +5,7 @@ import brocodex.fbot.mapper.TransactionMapper;
 import brocodex.fbot.repository.BudgetRepository;
 import brocodex.fbot.repository.UserRepository;
 import brocodex.fbot.repository.transactions.TransactionRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,7 @@ public class TransactionService {
         return null;
     }
 
+    @Transactional
     public TransactionDTO createTransaction(TransactionDTO dto) {
         String type = dto.getType().toLowerCase(Locale.ROOT);
         Long telegramId = dto.getTelegramId();

@@ -3,11 +3,11 @@ package brocodex.fbot.service;
 import brocodex.fbot.constants.CommandMessages;
 import brocodex.fbot.dto.budget.BudgetDTO;
 import brocodex.fbot.mapper.BudgetMapper;
-import brocodex.fbot.model.User;
 import brocodex.fbot.repository.BudgetRepository;
 import brocodex.fbot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @Service
@@ -24,6 +24,7 @@ public class BudgetService {
     @Autowired
     private ChatStateService chatStateService;
 
+    @Transactional
     public SendMessage setBudget(Long chatId, String amount, Long userId) {
         try {
             BudgetDTO dto = new BudgetDTO();
@@ -67,6 +68,7 @@ public class BudgetService {
         }
     }
 
+    @Transactional
     public SendMessage showBudget(Long userID, Long chatID) {
         var maybeUser = userRepository.findByTelegramId(userID).orElse(null);
         if(maybeUser == null) {
@@ -95,8 +97,9 @@ public class BudgetService {
         userRepository.save(maybeUser);   // Сохраняем пользователя
 
         return mapper.map(budget);
-        }
+    }
 
+    @Transactional
     public BudgetDTO updateBudget(BudgetDTO dto) {
         var maybeUser = userRepository.findByTelegramId(dto.getTelegramId()).get();
 

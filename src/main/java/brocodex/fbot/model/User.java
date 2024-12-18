@@ -35,6 +35,6 @@ public class User implements BaseModel {
     private LocalDate updatedAt; // обновлен
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "budget_id", referencedColumnName = "id")
+    @JoinColumn(name = "budget_id", referencedColumnName = "id")
     private Budget budget;
 }

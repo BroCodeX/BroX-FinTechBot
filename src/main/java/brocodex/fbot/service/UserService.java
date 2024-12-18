@@ -50,6 +50,7 @@ public class UserService {
         String text = CommandMessages.START_MESSAGE.getDescription() +
                 firstName +
                 "\n" +
+                "=====\n" +
                 "Please, set your budget or type /help to show the commands";
 
         SendMessage sendMessage = SendMessage // Create a message object

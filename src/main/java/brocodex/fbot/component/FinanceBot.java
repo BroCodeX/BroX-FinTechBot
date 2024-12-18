@@ -17,6 +17,8 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 public class FinanceBot implements SpringLongPollingBot, LongPollingSingleThreadUpdateConsumer {
     private String token;
 
+    private BotSession botSession;
+
     private final TelegramClient telegramClient;
 
     private final ResponseHandler responseHandler;
