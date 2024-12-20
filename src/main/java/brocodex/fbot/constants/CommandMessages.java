@@ -14,7 +14,6 @@ public enum CommandMessages {
             /get_report - Make a financial report \s
             /edit_budget - Edit your budget\s
             /view_budget - View your current budget\s
-            /stop - Stop the bot\s
             """),
     WAIT_TRANSACTION_AMOUNT("Please enter the transaction amount"),
     WAIT_FOR_NEW_BUDGET("Please type a new amount of the budget"),
