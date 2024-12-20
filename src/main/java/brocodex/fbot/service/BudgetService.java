@@ -91,7 +91,6 @@ public class BudgetService {
         var maybeUser = userRepository.findByTelegramId(dto.getTelegramId()).get();
 
         var budget = mapper.map(dto);
-//        repository.save(budget);
 
         maybeUser.setBudget(budget);       // Связываем бюджет с пользователем
         userRepository.save(maybeUser);   // Сохраняем пользователя

@@ -50,7 +50,9 @@ public class TransactionService {
             return mapper.map(transaction);
         } else if (type.equals("expense")) {
             if (currentBudgetAmount < trnAmount) {
-                throw new IllegalArgumentException("Not enough budget for the expense");
+                String failMessage = "Not enough budget for the expense" + "\n" +
+                        "Correct your budget first";
+                throw new RuntimeException(failMessage);
             }
             maybeBudget.setAmount(currentBudgetAmount - trnAmount);
             budgetRepository.save(maybeBudget);
