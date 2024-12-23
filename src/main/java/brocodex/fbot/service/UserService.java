@@ -74,19 +74,11 @@ public class UserService {
         return mapper.map(user);
     }
 
-    public UserDTO showUser(Long id) {
-        return null;
+    public void destroyUser(Long telegramId) {
+        repository.deleteByTelegramId(telegramId);
     }
 
-    public UserDTO updateUser(Long id, UserDTO dto) {
-        return null;
-    }
-
-    public void destroyUser(Long id) {
-
-    }
-
-    public boolean isUserPresent(Long id) {
-        return repository.findByTelegramId(id).isPresent();
+    public boolean isUserPresent(Long telegramId) {
+        return repository.findByTelegramId(telegramId).isPresent();
     }
 }
