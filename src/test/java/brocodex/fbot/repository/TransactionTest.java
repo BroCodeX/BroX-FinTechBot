@@ -50,7 +50,7 @@ public class TransactionTest {
     }
 
     @Test
-    public void testWithStartDate() {
+    public void testWithStartDateSpec() {
         repository.save(incomeTransaction);
         incomeTransaction.setTransactionDate(DATE_1991);
         repository.save(incomeTransaction);
@@ -80,7 +80,7 @@ public class TransactionTest {
     }
 
     @Test
-    public void testWithEndDate() {
+    public void testWithEndDateSpec() {
         repository.save(incomeTransaction);
         incomeTransaction.setTransactionDate(DATE_1991);
         repository.save(incomeTransaction);
@@ -110,7 +110,7 @@ public class TransactionTest {
     }
 
     @Test
-    public void testBetweenDates() {
+    public void testBetweenDatesSpec() {
         repository.save(incomeTransaction);
         incomeTransaction.setTransactionDate(DATE_1991);
         repository.save(incomeTransaction);
@@ -144,15 +144,13 @@ public class TransactionTest {
     }
 
     @Test
-    public void categoryTest() {
+    public void categoryTestSpec() {
         category = new TransactionCategory();
         category.setSlug("Food");
         categoryRepository.save(category);
 
         incomeTransaction.setCategory(category);
-        incomeTransaction.setUser(null);
         expenseTransaction.setCategory(category);
-        expenseTransaction.setUser(null);
 
         repository.save(incomeTransaction);
         repository.save(expenseTransaction);
@@ -168,5 +166,27 @@ public class TransactionTest {
         assertThat(transactionList)
                 .extracting(Transaction::getCategory)
                 .allMatch(cat -> cat.getSlug().equals("Food"));
+    }
+
+    @Test
+    public void typeTestSpec() {
+        var incomeTrans2 = Instancio.of(generator.makeIncomeTransaction()).create();
+        var incomeTrans3 = Instancio.of(generator.makeIncomeTransaction()).create();
+        var expenseTrans2 = Instancio.of(generator.makeExpenseTransaction()).create();
+
+        repository.save(incomeTransaction);
+        repository.save(incomeTrans2);
+        repository.save(incomeTrans3);
+        repository.save(expenseTransaction);
+        repository.save(expenseTrans2);
+
+        var dto = new TransactionFilterDTO();
+        dto.setOperationType("all");
+
+        var spec = specification.build(dto);
+
+        List<Transaction> transactionList = repository.findAll(spec);
+
+        assertThat(transactionList.size()).isEqualTo(5);
     }
 }
