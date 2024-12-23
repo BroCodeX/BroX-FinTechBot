@@ -96,12 +96,13 @@ public class TransactionBudgetTest {
 //        budget.setUser(user);
 
         when(mapper.map(any(Transaction.class))).thenAnswer(invocation -> {
-            Transaction transaction = invocation.getArgument(0);
-            TransactionDTO transactionDTO = new TransactionDTO();
-            transactionDTO.setId(transaction.getId());
-            transactionDTO.setAmount(transaction.getAmount());
-            transactionDTO.setType(transaction.getType());
-            return transactionDTO;
+//            Transaction transaction = invocation.getArgument(0);
+//            TransactionDTO transactionDTO = new TransactionDTO();
+//            transactionDTO.setId(transaction.getId());
+//            transactionDTO.setAmount(transaction.getAmount());
+//            transactionDTO.setType(transaction.getType());
+//            return transactionDTO;
+            return dto;
         });
 
         var result = service.createTransaction(dto);
@@ -130,12 +131,13 @@ public class TransactionBudgetTest {
         });
 
         when(mapper.map(any(Transaction.class))).thenAnswer(invocation -> {
-            Transaction transaction = invocation.getArgument(0);
-            TransactionDTO transactionDTO = new TransactionDTO();
-            transactionDTO.setId(transaction.getId());
-            transactionDTO.setAmount(transaction.getAmount());
-            transactionDTO.setType(transaction.getType());
-            return transactionDTO;
+//            Transaction transaction = invocation.getArgument(0);
+//            TransactionDTO transactionDTO = new TransactionDTO();
+//            transactionDTO.setId(transaction.getId());
+//            transactionDTO.setAmount(transaction.getAmount());
+//            transactionDTO.setType(transaction.getType());
+//            return transactionDTO;
+            return dto;
         });
 
         var result = service.createTransaction(dto);
