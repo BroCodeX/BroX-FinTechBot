@@ -2,6 +2,7 @@ package brocodex.fbot.mapper;
 
 import brocodex.fbot.dto.transaction.TransactionDTO;
 import brocodex.fbot.model.transaction.Transaction;
+import jakarta.transaction.Transactional;
 import org.mapstruct.*;
 
 @Mapper(

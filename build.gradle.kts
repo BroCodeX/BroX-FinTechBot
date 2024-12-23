@@ -47,6 +47,16 @@ dependencies {
 	implementation("org.apache.commons:commons-collections4:4.4")
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
+	implementation("com.itextpdf:itext-core:8.0.5")
+	implementation("com.itextpdf:bouncy-castle-adapter:8.0.5")
+	// Logger
+	implementation("io.sentry:sentry-spring-boot-starter-jakarta:7.15.0")
+	implementation("io.sentry:sentry-logback:7.15.0")
+	implementation("io.sentry:sentry-log4j2:7.15.0")
+	// Mapper
+	implementation("org.mapstruct:mapstruct:1.5.5.Final")
+	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
+	implementation("org.openapitools:jackson-databind-nullable:0.2.6")
 
 	// DB
 	implementation("org.postgresql:postgresql:42.7.3")
@@ -64,21 +74,6 @@ dependencies {
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:2.6.0")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
-	// Spring security
-//	implementation("org.springframework.boot:spring-boot-starter-security")
-//	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-//	testImplementation("org.springframework.security:spring-security-test")
-
-	// Logger
-	implementation("io.sentry:sentry-spring-boot-starter-jakarta:7.15.0")
-	implementation("io.sentry:sentry-logback:7.15.0")
-	implementation("io.sentry:sentry-log4j2:7.15.0")
-
-	// Mapper
-	implementation("org.mapstruct:mapstruct:1.5.5.Final")
-	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
-	implementation("org.openapitools:jackson-databind-nullable:0.2.6")
-
 	// Tests
 	implementation("net.datafaker:datafaker:2.0.1")
 	implementation("org.instancio:instancio-junit:3.3.0")
@@ -90,10 +85,7 @@ dependencies {
 
 	// Telegram
 	implementation("org.telegram:telegrambots-springboot-longpolling-starter:8.0.0")
-//	implementation("org.telegram:telegrambots:6.9.7.1")
 	implementation ("org.telegram:telegrambots-client:8.0.0")
-
-
 
 }
 
