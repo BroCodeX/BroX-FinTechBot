@@ -62,8 +62,6 @@ public class TransactonTest {
 
     @BeforeEach
     public void prepareData() {
-        userRepository.deleteAll();
-        budgetRepository.deleteAll();
         transactionRepository.deleteAll();
         categoryRepository.deleteAll();
 
@@ -122,7 +120,7 @@ public class TransactonTest {
         var currentBudget = budgetRepository.save(budget);
         Long budgetId = currentBudget.getId();
 
-        user.setBudget(currentBudget);
+        user.setBudget(budget);
         userRepository.save(user);
 
         var currentTransaction = service.createTransaction(dto);
@@ -147,10 +145,14 @@ public class TransactonTest {
         var currentBudget = budgetRepository.save(budget);
         Long budgetId = currentBudget.getId();
 
-        var exception = assertThrows(IllegalArgumentException.class,
+        user.setBudget(budget);
+        userRepository.save(user);
+
+        var exception = assertThrows(RuntimeException.class,
                 () -> service.createTransaction(dto));
 
-        assertThat(exception.getMessage()).isEqualTo("Not enough budget for the expense");
+        assertThat(exception.getMessage()).isEqualTo("Not enough budget for the expense" + "\n" +
+                "Correct your budget first");
 
         var maybeBudget = budgetRepository.findById(budgetId).orElse(null);
         assertThat(maybeBudget).isNotNull();
