@@ -16,6 +16,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -79,22 +80,25 @@ public class ReportService {
 
         List<Transaction> transactionList = transactionRepository.findAll(specification);
 
-        return showReport(transactionList, chatID);
-    }
-
-    public SendDocument showReport(List<Transaction> transactionList, Long chatID) {
         dto = null;
         stateService.removeChatState(chatID);
 
-        var transactionDTOS = transactionList.stream()
-                .map(t -> transactionMapper.map(t))
-                .toList();
+        var pdfReport = getReport(transactionList);
 
-        var pdfReport = pdfGenerator.generatePdfReport(transactionDTOS);
         return SendDocument.builder()
                 .chatId(chatID)
                 .document(new InputFile(pdfReport))
                 .caption("Your report represents as a PDF file")
                 .build();
+
+    }
+
+    public File getReport(List<Transaction> transactionList) {
+
+        var transactionDTOS = transactionList.stream()
+                .map(t -> transactionMapper.map(t))
+                .toList();
+
+        return pdfGenerator.generatePdfReport(transactionDTOS);
     }
 }

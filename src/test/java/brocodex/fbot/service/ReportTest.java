@@ -22,6 +22,8 @@ public class ReportTest {
     private ModelsGenerator modelsGenerator;
     @Autowired
     private TransactionMapper mapper;
+    @Autowired
+    private ReportService reportService;
 
     private User user;
     private Budget budget;
@@ -54,13 +56,12 @@ public class ReportTest {
     }
 
     public void reportPdfTest() {
-        user.setBudget(budget);
-        incomeTransaction.setBudget(budget);
-        incomeTransaction.setCategory(category);
-        expenseTransaction.setBudget(budget);
-        expenseTransaction.setCategory(category);
-
-        var dtos = transactions.stream().map(i -> mapper.map(i)).toList();
+        var dtos = when(transactions.stream()
+                .map(i -> mapper.map(i))
+                .toList())
+                .thenAnswer(invocation -> transactions.stream()
+                        .map(i -> mapper.map(i))
+                        .toList());
 
         var file = pdfGenerator.generatePdfReport(dtos);
     }
