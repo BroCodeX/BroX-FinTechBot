@@ -9,6 +9,7 @@ import brocodex.fbot.model.transaction.TransactionCategory;
 import brocodex.fbot.utils.ModelsGenerator;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -55,6 +56,7 @@ public class ReportTest {
         transactions = List.of(incomeTransaction, expenseTransaction);
     }
 
+    @Test
     public void reportPdfTest() {
         var dtos = when(transactions.stream()
                 .map(i -> mapper.map(i))
