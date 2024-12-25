@@ -14,9 +14,11 @@ import org.mapstruct.*;
 )
 public abstract class TransactionMapper {
     @Mapping(source = "telegramId", target = "user", qualifiedByName = "toUserEntity")
-    @Mapping(source = "categoryName", target = "category", qualifiedByName = "toTransactionCategory")
+    @Mapping(source = "category", target = "category", qualifiedByName = "toTransactionCategory")
+    @Mapping(source = "budget", target = "budget")
     public abstract Transaction map(TransactionDTO dto);
 
-    @Mapping(source = "category.slug", target = "categoryName")
+    @Mapping(source = "category.slug", target = "category")
+    @Mapping(source = "budget.id", target = "budget")
     public abstract TransactionDTO map(Transaction transaction);
 }

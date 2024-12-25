@@ -1,7 +1,6 @@
 package brocodex.fbot.component;
 
 import brocodex.fbot.dto.transaction.TransactionDTO;
-import brocodex.fbot.model.transaction.Transaction;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
@@ -38,7 +37,7 @@ public class PdfReportGenerator {
                 table.addCell(String.valueOf(t.getId()));
                 table.addCell(String.valueOf(t.getAmount()));
                 table.addCell(t.getType());
-                table.addCell(t.getCategoryName());
+                table.addCell(t.getCategory());
                 table.addCell(t.getTransactionDate().toString());
             });
 

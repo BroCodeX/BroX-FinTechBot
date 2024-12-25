@@ -71,7 +71,7 @@ public class TransactionsController {
 
     public SendMessage addTransactionCategory(Long chatId, String message) {
         try {
-            dto.setCategoryName(message);
+            dto.setCategory(message);
             SendMessage sendMessage = SendMessage
                     .builder()
                     .chatId(chatId)
@@ -112,7 +112,7 @@ public class TransactionsController {
             builder.append("Transaction success\n");
             builder.append("amount: ").append(transaction.getAmount()).append("\n");
             builder.append("type: ").append(transaction.getType()).append("\n");
-            builder.append("category: ").append(transaction.getCategoryName()).append("\n");
+            builder.append("category: ").append(transaction.getCategory()).append("\n");
             builder.append("description: ").append(transaction.getDescription()).append("\n");
 
             SendMessage sendMessage = SendMessage

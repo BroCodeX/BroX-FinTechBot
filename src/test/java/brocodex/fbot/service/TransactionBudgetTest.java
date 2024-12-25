@@ -74,7 +74,7 @@ public class TransactionBudgetTest {
         dto = new TransactionDTO();
         dto.setAmount(5.000);
         dto.setDescription("Yandex transaction");
-        dto.setCategoryName("Yandex");
+        dto.setCategory("Yandex");
         dto.setTransactionDate(NOW);
         dto.setTelegramId(user.getTelegramId());
     }

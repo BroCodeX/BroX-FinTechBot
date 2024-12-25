@@ -14,5 +14,6 @@ public class TransactionDTO {
     private String description; // описание в виде заметки
     private String type; // тип операции: income или expense
     private LocalDateTime transactionDate; // дата транзакции
-    private String categoryName; // название категории
+    private String category; // название категории
+    private Long budget;
 }

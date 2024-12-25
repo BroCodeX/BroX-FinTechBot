@@ -1,6 +1,7 @@
 package brocodex.fbot.mapper;
 
 import brocodex.fbot.model.BaseModel;
+import brocodex.fbot.model.Budget;
 import brocodex.fbot.model.User;
 import brocodex.fbot.model.transaction.TransactionCategory;
 import brocodex.fbot.repository.UserRepository;
@@ -41,5 +42,11 @@ public class ReferenceMapper {
     public TransactionCategory toTransactionCategory(String transactionCategory) {
         return categoryRepository.findBySlug(transactionCategory.trim()).orElseThrow(() ->
                 new NoSuchElementException("This category hasn't found: " + transactionCategory));
+    }
+
+    @Named("toBudgetEntity")
+    public Budget toBudgetEntity(Long telegramId) {
+        var maybeUser = toUserEntity(telegramId);
+        return maybeUser.getBudget();
     }
 }
