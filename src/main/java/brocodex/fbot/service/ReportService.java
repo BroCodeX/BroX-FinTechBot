@@ -76,7 +76,7 @@ public class ReportService {
     public SendDocument addTypeFilter(Long chatID, String type) {
         dto.setOperationType(type);
 
-        Specification<Transaction> specification =  spec.build(dto);
+        Specification<Transaction> specification = spec.build(dto);
 
         List<Transaction> transactionList = transactionRepository.findAll(specification);
 

@@ -28,33 +28,20 @@ public class BudgetService {
     public SendMessage setBudget(Long chatId, String amount, Long userId) {
         try {
             BudgetDTO dto = new BudgetDTO();
-            dto.setAmount(Double.parseDouble(amount));
-            dto.setTelegramId(userId);
+            var budgetAmount = Double.parseDouble(amount);
 
-            var user = userRepository.findByTelegramId(dto.getTelegramId())
-                    .orElse(null);
-            if(user == null) {
+            if (budgetAmount <= 0) {
                 return SendMessage
                         .builder()
                         .chatId(chatId)
-                        .text("User with such id not found: " + userId + "\nYou need to register first")
+                        .text("Your amount is below zero: " + amount)
                         .build();
             }
 
-            BudgetDTO budget;
+            dto.setAmount(budgetAmount);
+            dto.setTelegramId(userId);
 
-            if(user.getBudget() != null) {
-                budget = updateBudget(dto);
-            } else {
-                budget = createBudget(dto);
-            }
-
-            SendMessage sendMessage = SendMessage
-                    .builder()
-                    .chatId(chatId)
-                    .text("Your budget is set to: " + budget.getAmount() + "\n" + "\n" +
-                            CommandMessages.HELP_MESSAGE.getDescription())
-                    .build();
+            SendMessage sendMessage = createOrUpdate(dto, chatId);
             sendMessage.setChatId(chatId);
             chatStateService.setChatState(chatId, null);
 
@@ -66,6 +53,33 @@ public class BudgetService {
                     .text("Your message is incorrect. Please enter a valid data for your budget")
                     .build();
         }
+    }
+
+    public SendMessage createOrUpdate(BudgetDTO dto, Long chatId) {
+        var user = userRepository.findByTelegramId(dto.getTelegramId())
+                .orElse(null);
+        if(user == null) {
+            return SendMessage
+                    .builder()
+                    .chatId(chatId)
+                    .text("User with such id not found: " + dto.getTelegramId() + "\nYou need to register first")
+                    .build();
+        }
+
+        BudgetDTO budget;
+
+        if(user.getBudget() != null) {
+            budget = updateBudget(dto);
+        } else {
+            budget = createBudget(dto);
+        }
+
+        return SendMessage
+                .builder()
+                .chatId(chatId)
+                .text("Your budget is set to: " + budget.getAmount() + "\n" + "\n" +
+                        CommandMessages.HELP_MESSAGE.getDescription())
+                .build();
     }
 
     @Transactional
