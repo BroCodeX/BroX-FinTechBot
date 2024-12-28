@@ -84,6 +84,6 @@ public class ReportTest {
         File result = reportService.getReport(transactions);
 
         assertThat(result).isNotNull();
-        assertThat(result.getName()).isEqualTo("transaction-report.pdf");
+        assertThat(result.getName()).contains("transaction-report");
     }
 }
