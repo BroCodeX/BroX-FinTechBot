@@ -15,7 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.util.List;
@@ -84,6 +83,6 @@ public class ReportTest {
         File result = reportService.getReport(transactions);
 
         assertThat(result).isNotNull();
-        assertThat(result.getName()).contains("transaction-report");
+        assertThat(result.getName()).isEqualTo("report.pdf");
     }
 }
