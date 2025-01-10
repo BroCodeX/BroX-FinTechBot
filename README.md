@@ -33,14 +33,15 @@ Telegram-бот для учета, анализа финансовых данн�
 ### 1. Подготовьте окружение
 Убедитесь, что у вас установлены:
 - Docker и Docker Compose
-- Java 17
+- Java 21
+- Gradle 8,7
 
 ### 2. Клонируйте репозиторий
 
-\```bash
-git clone https://github.com/yourusername/telegram-finance-bot.git
+```bash
+git clone git@github.com:BroCodeX/BroX-FinTechBot.git
 cd telegram-finance-bot
-\```
+```
 
 ### 3. Запустите инфраструктуру (PostgreSQL и RabbitMQ)
 
