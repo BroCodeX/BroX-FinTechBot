@@ -40,19 +40,15 @@ Telegram-бот для учета, анализа финансовых данн�
 
 ```bash
 git clone git@github.com:BroCodeX/BroX-FinTechBot.git
-cd telegram-finance-bot
+cd BroX-FinTechBot
 ```
 
-### 3. Запустите инфраструктуру (PostgreSQL и RabbitMQ)
+### 3. Подготовьте переменные для запуска приложения через .env файл или через хардкод файла docker-compose.yaml
+
+### 4. Запустите инфраструктуру (PostgreSQL и RabbitMQ)
 
 ```bash
-docker-compose up -d
-```
-
-### 4. Запустите приложение
-
-```bash
-./mvnw spring-boot:run
+docker compose up -d
 ```
 
 </details>
