@@ -61,9 +61,7 @@ docker-compose up -d
 <details>
 <summary>## 🧪 Запуск тестов</summary>
 
-\```bash
-./mvnw test
-\```
+make test
 
 </details>
 
