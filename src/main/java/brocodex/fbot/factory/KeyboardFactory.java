@@ -89,11 +89,11 @@ public class KeyboardFactory {
 
         InlineKeyboardButton incomeButton = new InlineKeyboardButton("Income");
         InlineKeyboardButton expenseButton = new InlineKeyboardButton("Expense");
-        InlineKeyboardButton bothButton = new InlineKeyboardButton("Both types");
+        InlineKeyboardButton bothButton = new InlineKeyboardButton("All types");
 
         incomeButton.setCallbackData("income");
         expenseButton.setCallbackData("expense");
-        bothButton.setCallbackData("both");
+        bothButton.setCallbackData("all");
 
         InlineKeyboardRow row = new InlineKeyboardRow(incomeButton, expenseButton);
         InlineKeyboardRow row2 = new InlineKeyboardRow(bothButton);

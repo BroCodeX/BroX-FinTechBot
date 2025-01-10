@@ -36,11 +36,14 @@ public class TransactionService {
         String type = dto.getType().toLowerCase(Locale.ROOT);
         Long telegramId = dto.getTelegramId();
         Double trnAmount = dto.getAmount();
-        var transaction = mapper.map(dto);
 
         var maybeUser = userRepository.findByTelegramId(telegramId).orElseThrow(() ->
                 new NoSuchElementException("There is no user with telegram id: " + telegramId));
         var maybeBudget = maybeUser.getBudget();
+        dto.setBudget(maybeBudget.getId());
+
+        var transaction = mapper.map(dto);
+
         Double currentBudgetAmount = maybeBudget.getAmount();
 
         if (type.equals("income")) {
@@ -50,7 +53,9 @@ public class TransactionService {
             return mapper.map(transaction);
         } else if (type.equals("expense")) {
             if (currentBudgetAmount < trnAmount) {
-                throw new IllegalArgumentException("Not enough budget for the expense");
+                String failMessage = "Not enough budget for the expense" + "\n" +
+                        "Correct your budget first";
+                throw new RuntimeException(failMessage);
             }
             maybeBudget.setAmount(currentBudgetAmount - trnAmount);
             budgetRepository.save(maybeBudget);

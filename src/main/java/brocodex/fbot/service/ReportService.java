@@ -1,18 +1,22 @@
 package brocodex.fbot.service;
 
+import brocodex.fbot.component.PdfReportGenerator;
 import brocodex.fbot.constants.ChatState;
 import brocodex.fbot.constants.CommandMessages;
-import brocodex.fbot.dto.transaction.report.TransactionReportDTO;
 import brocodex.fbot.dto.transaction.report.TransactionFilterDTO;
 import brocodex.fbot.factory.KeyboardFactory;
+import brocodex.fbot.mapper.TransactionMapper;
 import brocodex.fbot.model.transaction.Transaction;
 import brocodex.fbot.repository.transactions.TransactionRepository;
 import brocodex.fbot.specification.TransactionSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,6 +33,12 @@ public class ReportService {
 
     @Autowired
     private ChatStateService stateService;
+
+    @Autowired
+    private PdfReportGenerator pdfGenerator;
+
+    @Autowired
+    private TransactionMapper transactionMapper;
 
     public SendMessage welcomeMessage(Long chatID) {
         var markup = KeyboardFactory.getDataFilters();
@@ -63,22 +73,32 @@ public class ReportService {
                 .build();
     }
 
-    public SendMessage addTypeFilter(Long chatID, String type) {
+    public SendDocument addTypeFilter(Long chatID, String type) {
         dto.setOperationType(type);
 
-        Specification<Transaction> specification =  spec.build(dto);
+        Specification<Transaction> specification = spec.build(dto);
 
         List<Transaction> transactionList = transactionRepository.findAll(specification);
 
-        return showReport(transactionList, chatID);
-    }
-
-    public SendMessage showReport(List<Transaction> transactionList, Long chatID) {
         dto = null;
         stateService.removeChatState(chatID);
-        return SendMessage.builder()
+
+        var pdfReport = getReport(transactionList);
+
+        return SendDocument.builder()
                 .chatId(chatID)
-                .text("in progress filters")
+                .document(new InputFile(pdfReport))
+                .caption("Your report represents as a PDF file")
                 .build();
+
+    }
+
+    public File getReport(List<Transaction> transactionList) {
+
+        var transactionDTOS = transactionList.stream()
+                .map(t -> transactionMapper.map(t))
+                .toList();
+
+        return pdfGenerator.generatePdfReport(transactionDTOS);
     }
 }

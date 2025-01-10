@@ -1,9 +1,9 @@
 spring:
-  rabbitmq:
-    host: "localhost"
-    port: 5672
-    username: "rootbot"
-    password: "WHYSOserious&112233"
+#  rabbitmq:
+#    host: "localhost"
+#    port: ${RABBIT_PORT}
+#    username: ${RABBIT_USERNAME}
+#    password: ${RABBIT_PASS}
   application:
     name: fbot
   output:
@@ -13,15 +13,12 @@ spring:
     default: "dev"
 
 server:
-  port: 8181
+  port: ${APP_PORT}
 
 logging:
   level:
     root: DEBUG
 
-
 telegram:
   bot:
     token: ${BOT_TOKEN}
-    name: ${BOT_NAME}
-    creatorId: ${CREATOR_ID}

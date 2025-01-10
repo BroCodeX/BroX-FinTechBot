@@ -13,11 +13,11 @@ import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateC
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 @Component
 public class FinanceBot implements SpringLongPollingBot, LongPollingSingleThreadUpdateConsumer {
     private String token;
-
-    private BotSession botSession;
 
     private final TelegramClient telegramClient;
 

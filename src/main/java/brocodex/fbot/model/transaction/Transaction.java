@@ -40,7 +40,7 @@ public class Transaction implements BaseModel {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private TransactionCategory category;
 

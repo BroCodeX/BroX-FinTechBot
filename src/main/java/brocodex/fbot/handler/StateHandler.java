@@ -6,6 +6,7 @@ import brocodex.fbot.service.ChatStateService;
 import brocodex.fbot.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
@@ -64,6 +65,14 @@ public class StateHandler {
     }
 
     public void sendMessage(SendMessage sendMessage) {
+        try {
+            telegramClient.execute(sendMessage);
+        } catch (TelegramApiException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void sendMessage(SendDocument sendMessage) {
         try {
             telegramClient.execute(sendMessage);
         } catch (TelegramApiException ex) {

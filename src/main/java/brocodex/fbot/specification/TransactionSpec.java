@@ -29,9 +29,15 @@ public class TransactionSpec {
     }
 
     public Specification<Transaction> withOperationType(String operationType) {
-        return ((root, query, cb) ->
-                operationType == null || operationType.isBlank() ?
-                cb.conjunction() : cb.equal(root.get("type"), operationType));
+        return ((root, query, cb) -> {
+            if (operationType == null || operationType.isBlank()) {
+                return cb.conjunction();
+            } else if(operationType.equals("all")) {
+                return cb.conjunction();
+            } else {
+                return cb.equal(root.get("type"), operationType);
+            }
+        });
     }
 
     public Specification<Transaction> withCategory(String category) {

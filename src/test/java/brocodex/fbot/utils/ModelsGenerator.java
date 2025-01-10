@@ -44,8 +44,10 @@ public class ModelsGenerator {
                 .ignore(Select.field(Transaction::getId))
                 .supply(Select.field(Transaction::getAmount), () -> 1500.00)
                 .supply(Select.field(Transaction::getDescription), () -> "Buy a new iPhone")
-                .supply(Select.field(Transaction::getType), () -> "EXPENSE")
+                .supply(Select.field(Transaction::getType), () -> "expense")
+                .ignore(Select.field(Transaction::getUser))
                 .ignore(Select.field(Transaction::getCategory))
+                .ignore(Select.field(Transaction::getBudget))
                 .supply(Select.field(Transaction::getTransactionDate),
                         () -> LocalDateTime.of(1991, 8, 25, 10, 10))
                 //.supply(Select.field(Transaction::getCategory), () -> categoryRepository.findBySlug("Electronic"))
@@ -57,9 +59,10 @@ public class ModelsGenerator {
                 .ignore(Select.field(Transaction::getId))
                 .supply(Select.field(Transaction::getAmount), () -> 5000.00)
                 .supply(Select.field(Transaction::getDescription), () -> "Had a salary")
-                .supply(Select.field(Transaction::getType), () -> "INCOME")
+                .supply(Select.field(Transaction::getType), () -> "income")
                 .ignore(Select.field(Transaction::getUser))
                 .ignore(Select.field(Transaction::getCategory))
+                .ignore(Select.field(Transaction::getBudget))
                 .supply(Select.field(Transaction::getTransactionDate),
                         () -> LocalDateTime.of(1991, 8, 25, 10, 10))
                 //.supply(Select.field(Transaction::getCategory), () -> categoryRepository.findBySlug("Salary"))

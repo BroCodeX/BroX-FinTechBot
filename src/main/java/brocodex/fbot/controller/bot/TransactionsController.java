@@ -71,7 +71,7 @@ public class TransactionsController {
 
     public SendMessage addTransactionCategory(Long chatId, String message) {
         try {
-            dto.setCategoryName(message);
+            dto.setCategory(message);
             SendMessage sendMessage = SendMessage
                     .builder()
                     .chatId(chatId)
@@ -105,29 +105,36 @@ public class TransactionsController {
 
 
     public SendMessage transactionSuccess(Long chatId) {
-        var transaction = service.createTransaction(dto);
+        try {
+            var transaction = service.createTransaction(dto);
 
-        StringBuilder builder = new StringBuilder();
-        builder.append("Transaction success\n");
-        builder.append("amount: ").append(transaction.getAmount()).append("\n");
-        builder.append("type: ").append(transaction.getType()).append("\n");
-        builder.append("category: ").append(transaction.getCategoryName()).append("\n");
-        builder.append("description: ").append(transaction.getDescription()).append("\n");
+            StringBuilder builder = new StringBuilder();
+            builder.append("Transaction success\n");
+            builder.append("amount: ").append(transaction.getAmount()).append("\n");
+            builder.append("type: ").append(transaction.getType()).append("\n");
+            builder.append("category: ").append(transaction.getCategory()).append("\n");
+            builder.append("description: ").append(transaction.getDescription()).append("\n");
 
-        SendMessage sendMessage = SendMessage
-                .builder()
-                .chatId(chatId)
-                .text(builder.toString())
-                .build();
+            SendMessage sendMessage = SendMessage
+                    .builder()
+                    .chatId(chatId)
+                    .text(builder.toString())
+                    .build();
 
-        chatState.setChatState(chatId, null);
-        dto = null;
+            chatState.setChatState(chatId, null);
+            dto = null;
 
-        return sendMessage;
-    }
+            return sendMessage;
+        } catch (RuntimeException ex) {
+            chatState.setChatState(chatId, null);
+            dto = null;
 
-    public void viewTransactions() {
-
+            return SendMessage
+                    .builder()
+                    .chatId(chatId)
+                    .text(ex.getMessage())
+                    .build();
+        }
     }
 
 }

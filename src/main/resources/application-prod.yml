@@ -3,10 +3,10 @@ spring:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.xml
   datasource:
-    url: ${JDBC-DATABASE-URL}
+    url: ${JDBC_DATABASE_URL}
     driver-class-name: org.postgresql.Driver
-    username: ${USERNAME}
-    password: ${PASSWORD}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     generate-ddl: false
     hibernate:

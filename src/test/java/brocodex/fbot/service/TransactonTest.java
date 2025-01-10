@@ -1,7 +1,6 @@
 package brocodex.fbot.service;
 
 import brocodex.fbot.dto.transaction.TransactionDTO;
-import brocodex.fbot.dto.transaction.report.TransactionFilterDTO;
 import brocodex.fbot.model.Budget;
 import brocodex.fbot.model.User;
 import brocodex.fbot.model.transaction.Transaction;
@@ -16,11 +15,9 @@ import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -51,8 +48,6 @@ public class TransactonTest {
 
     private TransactionSpec specification = new TransactionSpec();
 
-    private Transaction incomeTransaction;
-    private Transaction expenseTransaction;
     private TransactionCategory category;
     private Budget budget;
 
@@ -62,25 +57,22 @@ public class TransactonTest {
 
     @BeforeEach
     public void prepareData() {
-        userRepository.deleteAll();
-        budgetRepository.deleteAll();
         transactionRepository.deleteAll();
         categoryRepository.deleteAll();
+        userRepository.deleteAll();
 
-        incomeTransaction = Instancio.of(generator.makeIncomeTransaction()).create();
-        expenseTransaction = Instancio.of(generator.makeExpenseTransaction()).create();
 
         budget = Instancio.of(generator.makeBudget()).create(); // 10k
 
         dto = new TransactionDTO();
         dto.setAmount(5.000);
         dto.setDescription("Yandex transaction");
-        dto.setCategoryName("Yandex");
+        dto.setCategory("Yandex");
         dto.setTransactionDate(NOW);
 
         user = Instancio.of(generator.makeUser()).create();
-//        budget.setUser(user);
-//        user.setBudget(budget);
+        user.setBudget(budget);
+        userRepository.save(user);
 
         category = new TransactionCategory();
         category.setSlug("Yandex");
@@ -92,13 +84,8 @@ public class TransactonTest {
         dto.setType("income");
         dto.setTelegramId(user.getTelegramId());
 
-        userRepository.save(user);
-
-        var currentBudget = budgetRepository.save(budget);
-        Long budgetId = currentBudget.getId();
-
-        user.setBudget(currentBudget);
-        userRepository.save(user);
+        Long budgetId = user.getBudget().getId();
+        dto.setBudget(budgetId);
 
         var currentTransaction = service.createTransaction(dto);
         Long transactionId = currentTransaction.getId();
@@ -117,13 +104,8 @@ public class TransactonTest {
         dto.setType("expense");
         dto.setTelegramId(user.getTelegramId());
 
-        userRepository.save(user);
-
-        var currentBudget = budgetRepository.save(budget);
-        Long budgetId = currentBudget.getId();
-
-        user.setBudget(currentBudget);
-        userRepository.save(user);
+        Long budgetId = user.getBudget().getId();
+        dto.setBudget(budgetId);
 
         var currentTransaction = service.createTransaction(dto);
         Long transactionId = currentTransaction.getId();
@@ -142,15 +124,15 @@ public class TransactonTest {
         dto.setType("expense");
         dto.setAmount(20.000);
         dto.setTelegramId(user.getTelegramId());
-        userRepository.save(user);
 
-        var currentBudget = budgetRepository.save(budget);
-        Long budgetId = currentBudget.getId();
+        Long budgetId = user.getBudget().getId();
+        dto.setBudget(budgetId);
 
-        var exception = assertThrows(IllegalArgumentException.class,
+        var exception = assertThrows(RuntimeException.class,
                 () -> service.createTransaction(dto));
 
-        assertThat(exception.getMessage()).isEqualTo("Not enough budget for the expense");
+        assertThat(exception.getMessage()).isEqualTo("Not enough budget for the expense" + "\n" +
+                "Correct your budget first");
 
         var maybeBudget = budgetRepository.findById(budgetId).orElse(null);
         assertThat(maybeBudget).isNotNull();

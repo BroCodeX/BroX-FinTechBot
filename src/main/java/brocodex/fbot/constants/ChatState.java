@@ -10,8 +10,7 @@ public enum ChatState {
     WAITING_FOR_TRANSACTION_DESCRIPTION("Waiting for transaction description input"),
     WAITING_FOR_TRANSACTION_CATEGORY("Waiting for transaction description category"),
     WAITING_FOR_DATA_FILTERS("Waiting for choose report's data filters"),
-    WAITING_FOR_TYPE_FILTERS("Waiting for choose report's type filters"),
-    ADMIN_MODE("Iit admin mode");
+    WAITING_FOR_TYPE_FILTERS("Waiting for choose report's type filters");
 
     private final String description;
 
