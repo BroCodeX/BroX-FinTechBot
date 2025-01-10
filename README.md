@@ -43,7 +43,7 @@ git clone git@github.com:BroCodeX/BroX-FinTechBot.git
 cd BroX-FinTechBot
 ```
 
-### 3. Подготовьте переменные для запуска приложения через .env файл или через хардкод файла docker-compose.yaml
+### 3. Подготовьте переменные для запуска приложения через .env файл или через хардкод файла compose.yaml
 
 ### 4. Запустите инфраструктуру (PostgreSQL и RabbitMQ)
 
