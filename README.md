@@ -45,15 +45,15 @@ cd telegram-finance-bot
 
 ### 3. Запустите инфраструктуру (PostgreSQL и RabbitMQ)
 
-\```bash
+```bash
 docker-compose up -d
-\```
+```
 
 ### 4. Запустите приложение
 
-\```bash
+```bash
 ./mvnw spring-boot:run
-\```
+```
 
 </details>
 
@@ -61,8 +61,10 @@ docker-compose up -d
 
 <details>
 <summary>## 🧪 Запуск тестов</summary>
-
+   
+```bash
 make test
+```
 
 </details>
 
@@ -73,18 +75,18 @@ make test
 
 ### Сборка Docker-образа
 
-\```bash
+```bash
 docker build -t telegram-finance-bot .
-\```
+```
 
 ### Запуск в Kubernetes
 
 1. **Создайте манифесты Kubernetes** для деплоя (см. папку `/k8s`).
 2. **Примените конфигурации**:
 
-   \```bash
+   ```bash
    kubectl apply -f k8s/
-   \```
+   ```
 
 </details>
 
