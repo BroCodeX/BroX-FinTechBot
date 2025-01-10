@@ -61,7 +61,7 @@ docker-compose up -d
 
 <details>
 <summary>## 🧪 Запуск тестов</summary>
-   
+
 ```bash
 make test
 ```
