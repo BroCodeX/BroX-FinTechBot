@@ -10,9 +10,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitConfig {
-    public static String transactionsQueue = "transactions_queue";
-    public static String budgetQueue = "budget_queue";
-    public static String exchangeName = "transactions_exchange";
+    public static String updateMessageQueue = "update_queue";
+    public static String exchangeName = "update_exchange";
 
     @Bean
     public TopicExchange transactionsExchange() {
@@ -21,21 +20,11 @@ public class RabbitConfig {
 
     @Bean
     public Queue transactionsQueue() {
-        return new Queue(transactionsQueue, true);
-    }
-
-    @Bean
-    public Queue budgetQueue() {
-        return new Queue(budgetQueue, true);
+        return new Queue(updateMessageQueue, true);
     }
 
     @Bean
     public Binding transactionsBinding(Queue queue, TopicExchange topicExchange) {
-        return BindingBuilder.bind(queue).to(topicExchange).with("transactions.#");
-    }
-
-    @Bean
-    public Binding budgetBinding(Queue queue, TopicExchange topicExchange) {
-        return BindingBuilder.bind(queue).to(topicExchange).with("budget.#");
+        return BindingBuilder.bind(queue).to(topicExchange).with("update.#");
     }
 }

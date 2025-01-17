@@ -1,6 +1,9 @@
 package brocodex.fbot.component;
 
+import brocodex.fbot.constants.RoutingKeys;
 import brocodex.fbot.handler.ResponseHandler;
+import brocodex.fbot.service.MQ.MessageConsumer;
+import brocodex.fbot.service.MQ.MessageProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -13,8 +16,6 @@ import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateC
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 @Component
 public class FinanceBot implements SpringLongPollingBot, LongPollingSingleThreadUpdateConsumer {
     private String token;
@@ -24,10 +25,19 @@ public class FinanceBot implements SpringLongPollingBot, LongPollingSingleThread
     private final ResponseHandler responseHandler;
 
     @Autowired
-    public FinanceBot(ResponseHandler responseHandler, @Value("${telegram.bot.token}") String token) {
-        this.responseHandler = responseHandler;
+    private MessageProducer producer;
+
+    private final MessageConsumer consumer;
+
+    @Autowired
+    public FinanceBot(ResponseHandler responseHandler, MessageConsumer consumer,
+                      @Value("${telegram.bot.token}") String token) {
         this.token = token;
         telegramClient = new OkHttpTelegramClient(getBotToken());
+        this.responseHandler = responseHandler;
+        this.responseHandler.setTelegramClient(telegramClient);
+        this.consumer = consumer;
+        this.consumer.setHandler(responseHandler);
     }
 
     @Override
@@ -42,7 +52,8 @@ public class FinanceBot implements SpringLongPollingBot, LongPollingSingleThread
 
     @Override
     public void consume(Update update) {
-        responseHandler.handleUpdate(update, telegramClient);
+//        responseHandler.handleUpdate(update);
+        producer.sendUpdateMessage(update, RoutingKeys.UPDATE);
     }
 
     @AfterBotRegistration

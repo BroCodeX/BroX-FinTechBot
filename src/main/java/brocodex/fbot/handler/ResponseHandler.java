@@ -2,6 +2,7 @@ package brocodex.fbot.handler;
 
 import brocodex.fbot.commands.*;
 import brocodex.fbot.service.ChatStateService;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ public class ResponseHandler {
     @Autowired
     private ChatStateService chatState;
 
+    @Setter
     private TelegramClient telegramClient;
 
     @Autowired
@@ -41,13 +43,12 @@ public class ResponseHandler {
         );
     }
 
-    public void handleUpdate(Update update, TelegramClient telegramClient) {
-        this.telegramClient = telegramClient;
+    public void handleUpdate(Update update) {
         // We check if the update has a message and the message has text
         if (update.hasMessage() && update.getMessage().hasText()) {
-            // Set variables
             botAnswerUtils(update);
-        } else if (update.hasCallbackQuery()) {
+        }
+        if (update.hasCallbackQuery()) {
             var chatId = update.getCallbackQuery().getMessage().getChatId();
             var userId = update.getCallbackQuery().getFrom().getId();
             var callbackMessage = update.getCallbackQuery().getData();
