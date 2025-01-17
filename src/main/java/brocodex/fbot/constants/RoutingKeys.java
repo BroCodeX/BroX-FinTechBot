@@ -4,7 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum RoutingKeys {
-    CREATED("transactions.created");
+    TRANS_CREATED("transactions.created"),
+    BUDGET_CREATED("budget.created");
 
     private final String key;
 

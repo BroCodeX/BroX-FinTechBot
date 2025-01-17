@@ -7,7 +7,13 @@ import org.springframework.stereotype.Service;
 public class MessageConsumer {
 
     @RabbitListener(queues = "transactions_queue")
-    public void receiveMessage(String message) {
+    public void receiveTransactionsMessage(String message) {
+        System.out.println("Received message: " + message);
+        // Логика обработки сообщения
+    }
+
+    @RabbitListener(queues = "budget_queue")
+    public void receiveBudgetMessage(String message) {
         System.out.println("Received message: " + message);
         // Логика обработки сообщения
     }
