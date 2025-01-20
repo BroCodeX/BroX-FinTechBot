@@ -28,7 +28,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class TransactionBudgetTest {
+public class TransactionMockTest {
     private ModelsGenerator generator = new ModelsGenerator();
 
     @Mock
