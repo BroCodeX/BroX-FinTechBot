@@ -77,7 +77,7 @@ public class BudgetService {
         return SendMessage
                 .builder()
                 .chatId(chatId)
-                .text("Your budget is set to: " + budget.getAmount() + "\n" + "\n" +
+                .text("Your budget has set to: " + budget.getAmount() + "\n" + "\n" +
                         CommandMessages.HELP_MESSAGE.getDescription())
                 .build();
     }
