@@ -22,7 +22,7 @@ public class RabbitMQTest {
 
     private String receivedMessage;
 
-    @RabbitListener(queues = "transactions_queue")
+    @RabbitListener(queues = "update_queue")
     public void receiveMessage(String receivedMessage) {
         this.receivedMessage = receivedMessage;
         latch.countDown();
@@ -31,8 +31,8 @@ public class RabbitMQTest {
     @Test
     public void testSendMessage() throws InterruptedException {
         String message = "Yandex test message";
-        String exchange = "transactions_exchange";
-        String routingKey = RoutingKeys.CREATED.getKey();
+        String exchange = "update_exchange";
+        String routingKey = RoutingKeys.UPDATE.getKey();
 
         amqpTemplate.convertAndSend(exchange, routingKey, message);
 
