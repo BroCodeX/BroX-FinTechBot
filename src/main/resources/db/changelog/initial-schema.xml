@@ -11,12 +11,17 @@
     </changeSet>
 
     <changeSet id="2" author="brocodex">
-        <createTable tableName="notifications">
+        <createTable tableName="budgets">
         </createTable>
     </changeSet>
 
     <changeSet id="3" author="brocodex">
-        <createTable tableName="budgets">
+        <createTable tableName="transactions">
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="brocodex">
+        <createTable tableName="transaction_categories">
         </createTable>
     </changeSet>
 
