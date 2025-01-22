@@ -2,7 +2,7 @@ spring:
   rabbitmq:
     host: ${RABBIT_HOST}
     port: ${RABBIT_PORT}
-    username: ${RABBIT_USERNAME}
+    username: ${RABBIT_USER}
     password: ${RABBIT_PASS}
   application:
     name: fbot
