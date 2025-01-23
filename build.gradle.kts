@@ -49,14 +49,18 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 	implementation("com.itextpdf:itext-core:8.0.5")
 	implementation("com.itextpdf:bouncy-castle-adapter:8.0.5")
+
+
 	// Logger
 	implementation("io.sentry:sentry-spring-boot-starter-jakarta:7.15.0")
 	implementation("io.sentry:sentry-logback:7.15.0")
 	implementation("io.sentry:sentry-log4j2:7.15.0")
+
 	// Mapper
 	implementation("org.mapstruct:mapstruct:1.5.5.Final")
 	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
 	implementation("org.openapitools:jackson-databind-nullable:0.2.6")
+	//implementation("com.fasterxml.jackson.core:jackson-databind:2.18.2")
 
 	// DB
 	implementation("org.postgresql:postgresql:42.7.3")

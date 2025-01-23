@@ -1,5 +1,6 @@
 package brocodex.fbot.commands;
 
+import brocodex.fbot.dto.mq.MQDTO;
 import brocodex.fbot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,7 +14,7 @@ public class Start implements Command {
     private UserService userService;
 
     @Override
-    public SendMessage apply(Update update) {
-        return userService.welcomeUser(update);
+    public SendMessage apply(MQDTO dto) {
+        return userService.welcomeUser(dto);
     }
 }

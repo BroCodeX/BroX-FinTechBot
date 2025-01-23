@@ -1,9 +1,11 @@
 package brocodex.fbot.handler;
 
 import brocodex.fbot.controller.bot.TransactionsController;
+import brocodex.fbot.dto.mq.MQDTO;
 import brocodex.fbot.service.BudgetService;
 import brocodex.fbot.service.ChatStateService;
 import brocodex.fbot.service.ReportService;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
@@ -25,10 +27,14 @@ public class StateHandler {
     @Autowired
     private ReportService reportService;
 
+    @Setter
     private TelegramClient telegramClient;
 
-    public void handleState(String receivedMessage, TelegramClient telegramClient, Long chatId, Long userId) {
-        this.telegramClient = telegramClient;
+    public void handleState(MQDTO mqdto) {
+        String receivedMessage = mqdto.getMessage();
+        long chatId = mqdto.getChatId();
+        long userId = mqdto.getUserId();
+
         var actualState = chatStateService.getChatState(chatId);
 
         switch (actualState) {

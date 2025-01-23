@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="3-create-transaction-categories-table" author="brocodex">
+        <!--Create a table-->
+        <createTable tableName="transaction_categories">
+            <column name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="slug" type="VARCHAR(255)">
+                <constraints unique="true" nullable="false" />
+            </column>
+        </createTable>
+        <!--Insert init slugs into a table-->
+        <loadData tableName="transaction_categories"
+                  file="db/changelog/trans_cats_slugs.csv"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,5 +1,6 @@
 package brocodex.fbot.commands;
 
+import brocodex.fbot.dto.mq.MQDTO;
 import brocodex.fbot.service.BudgetService;
 import brocodex.fbot.service.ChatStateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,9 @@ public class ViewBudget implements Command {
     private BudgetService budgetService;
 
     @Override
-    public SendMessage apply(Update update) {
-        long chatId = update.getMessage().getChatId();
-        long userId = update.getMessage().getFrom().getId();
+    public SendMessage apply(MQDTO dto) {
+        long chatId = dto.getChatId();
+        long userId = dto.getUserId();
 
         return budgetService.showBudget(userId, chatId);
     }

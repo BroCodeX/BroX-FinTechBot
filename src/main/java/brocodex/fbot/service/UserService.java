@@ -2,6 +2,7 @@ package brocodex.fbot.service;
 
 import brocodex.fbot.constants.ChatState;
 import brocodex.fbot.constants.CommandMessages;
+import brocodex.fbot.dto.mq.MQDTO;
 import brocodex.fbot.dto.user.UserDTO;
 import brocodex.fbot.mapper.UserMapper;
 import brocodex.fbot.repository.UserRepository;
@@ -27,11 +28,11 @@ public class UserService {
         return null;
     }
 
-    public SendMessage welcomeUser(Update update) {
-        long chatId = update.getMessage().getChatId();
-        long userId = update.getMessage().getFrom().getId();
-        String userName = update.getMessage().getFrom().getUserName();
-        String firstName = update.getMessage().getFrom().getFirstName();
+    public SendMessage welcomeUser(MQDTO mqdto) {
+        long chatId = mqdto.getChatId();
+        long userId = mqdto.getUserId();
+        String userName = mqdto.getUserName();
+        String firstName = mqdto.getFirstName();
 
         UserDTO dto = new UserDTO();
         dto.setUsername(userName);

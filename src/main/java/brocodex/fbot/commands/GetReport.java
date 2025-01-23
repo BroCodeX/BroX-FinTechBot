@@ -1,5 +1,6 @@
 package brocodex.fbot.commands;
 
+import brocodex.fbot.dto.mq.MQDTO;
 import brocodex.fbot.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,8 +14,8 @@ public class GetReport implements Command {
     private ReportService reportService;
 
     @Override
-    public SendMessage apply(Update update) {
-        long chatId = update.getMessage().getChatId();
+    public SendMessage apply(MQDTO dto) {
+        long chatId = dto.getChatId();
 
         return reportService.welcomeMessage(chatId);
     }

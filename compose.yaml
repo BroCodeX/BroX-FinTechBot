@@ -1,15 +1,62 @@
 services:
+  # Rabbit
   rabbit:
     image: "rabbitmq:3.12-management"
     container_name: "rabbit"
     ports:
-      - "${RABBIT_PORT_EXT}:5672"
-      - "1${RABBIT_PORT_EXT}:15672"
+      - "${RABBIT_PORT}:5672"
+      - "1${RABBIT_PORT}:15672"
     environment:
-      RABBITMQ_DEFAULT_USER: "${RABBITMQ_DEFAULT_USER}"
-      RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS}"
+      RABBITMQ_DEFAULT_USER: "${RABBIT_USER}"
+      RABBITMQ_DEFAULT_PASS: "${RABBIT_PASS}"
     volumes:
       - rabbit_volume:/var/lib/rabbitmq
     restart: always
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status" ]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
+
+  # Postgres
+  postgres:
+    image: "postgres:16"
+    container_name: "postgres"
+    environment:
+      POSTGRES_USER: "${DB_USERNAME}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_DB: "${DB_NAME}"
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "${DB_USERNAME}" ]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
+
+  # Java App
+  app:
+    image: "gradle:8.9.0-jdk21"
+    container_name: "app"
+    depends_on:
+      - postgres
+      - rabbit
+    environment:
+      SPRING_PROFILES_ACTIVE: "prod"
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    restart: always
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: >
+      sh -c "gradle installDist && ./build/install/app/bin/app"
+
 volumes:
   rabbit_volume:
+  postgres_data:
