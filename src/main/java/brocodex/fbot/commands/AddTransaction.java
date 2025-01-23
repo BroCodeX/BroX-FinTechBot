@@ -2,6 +2,7 @@ package brocodex.fbot.commands;
 
 import brocodex.fbot.constants.ChatState;
 import brocodex.fbot.constants.CommandMessages;
+import brocodex.fbot.dto.mq.MQDTO;
 import brocodex.fbot.service.ChatStateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,8 +15,8 @@ public class AddTransaction implements Command {
     private ChatStateService stateService;
 
     @Override
-    public SendMessage apply(Update update) {
-        long chatId = update.getMessage().getChatId();
+    public SendMessage apply(MQDTO dto) {
+        long chatId = dto.getChatId();
 
         SendMessage sendMessage = SendMessage
                 .builder()

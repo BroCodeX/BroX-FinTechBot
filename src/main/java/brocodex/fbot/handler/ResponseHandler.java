@@ -1,6 +1,7 @@
 package brocodex.fbot.handler;
 
 import brocodex.fbot.commands.*;
+import brocodex.fbot.dto.mq.MQDTO;
 import brocodex.fbot.service.ChatStateService;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -43,37 +44,23 @@ public class ResponseHandler {
         );
     }
 
-    public void handleUpdate(Update update) {
-        // We check if the update has a message and the message has text
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            botAnswerUtils(update);
-        }
-        if (update.hasCallbackQuery()) {
-            var chatId = update.getCallbackQuery().getMessage().getChatId();
-            var userId = update.getCallbackQuery().getFrom().getId();
-            var callbackMessage = update.getCallbackQuery().getData();
-            stateHandler.handleState(callbackMessage, telegramClient, chatId, userId);
-        }
-    }
-
-    private void botAnswerUtils(Update update) {
-        String receivedMessage = update.getMessage().getText();
-        long chatId = update.getMessage().getChatId();
-        long userId = update.getMessage().getFrom().getId();
+    public void botAnswerUtils(MQDTO dto) {
+        String receivedMessage = dto.getMessage();
+        long chatId = dto.getChatId();
         if(!commandMap.containsKey(receivedMessage) && chatState.getChatState(chatId) == null) {
-            handleUnexpectedMessage(update);
+            handleUnexpectedMessage(dto);
         } else if(!commandMap.containsKey(receivedMessage) && chatState.getChatState(chatId) != null) {
-            stateHandler.handleState(receivedMessage, telegramClient, chatId, userId);
+            stateHandler.handleState(dto);
         } else {
             var command = commandMap.get(receivedMessage);
-            var message = command.apply(update);
+            var message = command.apply(dto);
             sendMessage(message);
         }
     }
 
-    public void handleUnexpectedMessage(Update update) {
-        long chatId = update.getMessage().getChatId();
-        String receivedMessage = update.getMessage().getText();
+    public void handleUnexpectedMessage(MQDTO dto) {
+        long chatId = dto.getChatId();
+        String receivedMessage = dto.getMessage();
 
         StringBuilder builder = new StringBuilder();
         builder.append("I don't understand your message: ").append(receivedMessage).append(" \n");

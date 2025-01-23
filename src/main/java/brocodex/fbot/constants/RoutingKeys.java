@@ -4,7 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum RoutingKeys {
-    UPDATE("update.message");
+    DIRECT("direct.message"),
+    CALLBACK("callback.message");
 
     private final String key;
 
