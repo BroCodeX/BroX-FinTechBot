@@ -17,6 +17,9 @@ server:
 
 logging:
   level:
+    org:
+      springframework:
+        amqp: DEBUG
     root: DEBUG
 
 telegram:

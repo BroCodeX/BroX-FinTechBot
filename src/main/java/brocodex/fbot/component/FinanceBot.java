@@ -6,6 +6,7 @@ import brocodex.fbot.handler.ResponseHandler;
 import brocodex.fbot.handler.StateHandler;
 import brocodex.fbot.service.MQ.MessageConsumer;
 import brocodex.fbot.service.MQ.MessageProducer;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateC
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
+@Slf4j
 @Component
 public class FinanceBot implements SpringLongPollingBot, LongPollingSingleThreadUpdateConsumer {
     private String token;
