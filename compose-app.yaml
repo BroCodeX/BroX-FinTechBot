@@ -1,0 +1,19 @@
+# Java App
+app:
+  image: "gradle:8.9.0-jdk21"
+  container_name: "app"
+  depends_on:
+    - postgres
+    - rabbit
+  env_file:
+    - .env
+  environment:
+    SPRING_PROFILES_ACTIVE: "prod"
+  ports:
+    - "${APP_PORT}:${APP_PORT}"
+  restart: always
+  working_dir: /app
+  volumes:
+    - .:/app
+  command: >
+    sh -c "gradle installDist && ./build/install/fbot/bin/fbot"

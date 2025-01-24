@@ -10,7 +10,7 @@ spring:
     ansi:
       enabled: always
   profiles:
-    default: "dev"
+    default: "prod"
 
 server:
   port: ${APP_PORT}

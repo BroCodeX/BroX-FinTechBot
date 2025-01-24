@@ -39,24 +39,6 @@ services:
       start_period: 10s
       timeout: 5s
 
-  # Java App
-  app:
-    image: "gradle:8.9.0-jdk21"
-    container_name: "app"
-    depends_on:
-      - postgres
-      - rabbit
-    environment:
-      SPRING_PROFILES_ACTIVE: "prod"
-    ports:
-      - "${APP_PORT}:${APP_PORT}"
-    restart: always
-    working_dir: /app
-    volumes:
-      - .:/app
-    command: >
-      sh -c "gradle installDist && ./build/install/app/bin/app"
-
 volumes:
   rabbit_volume:
   postgres_data:
