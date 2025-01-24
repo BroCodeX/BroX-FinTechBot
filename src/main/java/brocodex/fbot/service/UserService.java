@@ -6,6 +6,7 @@ import brocodex.fbot.dto.mq.MQDTO;
 import brocodex.fbot.dto.user.UserDTO;
 import brocodex.fbot.mapper.UserMapper;
 import brocodex.fbot.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -39,6 +40,10 @@ public class UserService {
         dto.setTelegramId(userId);
 
         if (isUserPresent(userId)) {
+            var curBudget = isBudgetPresent(userId);
+            if (!curBudget) {
+                return getMessage(firstName, chatId);
+            }
             return SendMessage // Create a message object
                     .builder()
                     .chatId(chatId)
@@ -48,21 +53,7 @@ public class UserService {
 
         createUser(dto);
 
-        String text = CommandMessages.START_MESSAGE.getDescription() +
-                firstName +
-                "\n" +
-                "=====\n" +
-                "Please, set your budget or type /help to show the commands";
-
-        SendMessage sendMessage = SendMessage // Create a message object
-                .builder()
-                .chatId(chatId)
-                .text(text)
-                .build();
-
-        stateService.setChatState(chatId, ChatState.WAITING_FOR_BUDGET);
-
-        return sendMessage;
+        return getMessage(firstName, chatId);
     }
 
     public UserDTO createUser(UserDTO dto) {
@@ -81,5 +72,29 @@ public class UserService {
 
     public boolean isUserPresent(Long telegramId) {
         return repository.findByTelegramId(telegramId).isPresent();
+    }
+
+    @Transactional
+    public boolean isBudgetPresent(Long telegramId) {
+        var user = repository.findByTelegramId(telegramId).get();
+        return user.getBudget() != null;
+    }
+
+    private SendMessage getMessage(String firstName, Long chatId) {
+        String text = CommandMessages.START_MESSAGE.getDescription() +
+                firstName +
+                "\n" +
+                "=====\n" +
+                "Please, set your budget or type /help to show the commands";
+
+        SendMessage sendMessage = SendMessage // Create a message object
+                .builder()
+                .chatId(chatId)
+                .text(text)
+                .build();
+
+        stateService.setChatState(chatId, ChatState.WAITING_FOR_BUDGET);
+
+        return sendMessage;
     }
 }
